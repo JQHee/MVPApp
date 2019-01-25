@@ -1,13 +1,18 @@
-package com.example.mvpapp.main.login;
+package com.example.mvpapp.presenter;
 
-import com.example.mvpapp.base.contracts.LoginContract;
+
+import com.example.mvpapp.base.BaseView;
+import com.example.mvpapp.contract.LoginContract;
+import com.example.mvpapp.login.LoginActivity;
+
+import javax.inject.Inject;
 
 public class LoginPresenter implements LoginContract.Presenter {
 
-    private LoginContract.View view;
+    LoginActivity view;
+    @Inject
+    public LoginPresenter() {
 
-    public LoginPresenter(LoginContract.View view) {
-        this.view = view;
     }
 
     @Override
@@ -18,11 +23,22 @@ public class LoginPresenter implements LoginContract.Presenter {
                 try {
                     Thread.sleep(3000);
                     view.showToast("登录成功");
+                    // 执行跳转
                     view.gotoMain();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
+    }
+
+    @Override
+    public void attachView(BaseView view) {
+        this.view = (LoginActivity) view;
+    }
+
+    @Override
+    public void detachView() {
+        this.view = null;
     }
 }

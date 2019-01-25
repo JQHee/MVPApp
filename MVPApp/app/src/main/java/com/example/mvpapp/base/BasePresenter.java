@@ -1,4 +1,8 @@
 package com.example.mvpapp.base;
 
-public interface BasePresenter {
+public interface BasePresenter<T extends BaseView> {
+
+    void attachView(T view);
+
+    void detachView();
 }
