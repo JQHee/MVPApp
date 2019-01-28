@@ -1,4 +1,4 @@
-package com.example.mvpapp;
+package com.example.testmvpapp;
 
 import org.junit.Test;
 
