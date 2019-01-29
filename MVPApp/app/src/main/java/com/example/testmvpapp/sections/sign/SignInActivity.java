@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
@@ -63,7 +64,7 @@ public class SignInActivity extends AppCompatActivity implements SignInContract.
 
     @Override
     public void showToast(String msg) {
-
+        Toast.makeText(this.getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
     }
 
     @Override
