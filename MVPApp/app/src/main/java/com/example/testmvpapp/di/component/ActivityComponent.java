@@ -4,7 +4,9 @@ import android.app.Activity;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.di.scope.ActivityScope;
-import com.example.testmvpapp.login.LoginActivity;
+import com.example.testmvpapp.sections.sign.SignInActivity;
+import com.example.testmvpapp.sections.sign.SignUpActivity;
+
 import dagger.Component;
 
 /**
@@ -18,7 +20,7 @@ public interface ActivityComponent {
 
     Activity getActivity();
 
-    void inject(MainActivity mainActivity);//用于注入MainActivity
-    void inject(LoginActivity loginActivity);//用于注入LoginActivity
+    void inject(SignInActivity signInActivity); // 用于注入SignInActivity
+    void inject(SignUpActivity signUpActivity); // 用于注入SignUpActivity
     //TODO 后续需要注入的Activity类都可以在这里添加 中像上面一样写就好了
 }
