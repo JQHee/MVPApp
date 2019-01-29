@@ -17,7 +17,7 @@
     <com.example.testmvpapp.ui.bottom.BottomBarLayout
         android:id="@+id/bbl"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center"
         android:layout_gravity="center"

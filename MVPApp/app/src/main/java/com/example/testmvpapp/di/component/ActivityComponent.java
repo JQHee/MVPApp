@@ -1,7 +1,7 @@
 package com.example.testmvpapp.di.component;
 
 import android.app.Activity;
-import com.example.testmvpapp.MainActivity;
+import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.di.scope.ActivityScope;
 import com.example.testmvpapp.login.LoginActivity;

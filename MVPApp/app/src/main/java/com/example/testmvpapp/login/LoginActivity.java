@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.testmvpapp.MainActivity;
+import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.contract.LoginContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
