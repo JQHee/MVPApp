@@ -55,4 +55,8 @@ dependencies {
 
     /* 轮播图 */
     implementation 'com.bigkoo:convenientbanner:2.0.5'
+
+    /* Fragment依赖 */
+    // implementation 'me.yokeyword:fragmentation:1.3.4'
+    // implementation 'me.yokeyword:fragmentation-swipeback:1.3.4'
 }

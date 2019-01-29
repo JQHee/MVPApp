@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.SimpleFragment;
+import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
+import com.example.testmvpapp.sections.main.index.IndexFragment;
+import com.example.testmvpapp.sections.main.personal.PersonalFragment;
+import com.example.testmvpapp.sections.main.sort.SortFragment;
 import com.example.testmvpapp.ui.bottom.BottomBarAdapter;
 import com.example.testmvpapp.ui.bottom.BottomBarLayout;
 import com.example.testmvpapp.ui.bottom.BottomBarViewPager;
@@ -19,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomBarViewPager mVpContent;
     private BottomBarLayout mBottomBarLayout;
 
-    private List<TabFragment> mFragmentList = new ArrayList<>();
+    private List<SimpleFragment> mFragmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,25 +43,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
-        TabFragment homeFragment = new TabFragment();
+        IndexFragment homeFragment = new IndexFragment();
         Bundle bundle1 = new Bundle();
         bundle1.putString(TabFragment.CONTENT,"第一个页面");
         homeFragment.setArguments(bundle1);
         mFragmentList.add(homeFragment);
 
-        TabFragment videoFragment = new TabFragment();
+        SortFragment videoFragment = new SortFragment();
         Bundle bundle2 = new Bundle();
         bundle2.putString(TabFragment.CONTENT,"第二个页面");
         videoFragment.setArguments(bundle2);
         mFragmentList.add(videoFragment);
 
-        TabFragment microFragment = new TabFragment();
+        DiscoverFragment microFragment = new DiscoverFragment();
         Bundle bundle3 = new Bundle();
         bundle3.putString(TabFragment.CONTENT,"第三个页面");
         microFragment.setArguments(bundle3);
         mFragmentList.add(microFragment);
 
-        TabFragment meFragment = new TabFragment();
+        PersonalFragment meFragment = new PersonalFragment();
         Bundle bundle4 = new Bundle();
         bundle4.putString(TabFragment.CONTENT,"第四个页面");
         meFragment.setArguments(bundle4);

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,13 @@ import butterknife.Unbinder;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleFragment extends android.support.v4.app.Fragment {
+public abstract class SimpleFragment extends Fragment {
     public final String TAG = this.getClass().getSimpleName();
     protected View mView;
     protected Activity mActivity;
     protected Context mContext;
     private Unbinder mUnBinder;
+    // 是否初始化
     protected boolean isInited = false;
 
     @Override
