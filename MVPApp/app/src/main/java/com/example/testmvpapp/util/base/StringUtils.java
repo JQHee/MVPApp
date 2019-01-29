@@ -1,6 +1,8 @@
-package com.example.testmvpapp.util;
+package com.example.testmvpapp.util.base;
 
 import android.text.TextUtils;
+
+import com.example.testmvpapp.util.file.SDCardUtils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;

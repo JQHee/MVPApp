@@ -1,4 +1,4 @@
-package com.example.testmvpapp.util;
+package com.example.testmvpapp.util.glide;
 
 import android.content.Context;
 import android.widget.ImageView;

@@ -1,4 +1,4 @@
-package com.example.testmvpapp.util;
+package com.example.testmvpapp.util.anim;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;

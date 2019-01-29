@@ -1,4 +1,4 @@
-package com.example.testmvpapp.util;
+package com.example.testmvpapp.util.base;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

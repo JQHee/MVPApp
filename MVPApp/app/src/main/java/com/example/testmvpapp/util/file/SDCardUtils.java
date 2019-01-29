@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.testmvpapp.util;
+package com.example.testmvpapp.util.file;
 
 import android.os.Build;
 import android.os.Environment;
