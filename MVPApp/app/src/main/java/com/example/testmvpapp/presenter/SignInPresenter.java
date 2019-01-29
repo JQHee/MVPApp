@@ -19,9 +19,6 @@ public class SignInPresenter implements SignInContract.Presenter {
     @Override
     public void signInAction() {
         // 发送登录请求
-        if (checkForm()) {
-
-        }
     }
 
     @Override
@@ -45,27 +42,5 @@ public class SignInPresenter implements SignInContract.Presenter {
 
     }
 
-    /**
-     * 表单信息检验
-     */
-    private boolean checkForm() {
-        final String email = view.mEmail.getText().toString();
-        final String password = view.mPassword.getText().toString();
 
-        boolean isPass = true;
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            view.mEmail.setError("错误的邮箱格式");
-            isPass = false;
-        } else {
-            view.mEmail.setError(null);
-        }
-
-        if (password.isEmpty()) {
-            view.mPassword.setError("请填写至少6位数密码");
-            isPass = false;
-        } else {
-            view.mPassword.setError(null);
-        }
-        return isPass;
-    }
 }

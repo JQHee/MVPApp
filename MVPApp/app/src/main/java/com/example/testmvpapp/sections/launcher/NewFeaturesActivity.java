@@ -15,6 +15,7 @@ import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.sections.main.MainActivity;
+import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.ui.newfeature.LauncherHolderCreator;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
     @OnClick(R.id.btn_skip)
     void skipButtonAction() {
         finish();
-        Intent intent = new Intent(NewFeaturesActivity.this, MainActivity.class);
+        Intent intent = new Intent(NewFeaturesActivity.this, SignInActivity.class);
         startActivity(intent);
     }
 

@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.widget.Toast;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
@@ -19,18 +21,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SignUpActivity extends AppCompatActivity implements SignUpContract.View {
+public class SignUpActivity extends BaseActivity implements SignUpContract.View {
 
     @BindView(R.id.edit_sign_up_name)
-    public TextInputEditText mName;
+    TextInputEditText mName;
     @BindView(R.id.edit_sign_up_email)
-    public TextInputEditText mEmail;
+    TextInputEditText mEmail;
     @BindView(R.id.edit_sign_up_phone)
-    public TextInputEditText mPhone;
+    TextInputEditText mPhone;
     @BindView(R.id.edit_sign_up_password)
-    public TextInputEditText mPassword;
+    TextInputEditText mPassword;
     @BindView(R.id.edit_sign_up_re_password)
-    public TextInputEditText mRePassword;
+    TextInputEditText mRePassword;
 
     @Inject
     SignUpPresenter mPresenter;
@@ -42,13 +44,16 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
 
     @OnClick({R.id.tv_link_sign_in})
     public void onClickLink() {
-
+        mPresenter.gotoSignIn();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+    protected int provideContentViewId() {
+        return R.layout.activity_sign_up;
+    }
+
+    @Override
+    public void initInjector() {
         DaggerActivityComponent.builder().appComponent(MyApplication.getAppComponent()).activityModule(new ActivityModule(this)).build().inject(this);
         mPresenter.attachView(this);
     }
@@ -75,5 +80,52 @@ public class SignUpActivity extends AppCompatActivity implements SignUpContract.
     @Override
     public void dismissLoading() {
 
+    }
+
+    private boolean checkForm() {
+        final String name = mName.getText().toString();
+        final String email = mEmail.getText().toString();
+        final String phone = mPhone.getText().toString();
+        final String password = mPassword.getText().toString();
+        final String rePassword = mRePassword.getText().toString();
+
+        boolean isPass = true;
+
+        if (name.isEmpty()) {
+            mName.setError("请输入姓名");
+            isPass = false;
+        } else {
+            mName.setError(null);
+        }
+
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mEmail.setError("错误的邮箱格式");
+            isPass = false;
+        } else {
+            mEmail.setError(null);
+        }
+
+        if (phone.isEmpty()) {
+            mPhone.setError("手机号码错误");
+            isPass = false;
+        } else {
+            mPhone.setError(null);
+        }
+
+        if (password.isEmpty()) {
+            mPassword.setError("请填写至少6位数密码");
+            isPass = false;
+        } else {
+            mPassword.setError(null);
+        }
+
+        if (rePassword.isEmpty() || rePassword.length() < 6 || !(rePassword.equals(password))) {
+            mRePassword.setError("密码验证错误");
+            isPass = false;
+        } else {
+            mRePassword.setError(null);
+        }
+
+        return isPass;
     }
 }
