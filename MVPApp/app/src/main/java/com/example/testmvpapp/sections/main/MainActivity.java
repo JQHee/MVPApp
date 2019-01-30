@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.base.SimpleFragment;
 import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
 import com.example.testmvpapp.sections.main.index.IndexFragment;
@@ -19,7 +20,7 @@ import com.example.testmvpapp.ui.bottom.TabFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends SimpleActivity {
 
     private BottomBarViewPager mVpContent;
     private BottomBarLayout mBottomBarLayout;
@@ -27,15 +28,19 @@ public class MainActivity extends AppCompatActivity {
     private List<SimpleFragment> mFragmentList = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getLayout() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initEventAndData() {
         // 解决虚拟按键遮挡的问题
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         initView();
         initData();
         initListener();
     }
+
     private void initView() {
         mVpContent = (BottomBarViewPager) findViewById(R.id.vp_content);
         mBottomBarLayout = (BottomBarLayout) findViewById(R.id.bbl);

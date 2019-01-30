@@ -1,15 +1,11 @@
 package com.example.testmvpapp.sections.sign;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
-import android.widget.Toast;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
@@ -21,7 +17,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SignUpActivity extends BaseActivity implements SignUpContract.View {
+public class SignUpActivity extends SimpleActivity implements SignUpContract.View {
 
     @BindView(R.id.edit_sign_up_name)
     TextInputEditText mName;
@@ -48,13 +44,17 @@ public class SignUpActivity extends BaseActivity implements SignUpContract.View 
     }
 
     @Override
-    protected int provideContentViewId() {
+    protected int getLayout() {
         return R.layout.activity_sign_up;
     }
 
     @Override
-    public void initInjector() {
-        DaggerActivityComponent.builder().appComponent(MyApplication.getAppComponent()).activityModule(new ActivityModule(this)).build().inject(this);
+    protected void initEventAndData() {
+        DaggerActivityComponent.builder()
+                .appComponent(MyApplication.getAppComponent())
+                .activityModule(new ActivityModule(this))
+                .build()
+                .inject(this);
         mPresenter.attachView(this);
     }
 
@@ -65,21 +65,6 @@ public class SignUpActivity extends BaseActivity implements SignUpContract.View 
         // 跳转注册页面
         Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void showToast(String msg) {
-        Toast.makeText(this.getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void dismissLoading() {
-
     }
 
     private boolean checkForm() {
@@ -128,4 +113,5 @@ public class SignUpActivity extends BaseActivity implements SignUpContract.View 
 
         return isPass;
     }
+
 }
