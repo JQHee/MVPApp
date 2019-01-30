@@ -9,6 +9,7 @@ import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.util.timer.BaseTimerTask;
 import com.example.testmvpapp.util.timer.ITimerListener;
+import com.jaeger.library.StatusBarUtil;
 
 import java.text.MessageFormat;
 import java.util.Timer;
@@ -53,6 +54,7 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
         finish();
         Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
         startActivity(intent);
+
     }
 
     @Override
@@ -63,6 +65,12 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     @Override
     protected void initEventAndData() {
 
+    }
+
+    @Override
+    protected void onViewCreated() {
+        super.onViewCreated();
+        StatusBarUtil.setTransparent(this);
     }
 
     @Override

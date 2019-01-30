@@ -62,4 +62,7 @@ dependencies {
 
     /* 侧滑退出Activity */
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
+
+    /* 状态栏 */
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
 }
