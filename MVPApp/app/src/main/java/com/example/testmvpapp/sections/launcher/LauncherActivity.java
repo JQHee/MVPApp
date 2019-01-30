@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.util.login.LoginInterceptor;
 import com.example.testmvpapp.util.timer.BaseTimerTask;
 import com.example.testmvpapp.util.timer.ITimerListener;
 import com.jaeger.library.StatusBarUtil;
@@ -52,9 +53,9 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
 
     private void checkIsShowScroll() {
         finish();
+        // LoginInterceptor.interceptor(LauncherActivity.this, "NewFeaturesActivity", null);
         Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
         startActivity(intent);
-
     }
 
     @Override

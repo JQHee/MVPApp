@@ -2,6 +2,7 @@ package com.example.testmvpapp.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.sections.sign.SignInActivity;
+import com.example.testmvpapp.util.login.LoginConfig;
+import com.example.testmvpapp.util.login.LoginResult;
 
 import java.util.ListIterator;
 
@@ -64,8 +68,14 @@ public abstract class SimpleActivity extends AppCompatActivity {
         initEventAndData();
     }
 
+    /**
+     * 沉浸式状态栏（适配虚拟按键、状态栏）
+     */
     protected void setTranslucentStatus() {
         // 5.0以上系统状态栏透明
+        /**
+         * 会影响布局，页面的空间会被拉伸
+         */
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -206,6 +216,28 @@ public abstract class SimpleActivity extends AppCompatActivity {
         if (token != null) {
             InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /**
+     * 是否需要登录登录
+     */
+    protected void startActivityWithLogin(Intent intent , boolean isNeedLogin , LoginResult startIntentStype){
+
+        if (isNeedLogin){
+
+            if (LoginConfig.isLogin()) {
+                Intent tempIntent = new Intent(this , SignInActivity.class);
+                if (LoginResult.START_FOR_RESULT == startIntentStype){
+                    startActivityForResult(tempIntent , LoginConfig.REQUEST_CODE);
+                }else if(LoginResult.START_NO_RESULT == startIntentStype){
+                    startActivity(tempIntent);
+                }
+            } else {
+                this.startActivity(intent);
+            }
+        }else {
+            this.startActivity(intent);
         }
     }
 }
