@@ -60,10 +60,11 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
 
     @Override
     public void gotoSignIn() {
-        finish();
+
         // 跳转注册页面
         Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
         startActivity(intent);
+        finish();
 
     }
 

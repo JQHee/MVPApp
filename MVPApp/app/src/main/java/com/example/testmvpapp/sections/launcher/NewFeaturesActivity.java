@@ -40,9 +40,10 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
 
     @OnClick(R.id.btn_skip)
     void skipButtonAction() {
-        finish();
+
         Intent intent = new Intent(NewFeaturesActivity.this, SignInActivity.class);
         startActivity(intent);
+        finish();
 
     }
 

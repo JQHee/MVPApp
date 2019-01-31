@@ -52,10 +52,11 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     }
 
     private void checkIsShowScroll() {
-        finish();
+
         // LoginInterceptor.interceptor(LauncherActivity.this, "NewFeaturesActivity", null);
         Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
