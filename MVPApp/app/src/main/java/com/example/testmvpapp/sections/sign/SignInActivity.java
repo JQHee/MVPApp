@@ -45,7 +45,7 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
     }
 
     @Override
-    protected int getLayout() {
+    protected Object getLayout() {
         return R.layout.activity_sign_in;
     }
 

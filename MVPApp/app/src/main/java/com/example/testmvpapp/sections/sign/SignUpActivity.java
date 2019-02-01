@@ -44,7 +44,7 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
     }
 
     @Override
-    protected int getLayout() {
+    protected Object getLayout() {
         return R.layout.activity_sign_up;
     }
 

@@ -57,11 +57,14 @@ public abstract class SimpleActivity extends AppCompatActivity {
         }
         */
         this.savedInstanceState = savedInstanceState;
-        if (getLayout() != 0) {
-            setContentView(getLayout());
+        if (getLayout() instanceof Integer) {
+            setContentView((Integer) getLayout());;
+        } else if (getLayout() instanceof  View) {
+            setContentView((View) getLayout());
         } else {
-            throw new ClassCastException("getLayout() type must be int or View");
+            throw new ClassCastException("setLayout() type must be int or View");
         }
+
         mUnBinder = ButterKnife.bind(this);
         onViewCreated();
         ActivityCollector.addActivity(this);
@@ -163,7 +166,7 @@ public abstract class SimpleActivity extends AppCompatActivity {
         return mCurrentActivity;
     }
 
-    protected abstract int getLayout();
+    protected abstract Object getLayout();
 
     protected abstract void initEventAndData();
 

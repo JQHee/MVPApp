@@ -52,7 +52,7 @@ public class MainActivity extends SimpleActivity {
     private List<SimpleFragment> mFragmentList = new ArrayList<>();
 
     @Override
-    protected int getLayout() {
+    protected Object getLayout() {
         return R.layout.activity_main;
     }
 

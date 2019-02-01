@@ -60,7 +60,7 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     }
 
     @Override
-    protected int getLayout() {
+    protected Object getLayout() {
         return R.layout.activity_launcher;
     }
 

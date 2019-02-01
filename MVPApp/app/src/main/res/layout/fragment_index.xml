@@ -8,19 +8,51 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_index"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/holo_orange_dark">
 
-        <android.support.v7.widget.AppCompatTextView
+        <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="首页"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText"/>
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_san"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@mipmap/home_scan"
+                android:gravity="center"
+                android:layout_gravity="left"/>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/tv_nav_title"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:text="首页"
+                android:textColor="@android:color/white"
+                android:textSize="25sp"
+                android:textAlignment="center"
+                tools:ignore="HardcodedText"/>
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/iv_message"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:gravity="center" />
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
     </android.support.v7.widget.Toolbar>
+
+
+
 
 
 </android.support.design.widget.CoordinatorLayout>
