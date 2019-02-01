@@ -16,6 +16,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    /* 在build.gradle中配置SO文件的使用 */
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
@@ -98,11 +104,14 @@ dependencies {
     /* 图片剪裁 */
     implementation 'com.github.yalantis:ucrop:2.2.1-native'
     /* 动态权限处理 */
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    /* 通过注解的方式
     implementation("com.github.hotchemi:permissionsdispatcher:3.1.0") {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
+    */
 
     /* 工具包 */
     implementation 'com.blankj:utilcode:1.10.0'
