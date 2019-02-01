@@ -1,8 +1,17 @@
 package com.example.testmvpapp.component.jpush;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.testmvpapp.util.log.LatteLogger;
+
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.JPushMessage;
 import cn.jpush.android.service.JPushMessageReceiver;
 
