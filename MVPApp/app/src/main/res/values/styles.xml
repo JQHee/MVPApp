@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
 
-    <style name="SplashTheme" parent="AppTheme">
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!--<item name="android:background">@mipmap/launcher_00</item>-->
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>

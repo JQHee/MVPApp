@@ -4,6 +4,7 @@ import android.app.Application;
 import com.example.testmvpapp.di.component.AppComponent;
 import com.example.testmvpapp.di.component.DaggerAppComponent;
 import com.example.testmvpapp.di.module.AppModule;
+import com.tencent.bugly.crashreport.CrashReport;
 
 public class MyApplication extends Application {
 
@@ -14,6 +15,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        initBugly();
     }
 
     public static synchronized MyApplication getInstance() {
@@ -28,5 +30,11 @@ public class MyApplication extends Application {
                     .build();
         }
         return appComponent;
+    }
+
+
+    /* bugly 收集崩溃日志 */
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "df307c3993", false);
     }
 }
