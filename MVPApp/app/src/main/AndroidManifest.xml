@@ -67,6 +67,12 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="PUNGOv0mnOPLjCl04XAwK4CsbGPOjsa4" />
 
+        <!--高德地图-->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="029c736c9e52ac293b933dd9ac0e69a7"></meta-data>
+        <service android:name="com.amap.api.location.APSService"></service>
+
 
         <activity android:name=".sections.launcher.LauncherActivity"
             android:screenOrientation="portrait"
