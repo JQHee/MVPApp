@@ -165,4 +165,7 @@ dependencies {
     /* 方便设置圆角的button 不在需要设置一堆的选择器*/
     implementation 'com.github.niniloveyou:StateButton:v1.0.0'
 
+    /* 加载提示框 */
+    implementation 'com.github.maning0303:MNProgressHUD:V1.1.5'
+
 }
