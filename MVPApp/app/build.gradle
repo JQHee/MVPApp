@@ -160,6 +160,9 @@ dependencies {
 
     /* 高德地图 */
     // 定位
-    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:location:4.5.0'
+
+    /* 方便设置圆角的button 不在需要设置一堆的选择器*/
+    implementation 'com.github.niniloveyou:StateButton:v1.0.0'
 
 }
