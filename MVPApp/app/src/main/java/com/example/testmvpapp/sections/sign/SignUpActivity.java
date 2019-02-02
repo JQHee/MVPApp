@@ -1,27 +1,34 @@
 package com.example.testmvpapp.sections.sign;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Patterns;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.base.BaseActivity;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignUpPresenter;
+import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SignUpActivity extends BaseActivity implements SignUpContract.View {
+public class SignUpActivity extends SimpleActivity implements SignUpContract.View {
 
     @BindView(R.id.edit_sign_up_name)
     TextInputEditText mName;
@@ -48,41 +55,49 @@ public class SignUpActivity extends BaseActivity implements SignUpContract.View 
     }
 
     @Override
-    protected int provideContentViewId() {
+    protected Object getLayout() {
         return R.layout.activity_sign_up;
     }
 
     @Override
-    public void initInjector() {
-        DaggerActivityComponent.builder().appComponent(MyApplication.getAppComponent()).activityModule(new ActivityModule(this)).build().inject(this);
+    protected BasePresenter createPresenter() {
+        return mPresenter;
+    }
+
+    @Override
+    protected void initEventAndData() {
+        DaggerActivityComponent.builder()
+                .appComponent(MyApplication.getAppComponent())
+                .activityModule(new ActivityModule(this))
+                .build()
+                .inject(this);
         mPresenter.attachView(this);
+        ToolbarUtil.setToolbar(this, "注册", true);
     }
 
     @Override
     public void gotoSignIn() {
-        // 跳转登录页面
-        finish();
+
         // 跳转注册页面
         Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
         startActivity(intent);
+        finish();
+
     }
+
 
     @Override
-    public void showToast(String msg) {
-        Toast.makeText(this.getApplicationContext(),msg,Toast.LENGTH_SHORT).show();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == android.R.id.home) {
+            // getSupportFragmentManager().popBackStack();//suport.v4包
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void dismissLoading() {
-
-    }
-
-    private boolean checkForm() {
+    public boolean checkForm() {
         final String name = mName.getText().toString();
         final String email = mEmail.getText().toString();
         final String phone = mPhone.getText().toString();
@@ -128,4 +143,5 @@ public class SignUpActivity extends BaseActivity implements SignUpContract.View 
 
         return isPass;
     }
+
 }

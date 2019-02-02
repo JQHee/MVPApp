@@ -6,9 +6,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.util.login.LoginInterceptor;
 import com.example.testmvpapp.util.timer.BaseTimerTask;
 import com.example.testmvpapp.util.timer.ITimerListener;
+import com.jaeger.library.StatusBarUtil;
 
 import java.text.MessageFormat;
 import java.util.Timer;
@@ -50,19 +53,32 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     }
 
     private void checkIsShowScroll() {
-        finish();
+
+        // LoginInterceptor.interceptor(LauncherActivity.this, "NewFeaturesActivity", null);
         Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
-    protected int getLayout() {
+    protected Object getLayout() {
         return R.layout.activity_launcher;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override
     protected void initEventAndData() {
 
+    }
+
+    @Override
+    protected void onViewCreated() {
+        super.onViewCreated();
+        StatusBarUtil.setTransparent(this);
     }
 
     @Override

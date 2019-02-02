@@ -18,6 +18,7 @@ import com.example.testmvpapp.di.module.FragmentModule;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 
 /**
@@ -25,40 +26,70 @@ import butterknife.Unbinder;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleFragment extends Fragment {
+public abstract class SimpleFragment extends LazyLoadFragment {
+
     public final String TAG = this.getClass().getSimpleName();
-    protected View mView;
-    protected Activity mActivity;
-    protected Context mContext;
-    private Unbinder mUnBinder;
+    protected View mRootView = null;
+    protected Activity mActivity = null;
+    protected Context mContext = null;
+    private Unbinder mUnbinder = null;
     // 是否初始化
     protected boolean isInited = false;
+    private BasePresenter mPresenter = null;
 
     @Override
     public void onAttach(Context context) {
+        super.onAttach(context);
         mActivity = (Activity) context;
         mContext = context;
-        super.onAttach(context);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(getLayoutId(), null);
-        return mView;
+        if (getLayout() instanceof  Integer) {
+            mRootView = inflater.inflate((Integer) getLayout(), null);
+        } else if (getLayout() instanceof View) {
+            mRootView =  (View) getLayout();
+        } else {
+            throw new ClassCastException("getLayout() type must be int or View");
+        }
+        mUnbinder = ButterKnife.bind(this, mRootView);
+        onBindView(savedInstanceState, mRootView);
+        return mRootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mUnBinder = ButterKnife.bind(this, view);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter = createPresenter();
+    }
+
+    @Override
+    protected void onFragmentFirstVisible() {
+        // 当第一次可见的时候，加载数据
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        mUnBinder.unbind();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mUnbinder != null) {
+            mUnbinder.unbind();
+        }
+        if (mPresenter != null) {
+            mPresenter.detachView();
+            mPresenter = null;
+        }
     }
 
     protected void showToast(String meg) {
@@ -76,6 +107,7 @@ public abstract class SimpleFragment extends Fragment {
         return new FragmentModule(this);
     }
 
-    protected abstract int getLayoutId();
-    protected abstract void initEventAndData();
+    protected abstract Object getLayout();
+    public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
+    protected abstract BasePresenter createPresenter();
 }

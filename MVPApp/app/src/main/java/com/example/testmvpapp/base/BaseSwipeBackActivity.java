@@ -10,7 +10,7 @@ import me.imid.swipebacklayout.lib.SwipeBackLayout;
  * 滑动退出Activity
  * 参考：https://github.com/ikew0ng/SwipeBackLayout
  */
-public abstract class BaseSwipeBackActivity extends BaseActivity {
+public abstract class BaseSwipeBackActivity extends SimpleActivity {
 
     private SwipeBackLayout mSwipeBackLayout;
 

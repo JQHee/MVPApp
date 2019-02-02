@@ -55,4 +55,36 @@
     <declare-styleable name="BottomBarLayout">
         <attr name="smoothScroll" format="boolean"/>
     </declare-styleable>
+
+    <!-- 背景颜色 -->
+    <attr name="appBgColor" format="color"/>
+    <!-- 边角幅度 -->
+    <attr name="appRadius" format="dimension"/>
+
+    <!--  圆角矩形TextView-->
+    <declare-styleable name="ShapeCornerBgView">
+        <attr name="appBorder" format="boolean"/>
+        <!-- 是否有边框 -->
+        <attr name="appBorderWidth" format="dimension"/>
+        <!-- 边框线条的粗细 -->
+        <attr name="appBorderColor" format="color"/>
+        <!-- 边框线条的颜色 -->
+        <attr name="appBgColor"/>
+        <!-- 背景的颜色 -->
+        <attr name="appRadius"/>
+        <!-- 圆角度数 -->
+        <attr name="appTopLeftCorner" format="boolean"/>
+        <!-- 是否有圆角，默认，真 -->
+        <attr name="appBottomLeftCorner" format="boolean"/>
+        <!-- 是否有圆角，默认，真 -->
+        <attr name="appTopRightCorner" format="boolean"/>
+        <!-- 是否有圆角，默认，真 -->
+        <attr name="appBottomRightCorner" format="boolean"/>
+        <!-- 是否有圆角，默认，真 -->
+        <attr name="appEnableFalseBgColor" format="color"/>
+        <!-- 禁用时的背景颜色 -->
+        <attr name="appEnableFalseTextColor" format="color"/>
+        <!-- 禁用时的文字颜色 -->
+    </declare-styleable>
+
 </resources>
