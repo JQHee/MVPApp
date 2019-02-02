@@ -24,13 +24,20 @@
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingRight">0dp</item>
         <item name="elevation">0dp</item>
-        <item name="android:windowAnimationStyle">@style/slide_in_right</item>
+        <item name="android:windowAnimationStyle">@style/FeelyouWindowAnimTheme</item>
     </style>
 
     <!-- 右滑动进入/退出动画 -->
     <style name="slide_in_right" parent="@android:style/Animation.Translucent">
         <item name="android:windowEnterAnimation">@anim/slide_right_entry</item>
         <item name="android:windowExitAnimation">@anim/slide_right_exit</item>
+    </style>
+
+    <style name="FeelyouWindowAnimTheme" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/in_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/out_from_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/in_from_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/out_from_right</item>
     </style>
 
 </resources>

@@ -19,6 +19,12 @@ android {
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
         ]
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -74,8 +80,8 @@ dependencies {
     implementation 'com.bigkoo:convenientbanner:2.0.5'
 
     /* Fragment依赖 */
-    // implementation 'me.yokeyword:fragmentation:1.3.4'
-    // implementation 'me.yokeyword:fragmentation-swipeback:1.3.4'
+    implementation 'me.yokeyword:fragmentation:1.3.4'
+    implementation 'me.yokeyword:fragmentation-swipeback:1.3.4'
 
     /* 侧滑退出Activity */
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'

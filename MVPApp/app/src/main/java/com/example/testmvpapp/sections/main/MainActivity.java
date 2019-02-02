@@ -6,9 +6,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -28,7 +25,6 @@ import com.example.testmvpapp.sections.main.sort.SortFragment;
 import com.example.testmvpapp.ui.bottom.BottomBarAdapter;
 import com.example.testmvpapp.ui.bottom.BottomBarLayout;
 import com.example.testmvpapp.ui.bottom.BottomBarViewPager;
-import com.example.testmvpapp.ui.bottom.TabFragment;
 import com.example.testmvpapp.util.location.BdLocationUtil;
 
 import java.util.ArrayList;

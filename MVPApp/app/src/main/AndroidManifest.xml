@@ -24,6 +24,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <!-- 访问网络，网络定位需要上网-->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 访问相机权限和自动聚焦 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- 极光推送的权限  -->
     <!-- Required -->
@@ -100,6 +103,11 @@
         </activity>
 
         <activity android:name=".sections.sign.SignUpActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|screenSize|orientation">
+        </activity>
+
+        <activity android:name=".ui.scanner.ScannerActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|screenSize|orientation">
         </activity>

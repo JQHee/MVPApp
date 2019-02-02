@@ -13,12 +13,12 @@ import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 
 /**
- * @author: wuchao
+ * @author: hjq
  * @date: 2018/1/11 21:50
  * @desciption:
  */
 
-public class ScannerDelegate extends SimpleActivity implements ZBarScannerView.ResultHandler {
+public class ScannerActivity extends SimpleActivity implements ZBarScannerView.ResultHandler {
 
     private ScanView mScanView = null;
 
@@ -51,6 +51,9 @@ public class ScannerDelegate extends SimpleActivity implements ZBarScannerView.R
 
     @Override
     protected Object getLayout() {
+        if (mScanView == null) {
+            mScanView = new ScanView(this);
+        }
         return mScanView;
     }
 

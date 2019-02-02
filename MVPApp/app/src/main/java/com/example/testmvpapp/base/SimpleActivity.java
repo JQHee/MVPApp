@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
@@ -62,7 +63,7 @@ public abstract class SimpleActivity extends AppCompatActivity {
         } else if (getLayout() instanceof  View) {
             setContentView((View) getLayout());
         } else {
-            throw new ClassCastException("setLayout() type must be int or View");
+            throw new ClassCastException("getLayout() type must be int or View");
         }
 
         mUnBinder = ButterKnife.bind(this);
@@ -145,8 +146,11 @@ public abstract class SimpleActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-
-            exit();
+            if (getCurrentActivity().equals(MainActivity.class)) {
+                exit();
+            } else {
+                finish();
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -154,7 +158,7 @@ public abstract class SimpleActivity extends AppCompatActivity {
 
     public void exit() {
         if ((System.currentTimeMillis() - mExitTime) > WAIT_TIME) {
-            Toast.makeText(MyApplication.getInstance().getApplicationContext(), "再按一次退出应用", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyApplication.getInstance().getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
             mExitTime = System.currentTimeMillis();
         } else {
             finish();

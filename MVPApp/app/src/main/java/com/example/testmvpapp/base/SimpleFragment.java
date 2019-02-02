@@ -18,6 +18,7 @@ import com.example.testmvpapp.di.module.FragmentModule;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.yokeyword.fragmentation.ISupportFragment;
 
 
 /**
@@ -26,45 +27,55 @@ import butterknife.Unbinder;
  * @date 2018/12/18
  */
 public abstract class SimpleFragment extends LazyLoadFragment {
+
     public final String TAG = this.getClass().getSimpleName();
-    protected View mView;
-    protected Activity mActivity;
-    protected Context mContext;
-    private Unbinder mUnbinder;
+    protected View mRootView = null;
+    protected Activity mActivity = null;
+    protected Context mContext = null;
+    private Unbinder mUnbinder = null;
     // 是否初始化
     protected boolean isInited = false;
 
     @Override
     public void onAttach(Context context) {
+        super.onAttach(context);
         mActivity = (Activity) context;
         mContext = context;
-        super.onAttach(context);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getLayout() instanceof  Integer) {
-            mView = inflater.inflate((Integer) getLayout(), null);
+            mRootView = inflater.inflate((Integer) getLayout(), null);
         } else if (getLayout() instanceof View) {
-            mView =  (View) getLayout();
+            mRootView =  (View) getLayout();
         } else {
-            throw new ClassCastException("setLayout() type must be int or View");
+            throw new ClassCastException("getLayout() type must be int or View");
         }
-        mUnbinder = ButterKnife.bind(this, mView);
-        onBindView(savedInstanceState, mView);
-        return mView;
+        mUnbinder = ButterKnife.bind(this, mRootView);
+        onBindView(savedInstanceState, mRootView);
+        return mRootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
 
+    @Override
+    protected void onFragmentFirstVisible() {
+        //当第一次可见的时候，加载数据
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
