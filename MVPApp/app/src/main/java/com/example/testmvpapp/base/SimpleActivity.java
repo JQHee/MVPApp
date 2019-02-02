@@ -141,20 +141,32 @@ public abstract class SimpleActivity extends AppCompatActivity {
        ActivityCollector.removeAllActivity();
     }
 
-    //对返回键进行监听
+    /**
+     * 统一退出控制
+     */
     @Override
+    public void onBackPressed() {
+        if (mCurrentActivity instanceof MainActivity){
+            //如果是主页面
+            if (System.currentTimeMillis() - mExitTime > 2000) {// 两次点击间隔大于2秒
+//                UIUtils.showToast("再按一次，退出应用");
+                mExitTime = System.currentTimeMillis();
+                return;
+            }
+        }
+        super.onBackPressed();// finish()
+    }
+
+    //对返回键进行监听
+/*    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            if (getCurrentActivity().equals(MainActivity.class)) {
-                exit();
-            } else {
-                finish();
-            }
+            exit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 
     public void exit() {
         if ((System.currentTimeMillis() - mExitTime) > WAIT_TIME) {
