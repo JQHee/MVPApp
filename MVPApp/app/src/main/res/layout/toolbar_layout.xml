@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+    <!--app:actionLayout  如果需要文字和图片一起显示 指向的是一个xml布局文件-->
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/id_toolbar"

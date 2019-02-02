@@ -85,6 +85,17 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        /*
+        MenuInflater inflater = getMenuInflater();
+        //设置menu界面为res/menu/menu.xml
+        inflater.inflate(R.menu.toolbar_menu, menu);
+        */
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatImageView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
 import com.example.testmvpapp.ui.scanner.ScannerActivity;
+import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import butterknife.BindView;
@@ -45,8 +50,9 @@ public class IndexFragment extends SimpleFragment {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-
     }
+
+
 
     @Override
     protected BasePresenter createPresenter() {
