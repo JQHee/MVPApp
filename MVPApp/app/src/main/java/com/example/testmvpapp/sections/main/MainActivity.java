@@ -43,8 +43,8 @@ public class MainActivity extends SimpleActivity {
     //声明AMapLocationClientOption对象
     public AMapLocationClientOption mLocationOption = null;
 
-    private BottomBarViewPager mVpContent;
-    private BottomBarLayout mBottomBarLayout;
+    private BottomBarViewPager mVpContent = null;
+    private BottomBarLayout mBottomBarLayout = null;
     private List<SimpleFragment> mFragmentList = new ArrayList<>();
 
     @Override
@@ -92,6 +92,7 @@ public class MainActivity extends SimpleActivity {
         final BottomBarAdapter bottomBarAdapter = new BottomBarAdapter(getSupportFragmentManager(), mFragmentList);
         mVpContent.setAdapter(bottomBarAdapter);
         mBottomBarLayout.setViewPager(mVpContent);
+        mBottomBarLayout.setCurrentItem(1);
 
         /*
         *  设置未读消息数

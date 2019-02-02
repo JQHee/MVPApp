@@ -19,11 +19,10 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
     private static final String STATE_INSTANCE = "instance_state";
     private static final String STATE_ITEM     = "state_item";
 
-
     private ViewPager mViewPager;
-    private int       mChildCount;//子条目个数
+    private int       mChildCount;  // 子条目个数
     private List<BottomBarItem> mItemViews = new ArrayList<>();
-    private int mCurrentItem;//当前条目的索引
+    private int mCurrentItem;   // 当前条目的索引
     private boolean mSmoothScroll;
 
     public BottomBarLayout(Context context) {
@@ -35,7 +34,7 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
     }
 
     public BottomBarLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context, attrs, defStyleAttr);;
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.BottomBarLayout);
         mSmoothScroll = ta.getBoolean(R.styleable.BottomBarLayout_smoothScroll,false);
         ta.recycle();
@@ -70,14 +69,14 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
             if (getChildAt(i) instanceof BottomBarItem) {
                 BottomBarItem bottomBarItem = (BottomBarItem) getChildAt(i);
                 mItemViews.add(bottomBarItem);
-                //设置点击监听
+                // 设置点击监听
                 bottomBarItem.setOnClickListener(new MyOnClickListener(i));
             } else {
                 throw new IllegalArgumentException("BottomBarLayout的子View必须是BottomBarItem");
             }
         }
 
-        mItemViews.get(mCurrentItem).setStatus(true);//设置选中项
+        mItemViews.get(mCurrentItem).setStatus(true); // 设置选中项
 
         if (mViewPager != null){
             mViewPager.setOnPageChangeListener(this);
@@ -96,7 +95,7 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
         if (onItemSelectedListener != null){
             onItemSelectedListener.onItemSelected(getBottomItem(position),mCurrentItem,position);
         }
-        mCurrentItem = position;//记录当前位置
+        mCurrentItem = position; // 记录当前位置
     }
 
     @Override
@@ -116,7 +115,7 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
         public void onClick(View v) {
             //回调点击的位置
             if(mViewPager != null){
-                //有设置viewPager
+                // 有设置viewPager
                 if (currentIndex == mCurrentItem){
                     //如果还是同个页签，使用setCurrentItem不会回调OnPageSelecte(),所以在此处需要回调点击监听
                     if (onItemSelectedListener != null) {
@@ -126,7 +125,7 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
                     mViewPager.setCurrentItem(currentIndex, mSmoothScroll);
                 }
             }else{
-                //没有设置viewPager
+                // 没有设置viewPager
                 if (onItemSelectedListener != null) {
                     onItemSelectedListener.onItemSelected(getBottomItem(currentIndex),mCurrentItem,currentIndex);
                 }
@@ -146,11 +145,14 @@ public class BottomBarLayout extends LinearLayoutCompat implements ViewPager.OnP
      * 重置当前按钮的状态
      */
     private void resetState() {
-        if (mCurrentItem < mItemViews.size()){
+        if (mCurrentItem < mItemViews.size()) {
             mItemViews.get(mCurrentItem).setStatus(false);
         }
     }
 
+    /**
+     * 设置item默认选中的item
+     */
     public void setCurrentItem(int currentItem) {
         if (mViewPager != null){
             mViewPager.setCurrentItem(currentItem,mSmoothScroll);
