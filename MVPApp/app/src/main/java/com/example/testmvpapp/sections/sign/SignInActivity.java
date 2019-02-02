@@ -6,11 +6,13 @@ import android.util.Patterns;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignInPresenter;
+import com.example.testmvpapp.sections.main.MainActivity;
 
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -59,6 +61,11 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
         mPresenter.attachView(this);
     }
 
+    @Override
+    protected BasePresenter createPresenter() {
+        return mPresenter;
+    }
+
 
     @Override
     public void gotoSignUp() {
@@ -69,10 +76,17 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
         finish();
     }
 
+    @Override
+    public void gotoMain() {
+        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     /**
      * 表单信息检验
      */
-    private boolean checkForm() {
+    public boolean checkForm() {
         final String email = mEmail.getText().toString();
         final String password = mPassword.getText().toString();
 

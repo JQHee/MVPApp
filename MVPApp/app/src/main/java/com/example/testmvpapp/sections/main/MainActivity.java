@@ -15,6 +15,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.baidu.location.BDLocation;
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.base.SimpleFragment;
 import com.example.testmvpapp.component.jpush.NotificationsUtils;
@@ -50,6 +51,11 @@ public class MainActivity extends SimpleActivity {
     @Override
     protected Object getLayout() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override

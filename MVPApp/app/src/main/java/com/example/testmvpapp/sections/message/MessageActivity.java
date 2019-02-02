@@ -1,5 +1,6 @@
 package com.example.testmvpapp.sections.message;
 
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 
 /**
@@ -9,6 +10,11 @@ public class MessageActivity extends SimpleActivity {
 
     @Override
     protected Object getLayout() {
+        return null;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
         return null;
     }
 

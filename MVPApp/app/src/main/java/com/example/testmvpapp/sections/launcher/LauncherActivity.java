@@ -6,6 +6,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.util.login.LoginInterceptor;
 import com.example.testmvpapp.util.timer.BaseTimerTask;
@@ -62,6 +63,11 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     @Override
     protected Object getLayout() {
         return R.layout.activity_launcher;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override

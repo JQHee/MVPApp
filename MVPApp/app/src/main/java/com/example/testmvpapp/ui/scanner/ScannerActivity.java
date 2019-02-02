@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.util.callback.CallbackManager;
 import com.example.testmvpapp.util.callback.CallbackType;
@@ -55,6 +56,11 @@ public class ScannerActivity extends SimpleActivity implements ZBarScannerView.R
             mScanView = new ScanView(this);
         }
         return mScanView;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.AppComponent;
 import com.example.testmvpapp.di.component.DaggerAppComponent;
 import com.example.testmvpapp.di.module.AppModule;
+import com.example.testmvpapp.util.log.LatteLogger;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import cn.jpush.android.api.JPushInterface;
@@ -36,6 +37,8 @@ public class MyApplication extends Application {
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
 
+        // 初始化化日志打印工具
+        LatteLogger.setup();
         initDB();
         initBugly();
         initJPUSH();

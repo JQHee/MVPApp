@@ -39,6 +39,7 @@ public abstract class SimpleActivity extends AppCompatActivity {
     protected final String TAG = this.getClass().getSimpleName();
     private static Activity mCurrentActivity;
     private Unbinder mUnBinder;
+    private BasePresenter mPresenter;
     protected  Bundle savedInstanceState;
     // 退出时的时间
     private long mExitTime;
@@ -116,6 +117,7 @@ public abstract class SimpleActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mPresenter = createPresenter();
         mCurrentActivity = this;
     }
 
@@ -131,6 +133,11 @@ public abstract class SimpleActivity extends AppCompatActivity {
         ActivityCollector.removeActivity(this);
         if (mUnBinder != null) {
             mUnBinder.unbind();
+        }
+
+        if (mPresenter != null) {
+            mPresenter.detachView();
+            mPresenter = null;
         }
     }
 
@@ -185,6 +192,8 @@ public abstract class SimpleActivity extends AppCompatActivity {
     protected abstract Object getLayout();
 
     protected abstract void initEventAndData();
+
+    protected abstract BasePresenter createPresenter();
 
     /**
      * 点击空白区域隐藏键盘.

@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
@@ -50,6 +51,11 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
     @Override
     protected Object getLayout() {
         return R.layout.activity_new_features;
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
     @Override

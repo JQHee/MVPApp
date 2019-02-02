@@ -6,6 +6,7 @@ import android.util.Patterns;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
@@ -49,6 +50,11 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
     }
 
     @Override
+    protected BasePresenter createPresenter() {
+        return mPresenter;
+    }
+
+    @Override
     protected void initEventAndData() {
         DaggerActivityComponent.builder()
                 .appComponent(MyApplication.getAppComponent())
@@ -68,7 +74,7 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
 
     }
 
-    private boolean checkForm() {
+    public boolean checkForm() {
         final String name = mName.getText().toString();
         final String email = mEmail.getText().toString();
         final String phone = mPhone.getText().toString();

@@ -5,6 +5,7 @@ import android.util.Patterns;
 import com.example.testmvpapp.base.BaseView;
 import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.sections.sign.SignInActivity;
+import com.example.testmvpapp.util.log.LatteLogger;
 
 import java.lang.ref.WeakReference;
 
@@ -23,6 +24,9 @@ public class SignInPresenter implements SignInContract.Presenter {
     @Override
     public void signInAction() {
         // 发送登录请求
+        if (obtainView().checkForm()) {
+            login();
+        }
     }
 
     @Override
@@ -38,6 +42,8 @@ public class SignInPresenter implements SignInContract.Presenter {
             weakRefView = null;
         }
 
+        LatteLogger.d("SignInPresenter");
+
     }
 
     protected boolean isAttach() {
@@ -50,6 +56,10 @@ public class SignInPresenter implements SignInContract.Presenter {
 
     public void goToSignUpAction() {
         obtainView().gotoSignUp();
+    }
+
+    private void login() {
+        obtainView().gotoMain();
     }
 
     /**
