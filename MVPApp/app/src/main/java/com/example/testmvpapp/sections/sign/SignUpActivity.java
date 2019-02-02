@@ -2,7 +2,16 @@ package com.example.testmvpapp.sections.sign;
 
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Patterns;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
@@ -12,6 +21,7 @@ import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignUpPresenter;
+import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 
 import javax.inject.Inject;
 
@@ -62,6 +72,7 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
+        ToolbarUtil.setToolbar(this, "注册", true);
     }
 
     @Override
@@ -72,6 +83,18 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
         startActivity(intent);
         finish();
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int i = item.getItemId();
+        if (i == android.R.id.home) {
+            // getSupportFragmentManager().popBackStack();//suport.v4包
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public boolean checkForm() {

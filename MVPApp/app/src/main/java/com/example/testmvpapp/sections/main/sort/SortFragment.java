@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
 
 public class SortFragment extends SimpleFragment {
@@ -17,6 +18,11 @@ public class SortFragment extends SimpleFragment {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
+    }
+
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 
 }

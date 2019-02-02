@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.View;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
 
 public class DiscoverFragment extends SimpleFragment {
@@ -17,5 +18,9 @@ public class DiscoverFragment extends SimpleFragment {
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
+    }
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
     }
 }

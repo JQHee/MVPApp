@@ -190,9 +190,7 @@ public abstract class SimpleActivity extends AppCompatActivity {
     }
 
     protected abstract Object getLayout();
-
     protected abstract void initEventAndData();
-
     protected abstract BasePresenter createPresenter();
 
     /**

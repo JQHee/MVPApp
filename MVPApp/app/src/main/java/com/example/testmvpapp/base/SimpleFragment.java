@@ -35,6 +35,7 @@ public abstract class SimpleFragment extends LazyLoadFragment {
     private Unbinder mUnbinder = null;
     // 是否初始化
     protected boolean isInited = false;
+    private BasePresenter mPresenter = null;
 
     @Override
     public void onAttach(Context context) {
@@ -64,8 +65,14 @@ public abstract class SimpleFragment extends LazyLoadFragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter = createPresenter();
+    }
+
+    @Override
     protected void onFragmentFirstVisible() {
-        //当第一次可见的时候，加载数据
+        // 当第一次可见的时候，加载数据
     }
 
     @Override
@@ -78,6 +85,10 @@ public abstract class SimpleFragment extends LazyLoadFragment {
         super.onDestroy();
         if (mUnbinder != null) {
             mUnbinder.unbind();
+        }
+        if (mPresenter != null) {
+            mPresenter.detachView();
+            mPresenter = null;
         }
     }
 
@@ -98,4 +109,5 @@ public abstract class SimpleFragment extends LazyLoadFragment {
 
     protected abstract Object getLayout();
     public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
+    protected abstract BasePresenter createPresenter();
 }
