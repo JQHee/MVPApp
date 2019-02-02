@@ -85,7 +85,7 @@ public class MyReceiver extends BroadcastReceiver {
         final String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
         final String alert = bundle.getString(JPushInterface.EXTRA_ALERT);
 
-        // 将数据插入数据库中
+        // 将数据插入数据库中 (msgid可以传null)
         DatabaseManager.getInstance().getDao().insertOrReplace(new MessageEntity(Long.parseLong(msgId), title, message));
     }
 
