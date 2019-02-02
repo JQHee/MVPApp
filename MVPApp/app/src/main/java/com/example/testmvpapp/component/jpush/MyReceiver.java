@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.testmvpapp.database.message.DatabaseManager;
+import com.example.testmvpapp.database.message.MessageEntity;
 import com.example.testmvpapp.util.log.LatteLogger;
 
 import java.util.Set;
@@ -82,6 +84,9 @@ public class MyReceiver extends BroadcastReceiver {
         final String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
         final String extra = bundle.getString(JPushInterface.EXTRA_EXTRA);
         final String alert = bundle.getString(JPushInterface.EXTRA_ALERT);
+
+        // 将数据插入数据库中
+        DatabaseManager.getInstance().getDao().insertOrReplace(new MessageEntity(Long.parseLong(msgId), title, message));
     }
 
     private void onOpenNotification(Context context, Bundle bundle) {

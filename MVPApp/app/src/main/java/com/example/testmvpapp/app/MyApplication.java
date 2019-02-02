@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.AppComponent;
 import com.example.testmvpapp.di.component.DaggerAppComponent;
 import com.example.testmvpapp.di.module.AppModule;
@@ -35,7 +36,7 @@ public class MyApplication extends Application {
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
 
-
+        initDB();
         initBugly();
         initJPUSH();
     }
@@ -66,6 +67,13 @@ public class MyApplication extends Application {
         JPushInterface.init(this);
         // 获取极光推送的ID
         registrationId = JPushInterface.getRegistrationID(this);
+    }
+
+    /**
+     * 初始化数据库
+     */
+    private void initDB() {
+        DatabaseManager.getInstance().init(this);
     }
 
     /**
