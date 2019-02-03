@@ -72,7 +72,7 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
-        ToolbarUtil.setToolbar(this, "注册", true);
+        ToolbarUtil.setActivityToolbar(this, "注册", false);
     }
 
     @Override
