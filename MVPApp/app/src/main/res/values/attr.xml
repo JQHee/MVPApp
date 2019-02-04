@@ -87,4 +87,12 @@
         <!-- 禁用时的文字颜色 -->
     </declare-styleable>
 
+    <!--显示提示的View-->
+    <declare-styleable name="TipView">
+        <attr name="tipBackgroundColor" format="color"/>
+        <attr name="tipTextColor" format="color"/>
+        <attr name="tipText" format="string"/>
+        <attr name="tipTextSize" format="dimension"/>
+    </declare-styleable>
+
 </resources>

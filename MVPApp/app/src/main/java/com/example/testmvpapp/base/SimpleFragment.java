@@ -2,9 +2,13 @@ package com.example.testmvpapp.base;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +19,13 @@ import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.di.component.DaggerFragmentComponent;
 import com.example.testmvpapp.di.component.FragmentComponent;
 import com.example.testmvpapp.di.module.FragmentModule;
+import com.example.testmvpapp.sections.common.listener.PermissionListener;
+import com.github.nukc.stateview.StateView;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -32,6 +43,8 @@ public abstract class SimpleFragment extends LazyLoadFragment {
     protected View mRootView = null;
     protected Activity mActivity = null;
     protected Context mContext = null;
+    // 用于显示加载中、网络异常，空布局、内容布局
+    protected StateView mStateView = null;
     private Unbinder mUnbinder = null;
     // 是否初始化
     protected boolean isInited = false;
@@ -110,4 +123,21 @@ public abstract class SimpleFragment extends LazyLoadFragment {
     protected abstract Object getLayout();
     public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
     protected abstract BasePresenter createPresenter();
+
+
+    public boolean isEventBusRegisted(Object subscribe) {
+        return EventBus.getDefault().isRegistered(subscribe);
+    }
+
+    public void registerEventBus(Object subscribe) {
+        if (!isEventBusRegisted(subscribe)) {
+            EventBus.getDefault().register(subscribe);
+        }
+    }
+
+    public void unregisterEventBus(Object subscribe) {
+        if (isEventBusRegisted(subscribe)) {
+            EventBus.getDefault().unregister(subscribe);
+        }
+    }
 }

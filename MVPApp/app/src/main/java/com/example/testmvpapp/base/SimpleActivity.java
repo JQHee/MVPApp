@@ -3,11 +3,15 @@ package com.example.testmvpapp.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,11 +23,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
+import com.github.nukc.stateview.StateView;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ListIterator;
 
 import butterknife.ButterKnife;
@@ -36,15 +46,19 @@ import butterknife.Unbinder;
  * @date 2018/12/18
  */
 public abstract class SimpleActivity extends AppCompatActivity {
+
     protected final String TAG = this.getClass().getSimpleName();
     private static Activity mCurrentActivity;
-    private Unbinder mUnBinder;
-    private BasePresenter mPresenter;
-    protected  Bundle savedInstanceState;
+    // 用于显示加载中、网络异常，空布局、内容布局
+    protected StateView mStateView = null;
+    protected BasePresenter mPresenter = null;
+    protected  Bundle savedInstanceState = null;
+    private Unbinder mUnBinder = null;
     // 退出时的时间
     private long mExitTime;
     // 间隔
     private static final long WAIT_TIME = 2000L;
+    public PermissionListener mPermissionListener = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -264,6 +278,68 @@ public abstract class SimpleActivity extends AppCompatActivity {
             }
         }else {
             this.startActivity(intent);
+        }
+    }
+
+    /**
+     * 事件总线
+     */
+    public boolean isEventBusRegisted(Object subscribe) {
+        return EventBus.getDefault().isRegistered(subscribe);
+    }
+
+    public void registerEventBus(Object subscribe) {
+        if (!isEventBusRegisted(subscribe)) {
+            EventBus.getDefault().register(subscribe);
+        }
+    }
+
+    public void unregisterEventBus(Object subscribe) {
+        if (isEventBusRegisted(subscribe)) {
+            EventBus.getDefault().unregister(subscribe);
+        }
+    }
+
+    /**
+     * 申请运行时权限
+     */
+    public void requestRuntimePermission(String[] permissions, PermissionListener permissionListener) {
+        mPermissionListener = permissionListener;
+        List<String> permissionList = new ArrayList<>();
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionList.add(permission);
+            }
+        }
+
+        if (!permissionList.isEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionList.toArray(new String[permissionList.size()]), 1);
+        } else {
+            permissionListener.onGranted();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0) {
+                    List<String> deniedPermissions = new ArrayList<>();
+                    for (int i = 0; i < grantResults.length; i++) {
+                        int grantResult = grantResults[i];
+                        String permission = permissions[i];
+                        if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                            deniedPermissions.add(permission);
+                        }
+                    }
+                    if (deniedPermissions.isEmpty()) {
+                        mPermissionListener.onGranted();
+                    } else {
+                        mPermissionListener.onDenied(deniedPermissions);
+                    }
+                }
+                break;
         }
     }
 }
