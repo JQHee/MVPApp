@@ -18,6 +18,10 @@ import java.io.File;
 
 import cn.jpush.android.api.JPushInterface;
 
+/**
+ * 入口文件优化：https://juejin.im/post/5b59a4e7e51d455f5f4cfa38
+ */
+
 public class MyApplication extends Application {
 
     public static String registrationId;
