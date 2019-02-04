@@ -3,6 +3,7 @@ package com.example.testmvpapp.app;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -12,6 +13,8 @@ import com.example.testmvpapp.di.component.DaggerAppComponent;
 import com.example.testmvpapp.di.module.AppModule;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.tencent.bugly.crashreport.CrashReport;
+
+import java.io.File;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -26,6 +29,15 @@ public class MyApplication extends Application {
     private static long mMainThreadId;//主线程id
     private static Looper mMainLooper;//循环队列
     private static Handler mHandler;//主线程Handler
+
+    //根目录
+    public static final String APP_ROOT_DIRECTORY = "zhenghexing";
+    public static final String APPPATH = Environment
+            .getExternalStorageDirectory()
+            + File.separator
+            + APP_ROOT_DIRECTORY
+            + File.separator;
+    public static String DATA_DATA;// /data/data目录
 
     @Override
     public void onCreate() {

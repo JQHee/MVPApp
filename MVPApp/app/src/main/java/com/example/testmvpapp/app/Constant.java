@@ -2,6 +2,8 @@ package com.example.testmvpapp.app;
 
 public class Constant {
 
+    public static final String SERIALIZABLE = "serializable";
+
     // 服务器的基本请求域名地址
     public static final String BASE_URL = "";
     // 服务器的基本请求ip地址
