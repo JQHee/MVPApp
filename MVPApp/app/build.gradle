@@ -136,9 +136,7 @@ dependencies {
     }
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:3.1.0"
     */
-
-    /* 工具包 */
-    implementation 'com.blankj:utilcode:1.10.0'
+    
     /* 二维码 */
     implementation 'me.dm7.barcodescanner:zbar:1.9.8'
 
