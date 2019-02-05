@@ -11,7 +11,7 @@ import com.amap.api.location.AMapLocationListener;
  * 高德定位类
  * Created by pjw on 2016/12/6.
  */
-public class Location {
+public class GdLocation {
     //声明AMapLocationClient类对象
     private static AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
@@ -59,7 +59,7 @@ public class Location {
      * 启动定位
      */
     public static void startLocation(LocationCallback mLocationCallback){
-        Location.mLocationCallback=mLocationCallback;
+        GdLocation.mLocationCallback=mLocationCallback;
         if(mLocationClient!=null){
             //启动定位
             mLocationClient.startLocation();
