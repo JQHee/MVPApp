@@ -191,4 +191,7 @@ dependencies {
     // animator providers
     implementation 'com.github.nukc.stateview:animations:1.0.1'
 
+    /* 工具类库 加密等*/
+    implementation 'com.blankj:utilcode:1.23.4'
+
 }
