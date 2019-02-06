@@ -60,15 +60,17 @@ public abstract class SimpleFragment extends LazyLoadFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (getLayout() instanceof  Integer) {
-            mRootView = inflater.inflate((Integer) getLayout(), null);
-        } else if (getLayout() instanceof View) {
-            mRootView =  (View) getLayout();
-        } else {
-            throw new ClassCastException("getLayout() type must be int or View");
+        if (mRootView == null) { // 防止重复添加
+            if (getLayout() instanceof  Integer) {
+                mRootView = inflater.inflate((Integer) getLayout(), null);
+            } else if (getLayout() instanceof View) {
+                mRootView =  (View) getLayout();
+            } else {
+                throw new ClassCastException("getLayout() type must be int or View");
+            }
+            mUnbinder = ButterKnife.bind(this, mRootView);
+            onBindView(savedInstanceState, mRootView);
         }
-        mUnbinder = ButterKnife.bind(this, mRootView);
-        onBindView(savedInstanceState, mRootView);
         return mRootView;
     }
 

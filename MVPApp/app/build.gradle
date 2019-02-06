@@ -108,8 +108,13 @@ dependencies {
 
     /* RxJava */
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+
+    /* 生命周期 */
+    implementation "io.reactivex.rxjava2:rxjava:2.2.0"
+    implementation 'com.trello.rxlifecycle3:rxlifecycle:3.0.0'
+    implementation 'com.trello:rxlifecycle-components:1.0'
+
     /* 网络请求依赖 */
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
@@ -181,7 +186,9 @@ dependencies {
     /* 事件总线 */
     implementation 'org.greenrobot:eventbus:3.1.1'
 
-    /* 解决65535报错的问题 */
+    /* 解决65535报错的问题
+        Error: Cannot fit requested classes in a single dex file (# methods: 76798 > 65536)
+     */
     implementation 'com.android.support:multidex:1.0.1'
 
     /* 多状态View 无数据、加载、网络错误提示等 */

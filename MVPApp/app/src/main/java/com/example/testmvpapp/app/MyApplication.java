@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.multidex.MultiDex;
 
 import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.AppComponent;
@@ -58,6 +59,15 @@ public class MyApplication extends Application {
         initDB();
         initBugly();
         initJPUSH();
+    }
+
+    /**
+     * 解决 使得这个dex的方法数量被限制在65535之内保错问题
+     */
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     public static synchronized MyApplication getInstance() {
