@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,5 +142,16 @@ public abstract class SimpleFragment extends LazyLoadFragment {
         if (isEventBusRegisted(subscribe)) {
             EventBus.getDefault().unregister(subscribe);
         }
+    }
+
+    /**
+     * 初始化 Toolbar
+     *
+     * @param toolbar
+     * @param homeAsUpEnabled
+     * @param title
+     */
+    protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
+        ((SimpleActivity)getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
     }
 }

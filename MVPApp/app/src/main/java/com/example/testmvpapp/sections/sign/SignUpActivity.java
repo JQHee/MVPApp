@@ -5,13 +5,13 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
+import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
@@ -30,6 +30,8 @@ import butterknife.OnClick;
 
 public class SignUpActivity extends SimpleActivity implements SignUpContract.View {
 
+    @BindView(R.id.id_toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.edit_sign_up_name)
     TextInputEditText mName;
     @BindView(R.id.edit_sign_up_email)
@@ -66,21 +68,23 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
 
     @Override
     protected void initEventAndData() {
+
+        // initToolBar(mToolbar, true, "注册");
+
         DaggerActivityComponent.builder()
                 .appComponent(MyApplication.getAppComponent())
                 .activityModule(new ActivityModule(this))
                 .build()
                 .inject(this);
         mPresenter.attachView(this);
-        ToolbarUtil.setActivityToolbar(this, "注册", false);
+
+        ToolbarUtil.setActivityToolbar(this, "注册", true);
     }
+
 
     @Override
     public void gotoSignIn() {
-
-        // 跳转注册页面
-        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
-        startActivity(intent);
+        // 跳转登录页面
         finish();
 
     }
@@ -97,6 +101,7 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
     }
 
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int i = item.getItemId();
@@ -107,6 +112,7 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
         }
         return super.onOptionsItemSelected(item);
     }
+    */
 
     public boolean checkForm() {
         final String name = mName.getText().toString();
