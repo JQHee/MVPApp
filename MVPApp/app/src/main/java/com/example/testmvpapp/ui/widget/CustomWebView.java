@@ -56,6 +56,9 @@ public class CustomWebView extends WebView {
         webSettings.setDisplayZoomControls(false);//隐藏
         webSettings.setDomStorageEnabled(true);
         webSettings.setSupportMultipleWindows(true);
+        // 修改ua使得web端正确判断
+        String ua = webSettings.getUserAgentString();
+        webSettings.setUserAgentString(ua+"; Android Client");
         //webSettings.setUseWideViewPort(true);
         this.setWebViewClient(mWebViewClientBase);
         this.setWebChromeClient(mWebChromeClientBase);
