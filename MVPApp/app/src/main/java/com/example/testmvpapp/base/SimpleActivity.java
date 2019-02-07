@@ -30,9 +30,12 @@ import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
+import com.example.testmvpapp.util.base.CleanLeakUtils;
+import com.example.testmvpapp.util.log.LatteLogger;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
 import com.github.nukc.stateview.StateView;
+import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -165,6 +168,9 @@ public abstract class SimpleActivity extends SwipeBackActivity {
 
     @Override
     protected void onDestroy() {
+
+        // 键盘造成的内存泄漏
+        CleanLeakUtils.fixInputMethodManagerLeak(this);
         super.onDestroy();
         ActivityCollector.removeActivity(this);
         if (mUnBinder != null) {
@@ -451,4 +457,5 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
