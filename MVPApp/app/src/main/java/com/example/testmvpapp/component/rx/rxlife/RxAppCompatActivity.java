@@ -4,17 +4,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.testmvpapp.base.SimpleActivity;
 import com.trello.rxlifecycle.android.ActivityEvent;
 
 import rx.Observable;
 import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
+import rx.subjects.PublishSubject;
 
 
-public abstract class RxAppCompatActivity extends AppCompatActivity implements ActivityLifeOperator {
+// implements ActivityLifeOperator
+public abstract class RxAppCompatActivity extends SimpleActivity {
 
-    protected final BehaviorSubject<ActivityEvent> lifeSubject = BehaviorSubject.create();
+    protected final PublishSubject<ActivityEvent> lifeSubject = BehaviorSubject.create();
 
+    /*
     public <T> Observable.Transformer<T, T> bindUntilEvent(final ActivityEvent bindEvent) {
         final Observable<ActivityEvent> observable = lifeSubject.takeFirst(new Func1<ActivityEvent, Boolean>() {
             @Override
@@ -31,7 +35,7 @@ public abstract class RxAppCompatActivity extends AppCompatActivity implements A
             }
         };
     }
-
+    */
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

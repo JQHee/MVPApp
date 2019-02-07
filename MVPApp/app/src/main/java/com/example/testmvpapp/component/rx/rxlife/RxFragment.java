@@ -6,16 +6,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
+import com.example.testmvpapp.base.SimpleFragment;
+
 import rx.Observable;
 import rx.functions.Func1;
 import rx.subjects.BehaviorSubject;
 
-
-public class RxFragment extends Fragment implements FragmentLifeOperator {
+// implements FragmentLifeOperator
+public abstract class RxFragment extends SimpleFragment {
 
     protected final BehaviorSubject<FragmentEvent> lifeSubject = BehaviorSubject.create();
 
-
+    /*
     @Override
     public <T> Observable.Transformer<T, T> bindUntilEvent(final FragmentEvent bindEvent) {
         final Observable<FragmentEvent> observable = lifeSubject.takeFirst(new Func1<FragmentEvent, Boolean>() {
@@ -33,6 +35,7 @@ public class RxFragment extends Fragment implements FragmentLifeOperator {
             }
         };
     }
+    */
 
     @Override
     public void onAttach(Context context) {

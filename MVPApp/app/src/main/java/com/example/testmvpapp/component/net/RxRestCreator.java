@@ -59,7 +59,9 @@ public class RxRestCreator {
         private static final ArrayList<Interceptor> INTERCEPTORS = InterceptorCreator.getInstance().getInterceptors();
 
         private static OkHttpClient.Builder addInterceptor() {
-
+            /*
+            * head 头可能是需要变化的
+            */
             if (INTERCEPTORS != null && !INTERCEPTORS.isEmpty()) {
                 for (Interceptor interceptor : INTERCEPTORS) {
                     BUILDER.addInterceptor(interceptor);
@@ -74,7 +76,7 @@ public class RxRestCreator {
     }
 
     /**
-     * Service接口
+     *  静态内部类 Service接口
      */
     private static final class RestServiceHolder {
         private static final RxRestService REST_SERVICE =

@@ -28,26 +28,26 @@ import retrofit2.http.Url;
 public interface RxRestService {
 
     @GET
-    Observable<String> get(@Url String url, @QueryMap Map<String, Object> params);
+    rx.Observable get(@Url String url, @QueryMap Map<String, Object> params);
 
     @FormUrlEncoded
     @POST
-    Observable<String> post(@Url String url, @FieldMap Map<String, Object> params);
+    rx.Observable post(@Url String url, @FieldMap Map<String, Object> params);
 
     //传入原始数据
     @POST
-    Observable<String> postRaw(@Url String url, @Body RequestBody body);
+    rx.Observable postRaw(@Url String url, @Body RequestBody body);
 
     @FormUrlEncoded
     @PUT
-    Observable<String> put(@Url String url, @FieldMap Map<String, Object> params);
+    rx.Observable put(@Url String url, @FieldMap Map<String, Object> params);
 
     //传入原始数据
     @PUT
-    Observable<String> putRaw(@Url String url, @Body RequestBody body);
+    rx.Observable putRaw(@Url String url, @Body RequestBody body);
 
     @DELETE
-    Observable<String> delete(@Url String url, @QueryMap Map<String, Object> params);
+    rx.Observable delete(@Url String url, @QueryMap Map<String, Object> params);
 
     @Streaming
     @GET
@@ -55,6 +55,6 @@ public interface RxRestService {
 
     @Multipart
     @POST
-    Observable<String> upload(@Url String url, @Part MultipartBody.Part file);
+    rx.Observable upload(@Url String url, @Part MultipartBody.Part file);
 
 }

@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -16,9 +17,12 @@ import com.amap.api.location.AMapLocationListener;
 import com.baidu.location.BDLocation;
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BasePresenter;
-import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.base.SimpleFragment;
 import com.example.testmvpapp.component.jpush.NotificationsUtils;
+import com.example.testmvpapp.component.net.HttpUtil;
+import com.example.testmvpapp.component.net.ProgressSubscriber;
+import com.example.testmvpapp.component.net.RxRestClient;
+import com.example.testmvpapp.component.rx.rxlife.RxAppCompatActivity;
 import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
 import com.example.testmvpapp.sections.main.index.IndexFragment;
 import com.example.testmvpapp.sections.main.personal.PersonalFragment;
@@ -27,6 +31,7 @@ import com.example.testmvpapp.ui.bottom.BottomBarAdapter;
 import com.example.testmvpapp.ui.bottom.BottomBarLayout;
 import com.example.testmvpapp.ui.bottom.BottomBarViewPager;
 import com.example.testmvpapp.util.location.BdLocationUtil;
+import com.trello.rxlifecycle.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,8 +39,10 @@ import java.util.List;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import rx.Observable;
+import rx.subjects.Subject;
 
-public class MainActivity extends SimpleActivity {
+public class MainActivity extends RxAppCompatActivity {
 
     private static final int BAIDU_ACCESS_COARSE_LOCATION = 100;
 
@@ -67,6 +74,26 @@ public class MainActivity extends SimpleActivity {
         initData();
         initListener();
         checkNotificationPermissions();
+    }
+
+    /*
+    * 测试rx的网络请求
+    */
+    private void testNetWork() {
+
+        Observable ob = RxRestClient.builder().params("name", "value").build().get();
+        HttpUtil.getInstance().toSubscribe(ob, new ProgressSubscriber<List<Subject>>(this) {
+            @Override
+            protected void _onNext(List<Subject> list) {
+
+            }
+
+            @Override
+            protected void _onError(String message) {
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+            }
+        },"cachekey", ActivityEvent.DESTROY, lifeSubject, false, false);
     }
 
     private void initView() {

@@ -202,4 +202,7 @@ dependencies {
     /* 边缘滑动返回 */
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
 
+    /* 网络数据缓存 */
+    implementation "com.orhanobut:hawk:2.0.1"
+
 }
