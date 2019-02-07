@@ -17,7 +17,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
-import com.example.testmvpapp.ui.uikit.UIUtils;
+import com.example.testmvpapp.ui.widget.UIUtils;
 import com.github.chrisbanes.photoview.OnPhotoTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.sunfusheng.glideimageview.GlideImageLoader;

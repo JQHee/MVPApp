@@ -104,6 +104,7 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
 
     @Override
     protected void initEventAndData() {
+        setSwipeBackEnable(false);
         startAnimation();
     }
 

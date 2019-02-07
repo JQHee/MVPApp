@@ -60,6 +60,7 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
 
     @Override
     protected void initEventAndData() {
+        setSwipeBackEnable(false);
         initBanner();
     }
 

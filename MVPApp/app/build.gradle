@@ -2,15 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.example.testmvpapp"
-        minSdkVersion 15
-        targetSdkVersion 27
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        //添加部分
+        // 添加部分
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath true
@@ -89,8 +89,8 @@ dependencies {
     implementation 'com.bigkoo:convenientbanner:2.0.5'
 
     /* Fragment依赖 */
-    implementation 'me.yokeyword:fragmentation:1.3.4'
-    implementation 'me.yokeyword:fragmentation-swipeback:1.3.4'
+    // implementation 'me.yokeyword:fragmentation:1.3.4'
+    // implementation 'me.yokeyword:fragmentation-swipeback:1.3.4'
 
     /* 侧滑退出Activity */
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
@@ -198,5 +198,8 @@ dependencies {
 
     /* 工具类库 加密等*/
     implementation 'com.blankj:utilcode:1.23.4'
+
+    /* 边缘滑动返回 */
+    implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
 
 }

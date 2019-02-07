@@ -14,7 +14,7 @@ import android.util.Log;
 
 
 import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.ui.uikit.UIUtils;
+import com.example.testmvpapp.ui.widget.UIUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

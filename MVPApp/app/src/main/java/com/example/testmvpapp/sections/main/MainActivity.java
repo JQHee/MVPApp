@@ -60,6 +60,7 @@ public class MainActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
+        setSwipeBackEnable(false);
         // 解决虚拟按键遮挡的问题
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         initView();

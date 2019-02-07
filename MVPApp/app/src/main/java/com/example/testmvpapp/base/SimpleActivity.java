@@ -42,6 +42,8 @@ import java.util.ListIterator;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 
 /**
@@ -49,7 +51,7 @@ import butterknife.Unbinder;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleActivity extends AppCompatActivity {
+public abstract class SimpleActivity extends SwipeBackActivity {
 
     protected final String TAG = this.getClass().getSimpleName();
     private static Activity mCurrentActivity;
@@ -64,9 +66,13 @@ public abstract class SimpleActivity extends AppCompatActivity {
     private static final long WAIT_TIME = 2000L;
     public PermissionListener mPermissionListener = null;
 
+    // 侧滑类配置
+    private SwipeBackLayout mSwipeBackLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         /*
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
@@ -84,11 +90,23 @@ public abstract class SimpleActivity extends AppCompatActivity {
         } else {
             throw new ClassCastException("getLayout() type must be int or View");
         }
-
+        initSwipeBackLayout();
         mUnBinder = ButterKnife.bind(this);
         onViewCreated();
         ActivityCollector.addActivity(this);
         initEventAndData();
+
+    }
+
+
+    private void initSwipeBackLayout() {
+        // 可以调用该方法，设置是否允许滑动退出 (如果不需要在子类关闭)
+        setSwipeBackEnable(true);
+        mSwipeBackLayout = getSwipeBackLayout();
+        // 设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
+        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+        // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
+        mSwipeBackLayout.setEdgeSize(200);
     }
 
     /**

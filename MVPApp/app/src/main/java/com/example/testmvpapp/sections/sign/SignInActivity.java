@@ -53,6 +53,7 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
 
     @Override
     protected void initEventAndData() {
+        setSwipeBackEnable(false);
         DaggerActivityComponent.builder()
                 .appComponent(MyApplication.getAppComponent())
                 .activityModule(new ActivityModule(this))
