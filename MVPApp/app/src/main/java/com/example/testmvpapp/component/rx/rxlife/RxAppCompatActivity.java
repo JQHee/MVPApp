@@ -16,7 +16,7 @@ import rx.subjects.PublishSubject;
 // implements ActivityLifeOperator
 public abstract class RxAppCompatActivity extends SimpleActivity {
 
-    protected final PublishSubject<ActivityEvent> lifeSubject = BehaviorSubject.create();
+    protected final PublishSubject<ActivityEvent> lifeSubject = PublishSubject.create();
 
     /*
     public <T> Observable.Transformer<T, T> bindUntilEvent(final ActivityEvent bindEvent) {

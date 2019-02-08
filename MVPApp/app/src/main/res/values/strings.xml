@@ -6,4 +6,8 @@
     <string name="findNewVersion">发现新版本：%1$s</string>
     <string name="talk_about_it_later">以后再说</string>
     <string name="upgrade_now">现在升级</string>
+
+    <!--新特性页面-->
+    <string name="new_features_start">立即体验</string>
+
 </resources>

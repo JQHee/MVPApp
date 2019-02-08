@@ -64,4 +64,13 @@
         <item name="android:progressDrawable">@drawable/shape_progressbar_mini</item>
     </style>
 
+    <!--去除按钮的阴影的效果-->
+<!-- 1. style="?android:attr/borderlessButtonStyle"
+     2.下面这种自定义-->
+    <style name="button_style" parent="@style/Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+_
 </resources>
