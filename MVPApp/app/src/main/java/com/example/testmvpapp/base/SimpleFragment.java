@@ -154,4 +154,27 @@ public abstract class SimpleFragment extends LazyLoadFragment {
     protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
         ((SimpleActivity)getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
     }
+
+    /*
+    boolean isEx = false;
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
+        if(fragment instanceof WebFragment){//判断是不是所属Fragment
+            webView =(WebView) fragment.getView().findViewById(R.id.webview);
+            if(webView.canGoBack())
+            {
+                webView.goBack();
+            }
+            else{
+                if (!isEx) {
+                    isEx = true;
+                    Toast.makeText(getApplicationContext(), "再按一次退出应用", Toast.LENGTH_SHORT).show();
+                } else {
+                    finish();
+                }
+            }
+        }
+        return false;
+    }
+    */
 }
