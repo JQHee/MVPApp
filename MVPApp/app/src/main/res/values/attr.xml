@@ -100,4 +100,9 @@
         <attr name="ratio" format="float" />
     </declare-styleable>
 
+    <!--用于设置宽高比例-->
+    <declare-styleable name="RatioLayout">
+        <attr name="ratio" format="float" />
+    </declare-styleable>
+
 </resources>
