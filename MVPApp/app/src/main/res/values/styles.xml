@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -65,8 +66,8 @@
     </style>
 
     <!--去除按钮的阴影的效果-->
-<!-- 1. style="?android:attr/borderlessButtonStyle"
-     2.下面这种自定义-->
+    <!-- 1. style="?android:attr/borderlessButtonStyle"
+         2.下面这种自定义-->
     <style name="button_style" parent="@style/Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
@@ -79,5 +80,5 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="colorAccent">#ffE91E63</item>
     </style>
-_
+    _
 </resources>
