@@ -72,5 +72,12 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:gravity">center</item>
     </style>
+
+    <!-- 自定义加载框圈的颜色  colorAccent 为了兼容低版本 -->
+    <style name="LoadingProgressDialog" parent="AppTheme">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorAccent">#ffE91E63</item>
+    </style>
 _
 </resources>
