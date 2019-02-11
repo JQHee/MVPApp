@@ -21,8 +21,8 @@ public class RatioRelativeLayout extends RelativeLayout {
     public RatioRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         //获取自定义属性值
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatioRelativeLayout);
-        ratio = typedArray.getFloat(R.styleable.RatioRelativeLayout_ratio, 0.0f);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatioLayout);
+        ratio = typedArray.getFloat(R.styleable.RatioLayout_ratio, 0.0f);
     }
 
     public RatioRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
