@@ -26,6 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.main.MainActivity;
@@ -35,6 +36,7 @@ import com.example.testmvpapp.util.log.LatteLogger;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
 import com.github.nukc.stateview.StateView;
+import com.jaeger.library.StatusBarUtil;
 import com.trello.rxlifecycle.LifecycleTransformer;
 
 import org.greenrobot.eventbus.EventBus;
@@ -98,6 +100,7 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         onViewCreated();
         ActivityCollector.addActivity(this);
         initEventAndData();
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main));
 
     }
 
