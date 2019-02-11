@@ -1,5 +1,5 @@
 <resources>
-    <!--hdpi 128 * 128 -->
+    <!--hdpi 72 * 72 px -->
     <string name="app_name">佳央</string>
 
     <string name="in_downloading_cb_tunke">正在下载正好房</string>
