@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,14 +18,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.testmvpapp.R;
@@ -32,6 +37,8 @@ import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.base.CleanLeakUtils;
+import com.example.testmvpapp.util.base.DensityUtil;
+import com.example.testmvpapp.util.base.StatusBarUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
@@ -70,6 +77,7 @@ public abstract class SimpleActivity extends SwipeBackActivity {
     // 间隔
     private static final long WAIT_TIME = 2000L;
     public PermissionListener mPermissionListener = null;
+    public int screenWidth;
 
     // 侧滑类配置
     private SwipeBackLayout mSwipeBackLayout;
@@ -78,15 +86,9 @@ public abstract class SimpleActivity extends SwipeBackActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
-        if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
-        */
+        screenWidth = DensityUtil.getScreenWidth(this);
+        initBeforeEventAndData();
+
         this.savedInstanceState = savedInstanceState;
         if (getLayout() instanceof Integer) {
             setContentView((Integer) getLayout());;
@@ -102,6 +104,19 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         initEventAndData();
         StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main));
 
+    }
+
+    public void setFullScreen() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (!DensityUtil.isNavigationBarExist(this)) {
+                if (getWindow() != null) {
+                    WindowManager.LayoutParams lp = getWindow().getAttributes();
+                    lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                    getWindow().setAttributes(lp);
+                    StatusBarUtils.setStatusBarVisible(this, false);
+                }
+            }
+        }
     }
 
 
@@ -232,6 +247,10 @@ public abstract class SimpleActivity extends SwipeBackActivity {
 
     public static Activity getCurrentActivity() {
         return mCurrentActivity;
+    }
+
+    public void initBeforeEventAndData() {
+
     }
 
     protected abstract Object getLayout();
