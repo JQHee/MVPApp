@@ -87,7 +87,6 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         super.onCreate(savedInstanceState);
 
         screenWidth = DensityUtil.getScreenWidth(this);
-        initBeforeEventAndData();
 
         this.savedInstanceState = savedInstanceState;
         if (getLayout() instanceof Integer) {
@@ -249,9 +248,6 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         return mCurrentActivity;
     }
 
-    public void initBeforeEventAndData() {
-
-    }
 
     protected abstract Object getLayout();
     protected abstract void initEventAndData();
