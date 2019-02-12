@@ -11,14 +11,17 @@ import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
 
-public class PersonalFragment extends Fragment {
+public class PersonalFragment extends SimpleFragment {
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-        // R.layout.fragment_personal;
+    protected Object getLayout() {
+        return R.layout.fragment_personal;
+    }
+
+    @Override
+    public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+
     }
 
 }

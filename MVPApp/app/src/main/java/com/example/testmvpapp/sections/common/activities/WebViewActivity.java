@@ -27,7 +27,7 @@ import butterknife.OnClick;
  * @date 2017/7/4  22:01
  */
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends SimpleActivity {
 
     public static final String URL = "url";
 
@@ -81,10 +81,14 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_web_view);
+    protected Object getLayout() {
+        return R.layout.activity_web_view;
+    }
+
+    @Override
+    protected void initView() {
         initData();
         initListener();
+
     }
 }

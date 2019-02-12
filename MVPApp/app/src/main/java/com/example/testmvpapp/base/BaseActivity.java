@@ -45,21 +45,17 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-
-/**
- * @desc SimpleActivity 无MVP的activity基类
- * @author HJQ
- * @date 2018/12/18
- */
-public abstract class SimpleActivity extends RxAppCompatActivity {
+public abstract class BaseActivity <T extends BaseContract.BasePresenter> extends RxAppCompatActivity implements BaseContract.BaseView  {
 
     protected final String TAG = this.getClass().getSimpleName();
+    @Inject
+    protected T mPresenter;
+    protected ActivityComponent mActivityComponent;
     protected ProgressDialog mProgressDialog;
     private Unbinder mUnBinder = null;
     // 用于显示加载中、网络异常，空布局、内容布局
@@ -69,20 +65,24 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initActivityComponent();
         if (getLayout() instanceof Integer) {
             setContentView((Integer) getLayout());;
-        } else if (getLayout() instanceof  View) {
+        } else if (getLayout() instanceof View) {
             setContentView((View) getLayout());
         } else {
             throw new ClassCastException("getLayout() type must be int or View");
         }
+        initInjector();
         mUnBinder = ButterKnife.bind(this);
         ActivityCollector.addActivity(this);
+        attachView();
         initView();
         StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main), 38);
 
     }
 
+    @Override
     public void showLoading() {
         mProgressDialog = new ProgressDialog(this);
         if (mProgressDialog != null) {
@@ -91,14 +91,51 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         }
     }
 
+    @Override
     public void hideLoading() {
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
     }
 
+    @Override
+    public void onRetry() {
+
+    }
+
+    @Override
     public <T> LifecycleTransformer<T> bindToLife() {
         return this.bindToLifecycle();
+    }
+
+    @Override
+    public void showSuccess(String successMsg) {
+        ToastUtils.showShort(successMsg);
+    }
+
+    @Override
+    public void showFaild(String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+    }
+
+    @Override
+    public void showNoNet() {
+        // ToastUtils.showShort(R.string.no_network_connection);
+    }
+
+    /**
+     * 分离view
+     */
+    private void detachView() {
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
+    }
+
+    private void attachView() {
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
+        }
     }
 
     /**
@@ -138,6 +175,16 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
     protected void onDestroy() {
 
         // 键盘造成的内存泄漏
@@ -147,16 +194,22 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         if (mUnBinder != null) {
             mUnBinder.unbind();
         }
+
+        if (mPresenter != null) {
+            mPresenter.detachView();
+            mPresenter = null;
+        }
     }
 
     /**
      * 退出应用的方法
      */
     public static void exitApp() {
-       ActivityCollector.removeAllActivity();
+        ActivityCollector.removeAllActivity();
     }
 
     protected abstract Object getLayout();
+    protected abstract void initInjector();
     protected abstract void initView();
 
     /**
@@ -365,4 +418,10 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    protected void initActivityComponent() {
+        mActivityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(((MyApplication) getApplication()).getApplicationComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+    }
 }

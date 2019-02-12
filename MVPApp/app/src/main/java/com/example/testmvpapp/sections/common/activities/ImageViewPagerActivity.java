@@ -39,7 +39,7 @@ import butterknife.OnClick;
  * @date 2017/8/23  11:02
  */
 
-public class ImageViewPagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.OnPageChangeListener {
 
     private static final String TAG = ImageViewPagerActivity.class.getSimpleName();
     public static final String IMG_URLS = "mImageUrls";
@@ -136,11 +136,13 @@ public class ImageViewPagerActivity extends AppCompatActivity implements ViewPag
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_view_pager);
-        initData();
+    protected Object getLayout() {
+        return R.layout.activity_image_view_pager;
+    }
 
+    @Override
+    protected void initView() {
+        initData();
     }
 
     class DownloadImgTask extends AsyncTask<String,Integer,Void>{

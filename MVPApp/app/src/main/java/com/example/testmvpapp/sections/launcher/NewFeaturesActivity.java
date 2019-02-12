@@ -31,7 +31,7 @@ import butterknife.OnClick;
  * 版本新特性
  */
 
-public class NewFeaturesActivity extends AppCompatActivity implements OnItemClickListener, ViewPager.OnPageChangeListener {
+public class NewFeaturesActivity extends SimpleActivity implements OnItemClickListener, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.convenientBanner)
     ConvenientBanner<Integer> mConvenientBanner;
@@ -51,10 +51,14 @@ public class NewFeaturesActivity extends AppCompatActivity implements OnItemClic
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_features);
+    protected Object getLayout() {
+        return R.layout.activity_new_features;
+    }
+
+    @Override
+    protected void initView() {
         initBanner();
+
     }
 
     private void initBanner() {

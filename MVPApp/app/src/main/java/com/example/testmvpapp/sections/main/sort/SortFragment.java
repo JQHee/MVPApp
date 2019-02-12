@@ -21,14 +21,17 @@ import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 
 import java.lang.reflect.Method;
 
-public class SortFragment extends Fragment {
+public class SortFragment extends SimpleFragment {
 
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-        // R.layout.fragment_sort;
+    protected Object getLayout() {
+        return R.layout.fragment_sort;
+    }
+
+    @Override
+    public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
+
     }
 
     @Override

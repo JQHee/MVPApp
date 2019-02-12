@@ -36,7 +36,7 @@ import butterknife.BindView;
  * @date 2017/8/23  10:42
  */
 
-public class BigImageFragment extends Fragment {
+public class BigImageFragment extends SimpleFragment {
 
     public static final String IMG_URL = "imgUrl";
 
@@ -50,7 +50,7 @@ public class BigImageFragment extends Fragment {
         mIvPic.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override
             public void onPhotoTap(ImageView view, float x, float y) {
-                // mActivity.finish();
+                getFragmentComponent().getAcitivty().finish();
             }
         });
     }
@@ -82,17 +82,14 @@ public class BigImageFragment extends Fragment {
                 .into(new SimpleTarget<Drawable>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        /* 暂时注释
-                        if (resource.getIntrinsicHeight() > DisplayUtil.getScreenHeight(mActivity)) {
+                        if (resource.getIntrinsicHeight() > DisplayUtil.getScreenHeight(getFragmentComponent().getAcitivty())) {
                             mIvPic.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         }
-                        */
                         requestBuilder.into(mIvPic);
                     }
                 });
     }
 
-    /*
     @Override
     protected Object getLayout() {
         return R.layout.fragment_big_image;
@@ -103,11 +100,6 @@ public class BigImageFragment extends Fragment {
 
     }
 
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
-    }
-    */
 }
 
 

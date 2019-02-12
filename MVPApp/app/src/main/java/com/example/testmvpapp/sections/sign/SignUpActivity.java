@@ -1,25 +1,13 @@
 package com.example.testmvpapp.sections.sign;
 
-import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.util.Patterns;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.base.BasePresenter;
-import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.contract.SignUpContract;
-import com.example.testmvpapp.di.component.DaggerActivityComponent;
-import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignUpPresenter;
 import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 
@@ -28,7 +16,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SignUpActivity extends SimpleActivity<SignUpPresenter> implements SignUpContract.View {
+public class SignUpActivity extends BaseActivity<SignUpPresenter> implements SignUpContract.View {
 
     @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
@@ -42,9 +30,6 @@ public class SignUpActivity extends SimpleActivity<SignUpPresenter> implements S
     TextInputEditText mPassword;
     @BindView(R.id.edit_sign_up_re_password)
     TextInputEditText mRePassword;
-
-    @Inject
-    SignUpPresenter mPresenter;
 
     @OnClick({R.id.btn_sign_up})
     public void onClickSignUp() {

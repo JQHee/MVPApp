@@ -5,28 +5,21 @@ import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
 
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.base.BasePresenter;
-import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
-import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignInPresenter;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.trello.rxlifecycle2.LifecycleTransformer;
-import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
-import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SignInActivity extends SimpleActivity<SignInPresenter> implements SignInContract.View {
+public class SignInActivity extends BaseActivity<SignInPresenter> implements SignInContract.View {
 
     @BindView(R.id.edit_sign_in_email)
     TextInputEditText mEmail;

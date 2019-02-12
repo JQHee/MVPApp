@@ -11,14 +11,15 @@ import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
 
-public class DiscoverFragment extends Fragment {
+public class DiscoverFragment extends SimpleFragment {
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-        // return R.layout.fragment_discover;
+    protected Object getLayout() {
+        return R.layout.fragment_discover;
+    }
+
+    @Override
+    public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
 
     }
 

@@ -34,7 +34,7 @@ import butterknife.OnClick;
  * 欢迎页面
  */
 
-public class LauncherActivity extends AppCompatActivity implements ITimerListener {
+public class LauncherActivity extends SimpleActivity implements ITimerListener {
 
     @BindView(R.id.rl_back_ground)
     RelativeLayout mrlayout;
@@ -52,7 +52,6 @@ public class LauncherActivity extends AppCompatActivity implements ITimerListene
             checkIsShowScroll();
         }
     }
-
 
     private void initTimer() {
         if (mTimer != null) {
@@ -116,9 +115,13 @@ public class LauncherActivity extends AppCompatActivity implements ITimerListene
     }
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_launcher);
+    protected Object getLayout() {
+        return R.layout.activity_launcher;
+    }
+
+    @Override
+    protected void initView() {
+        setFullScreen();
     }
 
     @Override

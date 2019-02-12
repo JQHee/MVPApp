@@ -9,7 +9,6 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -19,11 +18,8 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.baidu.location.BDLocation;
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
-import com.example.testmvpapp.base.SimpleFragment;
 import com.example.testmvpapp.component.jpush.NotificationsUtils;
-import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
 import com.example.testmvpapp.sections.main.index.IndexFragment;
 import com.example.testmvpapp.sections.main.personal.PersonalFragment;
@@ -32,8 +28,6 @@ import com.example.testmvpapp.ui.bottom.BottomBarAdapter;
 import com.example.testmvpapp.ui.bottom.BottomBarLayout;
 import com.example.testmvpapp.ui.bottom.BottomBarViewPager;
 import com.example.testmvpapp.util.location.BdLocationUtil;
-import com.example.testmvpapp.util.log.LatteLogger;
-import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -41,12 +35,9 @@ import java.util.List;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends SimpleActivity {
 
     protected final String TAG = this.getClass().getSimpleName();
     private static final int BAIDU_ACCESS_COARSE_LOCATION = 100;
@@ -65,17 +56,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        initView();
-        initData();
-        initListener();
-        checkNotificationPermissions();
+
 
     }
 
-    private void initView() {
+    @Override
+    protected Object getLayout() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void initView() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         mVpContent = (BottomBarViewPager) findViewById(R.id.vp_content);
         mBottomBarLayout = (BottomBarLayout) findViewById(R.id.bbl);
+        initData();
+        initListener();
+        checkNotificationPermissions();
     }
 
     private void initData() {

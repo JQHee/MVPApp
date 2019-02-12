@@ -1,22 +1,12 @@
 package com.example.testmvpapp.base;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
 
 import com.blankj.utilcode.util.NetworkUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -24,32 +14,24 @@ import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.di.component.DaggerFragmentComponent;
 import com.example.testmvpapp.di.component.FragmentComponent;
 import com.example.testmvpapp.di.module.FragmentModule;
-import com.example.testmvpapp.sections.common.listener.PermissionListener;
-import com.github.nukc.stateview.StateView;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-//import me.yokeyword.fragmentation.ISupportFragment;
 
-
-/**
- * @desc SimpleFragment 无MVP的Fragment基类
- * @author HJQ
- * @date 2018/12/18
- */
-public abstract class SimpleFragment extends RxFragment {
+public abstract class BaseFragment <T extends BaseContract.BasePresenter> extends RxFragment implements BaseContract.BaseView  {
 
     private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
     public final String TAG = this.getClass().getSimpleName();
+    @Nullable
+    @Inject
+    protected T mPresenter;
+    protected FragmentComponent mFragmentComponent;
     private Unbinder mUnbinder = null;
     protected View mRootView,mErrorView, mEmptyView;
     protected ProgressDialog mProgressDialog;
@@ -57,7 +39,11 @@ public abstract class SimpleFragment extends RxFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initFragmentComponent();
         // ARouter.getInstance().inject(this);
+        initInjector();
+        attachView();
+        if (!NetworkUtils.isConnected()) showNoNet();
         if (savedInstanceState != null) {
             boolean isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN);
             FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -96,11 +82,82 @@ public abstract class SimpleFragment extends RxFragment {
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
+        if (mPresenter != null) {
+            mPresenter.detachView();
+            mPresenter = null;
+        }
     }
 
+    @Override
+    public void showLoading() {
+        mProgressDialog=new ProgressDialog(getActivity());
+        if (mProgressDialog != null) {
+            mProgressDialog.setMessage("正在加载数据....");
+            mProgressDialog.show();
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if(mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showSuccess(String successMsg) {
+        ToastUtils.showShort(successMsg);
+    }
+
+    @Override
+    public void showFaild(String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+    }
+
+    @Override
+    public void showNoNet() {
+        // ToastUtils.showShort(R.string.no_network_connection);
+    }
+
+    @Override
+    public void onRetry() {
+        ToastUtils.showShort("onRetry");
+    }
+
+    @Override
     public <T> LifecycleTransformer<T> bindToLife() {
         return this.bindToLifecycle();
     }
+
+
+    /**
+     * 初始化FragmentComponent
+     */
+    private void initFragmentComponent() {
+        mFragmentComponent = DaggerFragmentComponent.builder()
+                .applicationComponent(((MyApplication) getActivity().getApplication()).getApplicationComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
+    }
+
+    /**
+     * 贴上view
+     */
+    private void attachView() {
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
+        }
+    }
+
+    /**
+     * 分离view
+     */
+    private void detachView() {
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
+    }
+
 
     protected FragmentComponent getFragmentComponent(){
 
@@ -115,7 +172,9 @@ public abstract class SimpleFragment extends RxFragment {
     }
 
     protected abstract Object getLayout();
+    protected abstract void initInjector();
     public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
+    protected abstract BasePresenter createPresenter();
 
 
     public boolean isEventBusRegisted(Object subscribe) {
