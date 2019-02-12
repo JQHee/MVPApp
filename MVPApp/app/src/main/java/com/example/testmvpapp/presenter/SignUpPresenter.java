@@ -5,6 +5,7 @@ import android.util.Patterns;
 import com.example.testmvpapp.base.BaseView;
 import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.sections.sign.SignUpActivity;
+import com.example.testmvpapp.util.log.LatteLogger;
 
 import javax.inject.Inject;
 
@@ -28,7 +29,7 @@ public class SignUpPresenter implements SignUpContract.Presenter {
 
     @Override
     public void detachView() {
-
+        LatteLogger.d("SignUpPresenter detach");
     }
 
     public void gotoSignIn() {

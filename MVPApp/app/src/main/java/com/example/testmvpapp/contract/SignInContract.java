@@ -3,6 +3,8 @@ package com.example.testmvpapp.contract;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.BaseView;
 
+import io.reactivex.ObservableTransformer;
+
 public class SignInContract {
 
     public interface View extends BaseView {
@@ -10,6 +12,8 @@ public class SignInContract {
         void gotoSignUp();
         // 跳转主框架页面
         void gotoMain();
+
+        <T> ObservableTransformer<T, T> bindLifecycle();
     }
 
     public interface Presenter extends BasePresenter {

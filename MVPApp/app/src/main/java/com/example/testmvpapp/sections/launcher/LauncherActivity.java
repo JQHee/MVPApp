@@ -125,7 +125,7 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     @Override
     protected void initEventAndData() {
         setFullScreen();
-        setSwipeBackEnable(false);
+        // setSwipeBackEnable(false);
         // hideBottomUIMenu();
         startAnimation();
     }

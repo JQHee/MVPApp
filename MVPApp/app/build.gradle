@@ -111,9 +111,12 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     /* rx生命周期 参考：https://www.jianshu.com/p/3655d7d22ac6 */
-    implementation "io.reactivex.rxjava2:rxjava:2.2.0"
-    implementation 'com.trello.rxlifecycle3:rxlifecycle:3.0.0'
-    implementation 'com.trello:rxlifecycle-components:1.0'
+    //处理rxjava内存泄漏,基础组件
+    implementation 'com.trello.rxlifecycle2:rxlifecycle:2.0.1'
+    //如果你想绑定到Android特定的生命周期
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-android:2.0.1'
+    //如果你想要预先写好的Activities和Fragments，你可以作为提供者的子类
+    implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.0.1'
 
     /* 网络请求依赖 */
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
@@ -200,7 +203,9 @@ dependencies {
     implementation 'com.blankj:utilcode:1.23.4'
 
     /* 边缘滑动返回 */
+    // 需要继承activity(使用rxjava生命周期不不能继承)
     implementation 'me.imid.swipebacklayout.lib:library:1.1.0'
+    // implementation 'cn.bingoogolapple:bga-swipebacklayout:latestVersion@aar'
 
     /* 网络数据缓存 */
     implementation "com.orhanobut:hawk:2.0.1"

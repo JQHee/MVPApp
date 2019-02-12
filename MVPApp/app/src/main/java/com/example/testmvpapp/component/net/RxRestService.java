@@ -19,6 +19,7 @@ import retrofit2.http.QueryMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
+
 /**
  * @author: wuchao
  * @date: 2017/10/23 22:44
@@ -28,26 +29,26 @@ import retrofit2.http.Url;
 public interface RxRestService {
 
     @GET
-    rx.Observable get(@Url String url, @QueryMap Map<String, Object> params);
+    Observable<String> get(@Url String url, @QueryMap Map<String, Object> params);
 
     @FormUrlEncoded
     @POST
-    rx.Observable post(@Url String url, @FieldMap Map<String, Object> params);
+    Observable<String> post(@Url String url, @FieldMap Map<String, Object> params);
 
     //传入原始数据
     @POST
-    rx.Observable postRaw(@Url String url, @Body RequestBody body);
+    Observable<String> postRaw(@Url String url, @Body RequestBody body);
 
     @FormUrlEncoded
     @PUT
-    rx.Observable put(@Url String url, @FieldMap Map<String, Object> params);
+    Observable<String> put(@Url String url, @FieldMap Map<String, Object> params);
 
     //传入原始数据
     @PUT
-    rx.Observable putRaw(@Url String url, @Body RequestBody body);
+    Observable<String> putRaw(@Url String url, @Body RequestBody body);
 
     @DELETE
-    rx.Observable delete(@Url String url, @QueryMap Map<String, Object> params);
+    Observable<String> delete(@Url String url, @QueryMap Map<String, Object> params);
 
     @Streaming
     @GET
@@ -55,6 +56,6 @@ public interface RxRestService {
 
     @Multipart
     @POST
-    rx.Observable upload(@Url String url, @Part MultipartBody.Part file);
+    Observable<String> upload(@Url String url, @Part MultipartBody.Part file);
 
 }

@@ -22,6 +22,7 @@ import com.example.testmvpapp.di.component.FragmentComponent;
 import com.example.testmvpapp.di.module.FragmentModule;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.github.nukc.stateview.StateView;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,7 +39,7 @@ import butterknife.Unbinder;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleFragment extends LazyLoadFragment {
+public abstract class SimpleFragment extends RxFragment {
 
     public final String TAG = this.getClass().getSimpleName();
     protected View mRootView = null;
@@ -86,10 +87,6 @@ public abstract class SimpleFragment extends LazyLoadFragment {
         mPresenter = createPresenter();
     }
 
-    @Override
-    protected void onFragmentFirstVisible() {
-        // 当第一次可见的时候，加载数据
-    }
 
     @Override
     public void onDestroyView() {

@@ -8,15 +8,23 @@ import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.di.component.DaggerActivityComponent;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignInPresenter;
 import com.example.testmvpapp.sections.main.MainActivity;
+import com.example.testmvpapp.util.log.LatteLogger;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.ObservableTransformer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class SignInActivity extends SimpleActivity implements SignInContract.View {
 
@@ -53,7 +61,7 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
 
     @Override
     protected void initEventAndData() {
-        setSwipeBackEnable(false);
+        // setSwipeBackEnable(false);
         DaggerActivityComponent.builder()
                 .appComponent(MyApplication.getAppComponent())
                 .activityModule(new ActivityModule(this))
@@ -81,6 +89,34 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    /*
+     * 测试rx的网络请求
+     */
+    private void testNetWork() {
+
+        RxRestClient.builder()
+                .url("http://120.76.240.104:8017/api/index/index")
+                .build()
+                .get()
+                .compose(this.bindLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io()).subscribe(new Consumer() {
+            @Override
+            public void accept(Object o) throws Exception {
+                LatteLogger.d(o);
+            }
+        });
+    }
+
+
+    @Override
+    public <T> ObservableTransformer<T, T> bindLifecycle() {
+        // 绑定到Activity的pause生命周期（在pause销毁请求）
+        // return this.bindUntilEvent(ActivityEvent.PAUSE);
+        // 绑定activity，与activity生命周期一样;
+        return this.bindToLifecycle();
     }
 
     /**

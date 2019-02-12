@@ -42,9 +42,9 @@ public class RxRestClient {
         return new RxRestClientBuilder();
     }
 
-    private rx.Observable request(HttpMethod method) {
+    private Observable request(HttpMethod method) {
         final RxRestService service = RxRestCreator.getRxRestService();
-        rx.Observable observable = null;
+        Observable observable = null;
         switch (method) {
             case GET:
                 observable = service.get(URL, PARAMS);
@@ -149,11 +149,11 @@ public class RxRestClient {
         return  requestBody;
     }
 
-    public final rx.Observable get() {
+    public final Observable get() {
         return request(HttpMethod.GET);
     }
 
-    public final rx.Observable post() {
+    public final Observable post() {
         if (BODY == null) {
             return request(HttpMethod.POST);
         } else {
@@ -165,7 +165,7 @@ public class RxRestClient {
         }
     }
 
-    public final rx.Observable put() {
+    public final Observable put() {
         if (BODY == null) {
             return request(HttpMethod.PUT);
         } else {
@@ -177,11 +177,11 @@ public class RxRestClient {
         }
     }
 
-    public final rx.Observable delete() {
+    public final Observable delete() {
         return request(HttpMethod.DELETE);
     }
 
-    public final rx.Observable upload() {
+    public final Observable upload() {
         return request(HttpMethod.UPLOAD);
     }
 

@@ -44,7 +44,7 @@ import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
 import com.github.nukc.stateview.StateView;
 import com.jaeger.library.StatusBarUtil;
-import com.trello.rxlifecycle.LifecycleTransformer;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -63,7 +63,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleActivity extends SwipeBackActivity {
+public abstract class SimpleActivity extends RxAppCompatActivity {
 
     protected final String TAG = this.getClass().getSimpleName();
     private static Activity mCurrentActivity;
@@ -96,7 +96,7 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         } else {
             throw new ClassCastException("getLayout() type must be int or View");
         }
-        initSwipeBackLayout();
+        // initSwipeBackLayout();
         mUnBinder = ButterKnife.bind(this);
         onViewCreated();
         ActivityCollector.addActivity(this);
@@ -119,6 +119,7 @@ public abstract class SimpleActivity extends SwipeBackActivity {
     }
 
 
+    /*
     private void initSwipeBackLayout() {
         // 可以调用该方法，设置是否允许滑动退出 (如果不需要在子类关闭)
         setSwipeBackEnable(true);
@@ -128,6 +129,7 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
         mSwipeBackLayout.setEdgeSize(200);
     }
+    */
 
     /**
      * 沉浸式状态栏（适配虚拟按键、状态栏）
