@@ -101,7 +101,7 @@ public abstract class SimpleActivity extends SwipeBackActivity {
         onViewCreated();
         ActivityCollector.addActivity(this);
         initEventAndData();
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main));
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main), 38);
 
     }
 
