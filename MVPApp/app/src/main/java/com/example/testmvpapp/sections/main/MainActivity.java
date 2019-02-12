@@ -4,8 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -42,8 +46,9 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class MainActivity extends SimpleActivity {
+public class MainActivity extends AppCompatActivity {
 
+    protected final String TAG = this.getClass().getSimpleName();
     private static final int BAIDU_ACCESS_COARSE_LOCATION = 100;
 
     //声明AMapLocationClient类对象
@@ -53,27 +58,19 @@ public class MainActivity extends SimpleActivity {
 
     private BottomBarViewPager mVpContent = null;
     private BottomBarLayout mBottomBarLayout = null;
-    private List<SimpleFragment> mFragmentList = new ArrayList<>();
+    private List<Fragment> mFragmentList = new ArrayList<>();
 
     @Override
-    protected Object getLayout() {
-        return R.layout.activity_main;
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
-    }
-
-    @Override
-    protected void initEventAndData() {
-        // setSwipeBackEnable(false);
-        // 解决虚拟按键遮挡的问题
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         initView();
         initData();
         initListener();
         checkNotificationPermissions();
+
     }
 
     private void initView() {

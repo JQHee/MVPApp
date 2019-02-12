@@ -1,29 +1,38 @@
 package com.example.testmvpapp.di.module;
 
 import android.app.Activity;
-import com.example.testmvpapp.di.scope.ActivityScope;
+import android.content.Context;
+
+
+import com.example.testmvpapp.di.scope.ContextLife;
+import com.example.testmvpapp.di.scope.PerActivity;
+
 import dagger.Module;
 import dagger.Provides;
 
 /**
- * @desc ActivityModule
- * @author hjq
- * @date 2018/10/9
+ * @author ：Peakmain
+ * version ：1.0
+ * createTime ：2018/10/19 0019 下午 7:40
+ * mail : 2726449200@qq.com
+ * describe ：
  */
-
 @Module
 public class ActivityModule {
     private Activity mActivity;
 
     public ActivityModule(Activity activity) {
-        this.mActivity = activity;
+        mActivity = activity;
     }
-
+    @PerActivity
     @Provides
-    @ActivityScope
+    @ContextLife("Activity")
+    public Context provideActivityContext(){
+        return mActivity;
+    }
+    @Provides
+    @PerActivity
     public Activity provideActivity() {
         return mActivity;
     }
-
-
 }

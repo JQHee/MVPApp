@@ -1,6 +1,7 @@
 package com.example.testmvpapp.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,8 +32,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
+import com.example.testmvpapp.di.component.ActivityComponent;
+import com.example.testmvpapp.di.component.DaggerActivityComponent;
+import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
@@ -44,6 +49,7 @@ import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
 import com.github.nukc.stateview.StateView;
 import com.jaeger.library.StatusBarUtil;
+import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,6 +57,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -63,32 +71,22 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleActivity extends RxAppCompatActivity {
+public abstract class SimpleActivity<T extends BaseContract.BasePresenter> extends RxAppCompatActivity implements BaseContract.BaseView {
 
     protected final String TAG = this.getClass().getSimpleName();
-    private static Activity mCurrentActivity;
+    @Inject
+    protected T mPresenter;
+    protected ActivityComponent mActivityComponent;
+    protected ProgressDialog mProgressDialog;
+    private Unbinder mUnBinder = null;
     // 用于显示加载中、网络异常，空布局、内容布局
     protected StateView mStateView = null;
-    protected BasePresenter mPresenter = null;
-    protected  Bundle savedInstanceState = null;
-    private Unbinder mUnBinder = null;
-    // 退出时的时间
-    private long mExitTime;
-    // 间隔
-    private static final long WAIT_TIME = 2000L;
     public PermissionListener mPermissionListener = null;
-    public int screenWidth;
-
-    // 侧滑类配置
-    private SwipeBackLayout mSwipeBackLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        screenWidth = DensityUtil.getScreenWidth(this);
-
-        this.savedInstanceState = savedInstanceState;
+        initActivityComponent();
         if (getLayout() instanceof Integer) {
             setContentView((Integer) getLayout());;
         } else if (getLayout() instanceof  View) {
@@ -96,15 +94,74 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         } else {
             throw new ClassCastException("getLayout() type must be int or View");
         }
-        // initSwipeBackLayout();
+        initInjector();
         mUnBinder = ButterKnife.bind(this);
-        onViewCreated();
         ActivityCollector.addActivity(this);
-        initEventAndData();
+        attachView();
+        initView();
         StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main), 38);
 
     }
 
+    @Override
+    public void showLoading() {
+        mProgressDialog = new ProgressDialog(this);
+        if (mProgressDialog != null) {
+            mProgressDialog.setMessage("正在加载数据");
+            mProgressDialog.show();
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onRetry() {
+
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindToLife() {
+        return this.bindToLifecycle();
+    }
+
+    @Override
+    public void showSuccess(String successMsg) {
+        ToastUtils.showShort(successMsg);
+    }
+
+    @Override
+    public void showFaild(String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+    }
+
+    @Override
+    public void showNoNet() {
+        // ToastUtils.showShort(R.string.no_network_connection);
+    }
+
+    /**
+     * 分离view
+     */
+    private void detachView() {
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
+    }
+
+    private void attachView() {
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
+        }
+    }
+
+    /**
+     * 设置全屏显示
+     */
     public void setFullScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (!DensityUtil.isNavigationBarExist(this)) {
@@ -117,19 +174,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
             }
         }
     }
-
-
-    /*
-    private void initSwipeBackLayout() {
-        // 可以调用该方法，设置是否允许滑动退出 (如果不需要在子类关闭)
-        setSwipeBackEnable(true);
-        mSwipeBackLayout = getSwipeBackLayout();
-        // 设置滑动方向，可设置EDGE_LEFT, EDGE_RIGHT, EDGE_ALL, EDGE_BOTTOM
-        mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
-        // 滑动退出的效果只能从边界滑动才有效果，如果要扩大touch的范围，可以调用这个方法
-        mSwipeBackLayout.setEdgeSize(200);
-    }
-    */
 
     /**
      * 沉浸式状态栏（适配虚拟按键、状态栏）
@@ -151,38 +195,14 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         }
     }
 
-    protected void showToast(String meg) {
-        Toast.makeText(this, meg, Toast.LENGTH_LONG).show();
-    }
-
-
-    protected void showLoadingDialog() {
-
-    }
-
-    protected void dissmissLoadingDialog() {
-
-    }
-
-    public void goToLogionActivity() {
-
-    }
-
-    protected void onViewCreated() {
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter = createPresenter();
-        mCurrentActivity = this;
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mCurrentActivity = null;
     }
 
     @Override
@@ -209,51 +229,9 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
        ActivityCollector.removeAllActivity();
     }
 
-    /**
-     * 统一退出控制
-     */
-    @Override
-    public void onBackPressed() {
-        if (mCurrentActivity instanceof MainActivity){
-            //如果是主页面
-            if (System.currentTimeMillis() - mExitTime > 2000) {// 两次点击间隔大于2秒
-//                UIUtils.showToast("再按一次，退出应用");
-                mExitTime = System.currentTimeMillis();
-                return;
-            }
-        }
-        super.onBackPressed();// finish()
-    }
-
-    //对返回键进行监听
-/*    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            exit();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
-
-    public void exit() {
-        if ((System.currentTimeMillis() - mExitTime) > WAIT_TIME) {
-            Toast.makeText(MyApplication.getInstance().getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
-            mExitTime = System.currentTimeMillis();
-        } else {
-            finish();
-            System.exit(0);
-        }
-    }
-
-    public static Activity getCurrentActivity() {
-        return mCurrentActivity;
-    }
-
-
     protected abstract Object getLayout();
-    protected abstract void initEventAndData();
-    protected abstract BasePresenter createPresenter();
+    protected abstract void initInjector();
+    protected abstract void initView();
 
     /**
      * 点击空白区域隐藏键盘.
@@ -392,23 +370,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     }
 
     /**
-     * 初始化 Toolbar
-     *
-     * @param toolbar
-     * @param homeAsUpEnabled
-     * @param title
-     */
-    protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(homeAsUpEnabled);
-    }
-
-    protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, int resTitle) {
-        initToolBar(toolbar, homeAsUpEnabled, getString(resTitle));
-    }
-
-    /**
      * 添加 Fragment
      *
      * @param containerViewId
@@ -476,6 +437,13 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void initActivityComponent() {
+        mActivityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(((MyApplication) getApplication()).getApplicationComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
     }
 
 }

@@ -1,16 +1,16 @@
 package com.example.testmvpapp.contract;
 
-import com.example.testmvpapp.base.BasePresenter;
-import com.example.testmvpapp.base.BaseView;
+import com.example.testmvpapp.base.BaseContract;
+
 
 public class SignUpContract {
 
-    public interface View extends BaseView {
+    public interface View extends BaseContract.BaseView {
         // 跳转登录页面
         void gotoSignIn();
     }
 
-    public interface Presenter extends BasePresenter {
+    public interface Presenter extends BaseContract.BasePresenter<SignUpContract.View> {
         void signUpAction();
     }
 }

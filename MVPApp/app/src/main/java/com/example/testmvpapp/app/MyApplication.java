@@ -12,9 +12,9 @@ import android.os.Looper;
 import android.support.multidex.MultiDex;
 
 import com.example.testmvpapp.database.message.DatabaseManager;
-import com.example.testmvpapp.di.component.AppComponent;
-import com.example.testmvpapp.di.component.DaggerAppComponent;
-import com.example.testmvpapp.di.module.AppModule;
+import com.example.testmvpapp.di.component.ApplicationComponent;
+import com.example.testmvpapp.di.component.DaggerApplicationComponent;
+import com.example.testmvpapp.di.module.ApplicationModule;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -30,7 +30,8 @@ public class MyApplication extends Application {
 
     public static String registrationId;
     private static MyApplication instance;
-    public static AppComponent appComponent;
+    private ApplicationComponent mApplicationComponent;
+    public static Context mContext;
     @SuppressLint("StaticFieldLeak")
     private static Activity activity;
 
@@ -59,6 +60,7 @@ public class MyApplication extends Application {
         mMainThreadId = android.os.Process.myTid();
         mHandler = new Handler();
 
+        initApplicationComponent();
         // 初始化化日志打印工具
         LatteLogger.setup();
         initDB();
@@ -118,14 +120,18 @@ public class MyApplication extends Application {
         return instance;
     }
 
-    public static AppComponent getAppComponent() {
-        if (appComponent == null) {
-            appComponent = DaggerAppComponent.builder()
-                    .appModule(new AppModule(instance))
-//                    .httpModule(new HttpModule())  创建网络请求的module这里暂时不管，
-                    .build();
-        }
-        return appComponent;
+    public ApplicationComponent getApplicationComponent() {
+        return mApplicationComponent;
+    }
+
+    public static Context getAppContext() {
+        return mContext.getApplicationContext();
+    }
+
+    private void initApplicationComponent() {
+        mApplicationComponent =
+                DaggerApplicationComponent.builder()
+                        .applicationModule(new ApplicationModule(this)).build();
     }
 
 

@@ -2,6 +2,7 @@ package com.example.testmvpapp.ui.scanner;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.example.testmvpapp.base.BasePresenter;
@@ -19,7 +20,7 @@ import me.dm7.barcodescanner.zbar.ZBarScannerView;
  * @desciption:
  */
 
-public class ScannerActivity extends SimpleActivity implements ZBarScannerView.ResultHandler {
+public class ScannerActivity extends AppCompatActivity implements ZBarScannerView.ResultHandler {
 
     private ScanView mScanView = null;
 
@@ -50,6 +51,7 @@ public class ScannerActivity extends SimpleActivity implements ZBarScannerView.R
         }
     }
 
+    /*
     @Override
     protected Object getLayout() {
         if (mScanView == null) {
@@ -67,6 +69,7 @@ public class ScannerActivity extends SimpleActivity implements ZBarScannerView.R
     protected void initEventAndData() {
 
     }
+    */
 
     @Override
     public void handleResult(Result result) {

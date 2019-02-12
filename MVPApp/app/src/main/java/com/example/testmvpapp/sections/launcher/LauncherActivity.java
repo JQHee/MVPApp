@@ -5,6 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.DisplayCutout;
 import android.view.View;
@@ -31,7 +34,7 @@ import butterknife.OnClick;
  * 欢迎页面
  */
 
-public class LauncherActivity extends SimpleActivity implements ITimerListener {
+public class LauncherActivity extends AppCompatActivity implements ITimerListener {
 
     @BindView(R.id.rl_back_ground)
     RelativeLayout mrlayout;
@@ -113,27 +116,9 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     }
 
     @Override
-    protected Object getLayout() {
-        return R.layout.activity_launcher;
-    }
-
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
-    }
-
-    @Override
-    protected void initEventAndData() {
-        setFullScreen();
-        // setSwipeBackEnable(false);
-        // hideBottomUIMenu();
-        startAnimation();
-    }
-
-    @Override
-    protected void onViewCreated() {
-        super.onViewCreated();
-        StatusBarUtil.setTransparent(this);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_launcher);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.example.testmvpapp.sections.common.activities;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebChromeClient;
@@ -24,7 +27,7 @@ import butterknife.OnClick;
  * @date 2017/7/4  22:01
  */
 
-public class WebViewActivity extends SimpleActivity {
+public class WebViewActivity extends AppCompatActivity {
 
     public static final String URL = "url";
 
@@ -78,18 +81,10 @@ public class WebViewActivity extends SimpleActivity {
     }
 
     @Override
-    protected Object getLayout() {
-        return R.layout.activity_web_view;
-    }
-
-    @Override
-    protected void initEventAndData() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_web_view);
         initData();
         initListener();
-    }
-
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
     }
 }

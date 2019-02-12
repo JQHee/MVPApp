@@ -1,8 +1,18 @@
 package com.example.testmvpapp.base;
 
-public interface BasePresenter<T extends BaseView> {
+public class BasePresenter<T extends BaseContract.BaseView> implements BaseContract.BasePresenter<T> {
 
-    void attachView(T view);
+    protected T mView;
 
-    void detachView();
+    @Override
+    public void attachView(T view) {
+        this.mView = view;
+    }
+
+    @Override
+    public void detachView() {
+        if (mView != null) {
+            mView = null;
+        }
+    }
 }

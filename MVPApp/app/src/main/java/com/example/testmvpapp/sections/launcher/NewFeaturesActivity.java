@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,7 +31,7 @@ import butterknife.OnClick;
  * 版本新特性
  */
 
-public class NewFeaturesActivity extends SimpleActivity implements OnItemClickListener, ViewPager.OnPageChangeListener {
+public class NewFeaturesActivity extends AppCompatActivity implements OnItemClickListener, ViewPager.OnPageChangeListener {
 
     @BindView(R.id.convenientBanner)
     ConvenientBanner<Integer> mConvenientBanner;
@@ -50,25 +51,10 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
     }
 
     @Override
-    protected Object getLayout() {
-        return R.layout.activity_new_features;
-    }
-
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
-    }
-
-    @Override
-    protected void initEventAndData() {
-        // setSwipeBackEnable(false);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_new_features);
         initBanner();
-    }
-
-    @Override
-    protected void onViewCreated() {
-        super.onViewCreated();
-        setTranslucentStatus();
     }
 
     private void initBanner() {

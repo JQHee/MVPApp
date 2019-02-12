@@ -3,6 +3,8 @@ package com.example.testmvpapp.sections.common.fragments;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,7 +36,7 @@ import butterknife.BindView;
  * @date 2017/8/23  10:42
  */
 
-public class BigImageFragment extends SimpleFragment {
+public class BigImageFragment extends Fragment {
 
     public static final String IMG_URL = "imgUrl";
 
@@ -48,13 +50,15 @@ public class BigImageFragment extends SimpleFragment {
         mIvPic.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override
             public void onPhotoTap(ImageView view, float x, float y) {
-                mActivity.finish();
+                // mActivity.finish();
             }
         });
     }
 
     private void loadData() {
-        String imgUrl = getArguments().getString(IMG_URL);
+
+        String imgUrl =  "http://test";
+                // getArguments().getString(IMG_URL);
 
         GlideImageLoader imageLoader = new GlideImageLoader(mIvPic);
 
@@ -78,14 +82,17 @@ public class BigImageFragment extends SimpleFragment {
                 .into(new SimpleTarget<Drawable>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
+                        /* 暂时注释
                         if (resource.getIntrinsicHeight() > DisplayUtil.getScreenHeight(mActivity)) {
                             mIvPic.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         }
+                        */
                         requestBuilder.into(mIvPic);
                     }
                 });
     }
 
+    /*
     @Override
     protected Object getLayout() {
         return R.layout.fragment_big_image;
@@ -100,6 +107,7 @@ public class BigImageFragment extends SimpleFragment {
     protected BasePresenter createPresenter() {
         return null;
     }
+    */
 }
 
 

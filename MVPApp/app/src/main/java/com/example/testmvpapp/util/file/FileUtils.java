@@ -347,7 +347,7 @@ public class FileUtils {
      */
     public static String getRawFile(int id) {
 
-        final InputStream is = MyApplication.getAppComponent().getContext().getResources().openRawResource(id);
+        final InputStream is = MyApplication.getAppContext().getResources().openRawResource(id);
         final BufferedInputStream bis = new BufferedInputStream(is);
         final InputStreamReader isr = new InputStreamReader(bis);
         final BufferedReader br = new BufferedReader(isr);

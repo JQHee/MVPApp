@@ -1,26 +1,39 @@
 package com.example.testmvpapp.di.component;
 
 import android.app.Activity;
-import com.example.testmvpapp.sections.main.MainActivity;
+import android.content.Context;
+
+
 import com.example.testmvpapp.di.module.ActivityModule;
-import com.example.testmvpapp.di.scope.ActivityScope;
+import com.example.testmvpapp.di.scope.ContextLife;
+import com.example.testmvpapp.di.scope.PerActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.sections.sign.SignUpActivity;
 
 import dagger.Component;
 
 /**
- * @desc ActivityComponent 用于管理需要进行依赖注入的Activity
- * @author hjq
- * @date 2018/10/9
+ * @author ：Peakmain
+ * version ：1.0
+ * createTime ：2018/10/19 0019 下午 7:39
+ * mail : 2726449200@qq.com
+ * describe ：
  */
-@ActivityScope
-@Component(dependencies = AppComponent.class, modules = ActivityModule.class)
+@PerActivity
+@Component(dependencies = ApplicationComponent.class,modules = ActivityModule.class)
 public interface ActivityComponent {
+    @ContextLife("Activity")
+    Context getActivityContext();
+
+    @ContextLife("Application")
+    Context getApplicationContext();
 
     Activity getActivity();
 
-    void inject(SignInActivity signInActivity); // 用于注入SignInActivity
-    void inject(SignUpActivity signUpActivity); // 用于注入SignUpActivity
-    //TODO 后续需要注入的Activity类都可以在这里添加 中像上面一样写就好了
+    void inject(SignInActivity signInActivity);
+
+    void inject(SignUpActivity signUpActivity);
+
+    // void inject(ZhihuWebActivity zhihuWebActivity);
+
 }

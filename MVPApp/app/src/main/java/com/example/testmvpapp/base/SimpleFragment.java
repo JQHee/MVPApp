@@ -1,6 +1,7 @@
 package com.example.testmvpapp.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -16,18 +18,23 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.di.component.DaggerFragmentComponent;
 import com.example.testmvpapp.di.component.FragmentComponent;
 import com.example.testmvpapp.di.module.FragmentModule;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.github.nukc.stateview.StateView;
+import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -39,58 +46,56 @@ import butterknife.Unbinder;
  * @author HJQ
  * @date 2018/12/18
  */
-public abstract class SimpleFragment extends RxFragment {
+public abstract class SimpleFragment<T extends BaseContract.BasePresenter> extends RxFragment implements BaseContract.BaseView {
 
+    private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
     public final String TAG = this.getClass().getSimpleName();
-    protected View mRootView = null;
-    protected Activity mActivity = null;
-    protected Context mContext = null;
-    // 用于显示加载中、网络异常，空布局、内容布局
-    protected StateView mStateView = null;
+    @Nullable
+    @Inject
+    protected T mPresenter;
+    protected FragmentComponent mFragmentComponent;
     private Unbinder mUnbinder = null;
-    // 是否初始化
-    protected boolean isInited = false;
-    private BasePresenter mPresenter = null;
+    protected View mRootView,mErrorView, mEmptyView;
+    protected ProgressDialog mProgressDialog;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mActivity = (Activity) context;
-        mContext = context;
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initFragmentComponent();
+        // ARouter.getInstance().inject(this);
+        initInjector();
+        attachView();
+        if (!NetworkUtils.isConnected()) showNoNet();
+        if (savedInstanceState != null) {
+            boolean isSupportHidden = savedInstanceState.getBoolean(STATE_SAVE_IS_HIDDEN);
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            if (isSupportHidden) {
+                ft.hide(this);
+            } else {
+                ft.show(this);
+            }
+            ft.commit();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(STATE_SAVE_IS_HIDDEN, isHidden());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (mRootView == null) { // 防止重复添加
-            if (getLayout() instanceof  Integer) {
-                mRootView = inflater.inflate((Integer) getLayout(), null);
-            } else if (getLayout() instanceof View) {
-                mRootView =  (View) getLayout();
-            } else {
-                throw new ClassCastException("getLayout() type must be int or View");
-            }
-            mUnbinder = ButterKnife.bind(this, mRootView);
-            onBindView(savedInstanceState, mRootView);
+        if (getLayout() instanceof  Integer) {
+            mRootView = inflater.inflate((Integer) getLayout(), null);
+        } else if (getLayout() instanceof View) {
+            mRootView =  (View) getLayout();
+        } else {
+            throw new ClassCastException("getLayout() type must be int or View");
         }
+        mUnbinder = ButterKnife.bind(this, mRootView);
+        onBindView(savedInstanceState, mRootView);
         return mRootView;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter = createPresenter();
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 
     @Override
@@ -105,13 +110,81 @@ public abstract class SimpleFragment extends RxFragment {
         }
     }
 
-    protected void showToast(String meg) {
-        Toast.makeText(MyApplication.getInstance(), meg, Toast.LENGTH_LONG).show();
+    @Override
+    public void showLoading() {
+        mProgressDialog=new ProgressDialog(getActivity());
+        if (mProgressDialog != null) {
+            mProgressDialog.setMessage("正在加载数据....");
+            mProgressDialog.show();
+        }
     }
 
+    @Override
+    public void hideLoading() {
+        if(mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void showSuccess(String successMsg) {
+        ToastUtils.showShort(successMsg);
+    }
+
+    @Override
+    public void showFaild(String errorMsg) {
+        ToastUtils.showShort(errorMsg);
+    }
+
+    @Override
+    public void showNoNet() {
+        // ToastUtils.showShort(R.string.no_network_connection);
+    }
+
+    @Override
+    public void onRetry() {
+        ToastUtils.showShort("onRetry");
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindToLife() {
+        return this.bindToLifecycle();
+    }
+
+
+    /**
+     * 初始化FragmentComponent
+     */
+    private void initFragmentComponent() {
+        mFragmentComponent = DaggerFragmentComponent.builder()
+                .applicationComponent(((MyApplication) getActivity().getApplication()).getApplicationComponent())
+                .fragmentModule(new FragmentModule(this))
+                .build();
+    }
+
+    /**
+     * 贴上view
+     */
+    private void attachView() {
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
+        }
+    }
+
+    /**
+     * 分离view
+     */
+    private void detachView() {
+        if (mPresenter != null) {
+            mPresenter.detachView();
+        }
+    }
+
+
     protected FragmentComponent getFragmentComponent(){
+
         return DaggerFragmentComponent.builder()
-                .appComponent(MyApplication.getAppComponent())
+                .applicationComponent(((MyApplication) getActivity().getApplication()).getApplicationComponent())
                 .fragmentModule(getFragmentModule())
                 .build();
     }
@@ -121,6 +194,7 @@ public abstract class SimpleFragment extends RxFragment {
     }
 
     protected abstract Object getLayout();
+    protected abstract void initInjector();
     public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
     protected abstract BasePresenter createPresenter();
 
@@ -140,38 +214,4 @@ public abstract class SimpleFragment extends RxFragment {
             EventBus.getDefault().unregister(subscribe);
         }
     }
-
-    /**
-     * 初始化 Toolbar
-     *
-     * @param toolbar
-     * @param homeAsUpEnabled
-     * @param title
-     */
-    protected void initToolBar(Toolbar toolbar, boolean homeAsUpEnabled, String title) {
-        ((SimpleActivity)getActivity()).initToolBar(toolbar, homeAsUpEnabled, title);
-    }
-
-    /*
-    boolean isEx = false;
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment);
-        if(fragment instanceof WebFragment){//判断是不是所属Fragment
-            webView =(WebView) fragment.getView().findViewById(R.id.webview);
-            if(webView.canGoBack())
-            {
-                webView.goBack();
-            }
-            else{
-                if (!isEx) {
-                    isEx = true;
-                    Toast.makeText(getApplicationContext(), "再按一次退出应用", Toast.LENGTH_SHORT).show();
-                } else {
-                    finish();
-                }
-            }
-        }
-        return false;
-    }
-    */
 }

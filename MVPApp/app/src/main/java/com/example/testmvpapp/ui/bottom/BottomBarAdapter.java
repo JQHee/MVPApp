@@ -12,9 +12,9 @@ import java.util.List;
 
 public class BottomBarAdapter extends FragmentStatePagerAdapter {
 
-    private List<SimpleFragment> mFragmentList;
+    private List<Fragment> mFragmentList;
 
-    public BottomBarAdapter(FragmentManager fm, List<SimpleFragment> fragmentList) {
+    public BottomBarAdapter(FragmentManager fm, List<Fragment> fragmentList) {
         super(fm);
         this.mFragmentList = fragmentList;
     }

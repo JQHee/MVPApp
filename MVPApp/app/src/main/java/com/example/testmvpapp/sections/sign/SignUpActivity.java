@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class SignUpActivity extends SimpleActivity implements SignUpContract.View {
+public class SignUpActivity extends SimpleActivity<SignUpPresenter> implements SignUpContract.View {
 
     @BindView(R.id.id_toolbar)
     Toolbar mToolbar;
@@ -62,25 +62,15 @@ public class SignUpActivity extends SimpleActivity implements SignUpContract.Vie
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return mPresenter;
+    protected void initInjector() {
+        mActivityComponent.inject(this);
     }
 
     @Override
-    protected void initEventAndData() {
-
-        // initToolBar(mToolbar, true, "注册");
-
-        DaggerActivityComponent.builder()
-                .appComponent(MyApplication.getAppComponent())
-                .activityModule(new ActivityModule(this))
-                .build()
-                .inject(this);
-        mPresenter.attachView(this);
-
+    protected void initView() {
         ToolbarUtil.setActivityToolbar(this, "注册", true);
-    }
 
+    }
 
     @Override
     public void gotoSignIn() {

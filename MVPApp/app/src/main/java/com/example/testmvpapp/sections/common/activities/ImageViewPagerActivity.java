@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -37,7 +39,7 @@ import butterknife.OnClick;
  * @date 2017/8/23  11:02
  */
 
-public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.OnPageChangeListener {
+public class ImageViewPagerActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
     private static final String TAG = ImageViewPagerActivity.class.getSimpleName();
     public static final String IMG_URLS = "mImageUrls";
@@ -69,7 +71,7 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
 
             Bundle bundle = new Bundle();
             bundle.putString(BigImageFragment.IMG_URL, url);
-            imageFragment.setArguments(bundle);
+            // imageFragment.setArguments(bundle);
 
             mFragments.add(imageFragment);//添加到fragment集合中
             mDownloadingFlagMap.put(i,false);//初始化map，一开始全部的值都为false
@@ -107,6 +109,7 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
 
     @OnClick(R.id.tv_save)
     public void onViewClicked() {
+        /*
         requestRuntimePermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
             @Override
             public void onGranted() {
@@ -119,6 +122,7 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
 
             }
         });
+        */
     }
 
     private void downloadImg() {
@@ -132,18 +136,11 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
     }
 
     @Override
-    protected Object getLayout() {
-        return R.layout.activity_image_view_pager;
-    }
-
-    @Override
-    protected void initEventAndData() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_image_view_pager);
         initData();
-    }
 
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
     }
 
     class DownloadImgTask extends AsyncTask<String,Integer,Void>{

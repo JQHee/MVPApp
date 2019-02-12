@@ -10,11 +10,11 @@ import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
-import com.example.testmvpapp.di.component.DaggerActivityComponent;
 import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.presenter.SignInPresenter;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.util.log.LatteLogger;
+import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
@@ -26,15 +26,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SignInActivity extends SimpleActivity implements SignInContract.View {
+public class SignInActivity extends SimpleActivity<SignInPresenter> implements SignInContract.View {
 
     @BindView(R.id.edit_sign_in_email)
     TextInputEditText mEmail;
     @BindView(R.id.edit_sign_in_password)
     TextInputEditText mPassword;
-
-    @Inject
-    SignInPresenter mPresenter;
 
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
@@ -60,21 +57,14 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
     }
 
     @Override
-    protected void initEventAndData() {
-        // setSwipeBackEnable(false);
-        DaggerActivityComponent.builder()
-                .appComponent(MyApplication.getAppComponent())
-                .activityModule(new ActivityModule(this))
-                .build()
-                .inject(this);
-        mPresenter.attachView(this);
+    protected void initInjector() {
+        mActivityComponent.inject(this);
     }
 
     @Override
-    protected BasePresenter createPresenter() {
-        return mPresenter;
-    }
+    protected void initView() {
 
+    }
 
     @Override
     public void gotoSignUp() {
@@ -100,7 +90,7 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
                 .url("http://120.76.240.104:8017/api/index/index")
                 .build()
                 .get()
-                .compose(this.bindLifecycle())
+                .compose(this.bindToLife())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io()).subscribe(new Consumer() {
             @Override
@@ -108,15 +98,6 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
                 LatteLogger.d(o);
             }
         });
-    }
-
-
-    @Override
-    public <T> ObservableTransformer<T, T> bindLifecycle() {
-        // 绑定到Activity的pause生命周期（在pause销毁请求）
-        // return this.bindUntilEvent(ActivityEvent.PAUSE);
-        // 绑定activity，与activity生命周期一样;
-        return this.bindToLifecycle();
     }
 
     /**
@@ -141,5 +122,13 @@ public class SignInActivity extends SimpleActivity implements SignInContract.Vie
             mPassword.setError(null);
         }
         return isPass;
+    }
+
+    @Override
+    public <T> LifecycleTransformer<T> bindToLife() {
+        // 绑定到Activity的pause生命周期（在pause销毁请求）
+        // return this.bindUntilEvent(ActivityEvent.PAUSE);
+        // 绑定activity，与activity生命周期一样;
+        return this.bindToLifecycle();
     }
 }

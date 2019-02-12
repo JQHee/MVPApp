@@ -4,11 +4,14 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.view.menu.MenuBuilder;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.testmvpapp.R;
@@ -18,22 +21,14 @@ import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 
 import java.lang.reflect.Method;
 
-public class SortFragment extends SimpleFragment {
+public class SortFragment extends Fragment {
 
+
+    @Nullable
     @Override
-    protected Object getLayout() {
-        return R.layout.fragment_sort;
-    }
-
-    @Override
-    public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-        ToolbarUtil.setFragmentToolbar(this, rootView,"分类", false, true);
-
-    }
-
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+        // R.layout.fragment_sort;
     }
 
     @Override
