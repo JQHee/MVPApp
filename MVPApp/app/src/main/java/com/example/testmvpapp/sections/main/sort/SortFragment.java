@@ -22,8 +22,7 @@ import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 import java.lang.reflect.Method;
 
 public class SortFragment extends SimpleFragment {
-
-
+    
     @Override
     protected Object getLayout() {
         return R.layout.fragment_sort;

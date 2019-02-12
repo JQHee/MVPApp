@@ -52,15 +52,6 @@ public class MainActivity extends SimpleActivity {
     private List<Fragment> mFragmentList = new ArrayList<>();
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-
-
-    }
-
-    @Override
     protected Object getLayout() {
         return R.layout.activity_main;
     }
