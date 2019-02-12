@@ -1,8 +1,11 @@
 package com.example.testmvpapp.app;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,6 +31,8 @@ public class MyApplication extends Application {
     public static String registrationId;
     private static MyApplication instance;
     public static AppComponent appComponent;
+    @SuppressLint("StaticFieldLeak")
+    private static Activity activity;
 
     //以下属性应用于整个应用程序，合理利用资源，减少资源浪费
     private static Thread mMainThread;//主线程
@@ -59,6 +64,45 @@ public class MyApplication extends Application {
         initDB();
         initBugly();
         initJPUSH();
+
+        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                // ZLog.d(TAG, activity.getClass().getSimpleName() + " Created");
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                // ZLog.d(TAG, activity.getClass().getSimpleName() + " Started");
+                MyApplication.activity = activity;
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+
+            }
+        });
     }
 
     /**
@@ -144,5 +188,9 @@ public class MyApplication extends Application {
 
     public static void setMainHandler(Handler mHandler) {
         MyApplication.mHandler = mHandler;
+    }
+
+    public static Activity getActivity() {
+        return activity;
     }
 }
