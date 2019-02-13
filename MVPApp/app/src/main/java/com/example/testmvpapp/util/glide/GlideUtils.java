@@ -51,4 +51,20 @@ public class GlideUtils {
                 .apply(options)
                 .into(iv);
     }
+
+    /*
+    //获取图片真正的宽高
+        Glide.with(this)
+                .load(imgUrl)
+                .asBitmap()//强制Glide返回一个Bitmap对象
+                .into(new SimpleTarget<Bitmap>() {
+        @Override
+        public void onResourceReady(Bitmap bitmap, GlideAnimation<? super Bitmap> glideAnimation) {
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            Log.d(TAG, "width " + width); //200px
+            Log.d(TAG, "height " + height); //200px
+        }
+    });
+    */
 }
