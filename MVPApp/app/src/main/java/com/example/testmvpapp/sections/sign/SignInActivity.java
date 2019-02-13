@@ -28,9 +28,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
 
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
-        if (checkForm()) {
-            mPresenter.signInAction();
-        }
+        mPresenter.login(mEmail.getText().toString(), mPassword.getText().toString());
     }
 
     @OnClick({R.id.tv_link_sign_up})
@@ -96,6 +94,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     /**
      * 表单信息检验
      */
+    @Override
     public boolean checkForm() {
         final String email = mEmail.getText().toString();
         final String password = mPassword.getText().toString();

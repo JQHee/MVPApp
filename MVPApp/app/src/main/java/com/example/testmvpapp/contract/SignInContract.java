@@ -13,9 +13,11 @@ public class SignInContract {
         void gotoSignUp();
         // 跳转主框架页面
         void gotoMain();
+        // 验证表单信息
+        boolean checkForm();
     }
 
     public interface Presenter extends BaseContract.BasePresenter<View> {
-        void signInAction();
+        void login(String email, String password);
     }
 }

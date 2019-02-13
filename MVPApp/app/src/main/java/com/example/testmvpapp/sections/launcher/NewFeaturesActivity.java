@@ -62,6 +62,8 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
     }
 
     private void initBanner() {
+        // 数据清空，不然数据会重复添加
+        INTEGERS.clear();
         INTEGERS.add(R.mipmap.launcher_01);
         INTEGERS.add(R.mipmap.launcher_02);
         INTEGERS.add(R.mipmap.launcher_03);
