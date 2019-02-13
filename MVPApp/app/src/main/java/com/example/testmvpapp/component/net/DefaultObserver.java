@@ -21,6 +21,10 @@ import retrofit2.HttpException;
  * 封装DefaultObserver 处理返回的json
  */
 public abstract class DefaultObserver<T> implements Observer<T> {
+
+    public static final String CODE = "code";
+    public static final int NO_LOGI_CODE = 302;
+
     @Override
     public void onSubscribe(Disposable d) {
 
@@ -28,6 +32,14 @@ public abstract class DefaultObserver<T> implements Observer<T> {
 
     @Override
     public void onNext(T response) {
+        if (response instanceof String) {
+            final String tempResponse = (String) response;
+            final JSONObject profileJson = JSON.parseObject(tempResponse);
+            final int code = profileJson.getInteger(CODE);
+            if (code == NO_LOGI_CODE) {
+                // 尚未登录
+            }
+        }
         onSuccess(response);
         onFinish();
     }

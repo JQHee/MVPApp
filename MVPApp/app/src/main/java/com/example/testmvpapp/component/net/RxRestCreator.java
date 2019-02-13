@@ -56,22 +56,11 @@ public class RxRestCreator {
 
         private static final int TIME_OUT = 60;
         private static final OkHttpClient.Builder BUILDER = new OkHttpClient.Builder();
-        private static final ArrayList<Interceptor> INTERCEPTORS = InterceptorCreator.getInstance().getInterceptors();
 
         private static OkHttpClient.Builder addInterceptor() {
 
             // BUILDER.sslSocketFactory(HttpsTrustManager.createSSLSocketFactory());
             // BUILDER.hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier());
-            /*
-            * head 头可能是需要变化的
-            */
-            /*
-            if (INTERCEPTORS != null && !INTERCEPTORS.isEmpty()) {
-                for (Interceptor interceptor : INTERCEPTORS) {
-                    BUILDER.addInterceptor(interceptor);
-                }
-            }
-            */
             BUILDER.addInterceptor(CommonInterceptor.mRewriteCacheControlInterceptor);
             BUILDER.addInterceptor(CommonInterceptor.mLoggingInterceptor);
             return BUILDER;
