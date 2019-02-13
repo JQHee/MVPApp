@@ -1,5 +1,6 @@
 package com.example.testmvpapp.component.net;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -15,6 +16,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.QueryMap;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -35,7 +37,7 @@ public interface RxRestService {
     @POST
     Observable<String> post(@Url String url, @FieldMap Map<String, Object> params);
 
-    //传入原始数据
+    // 传入原始数据
     @POST
     Observable<String> postRaw(@Url String url, @Body RequestBody body);
 
@@ -43,7 +45,7 @@ public interface RxRestService {
     @PUT
     Observable<String> put(@Url String url, @FieldMap Map<String, Object> params);
 
-    //传入原始数据
+    // 传入原始数据
     @PUT
     Observable<String> putRaw(@Url String url, @Body RequestBody body);
 
@@ -57,5 +59,10 @@ public interface RxRestService {
     @Multipart
     @POST
     Observable<String> upload(@Url String url, @Part MultipartBody.Part file);
+
+    // 多个文件上传
+    @Multipart
+    @POST
+    Observable<String> uploadFiles(@Url String url, @PartMap HashMap<String, RequestBody> bodyMap);
 
 }
