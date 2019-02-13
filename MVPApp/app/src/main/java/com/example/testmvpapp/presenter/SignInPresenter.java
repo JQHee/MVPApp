@@ -2,11 +2,15 @@ package com.example.testmvpapp.presenter;
 
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.component.net.ConstantService;
+import com.example.testmvpapp.component.net.DefaultObserver;
 import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.util.log.LatteLogger;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
@@ -49,32 +53,9 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
                     .compose(mView.bindToLife())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Observer<String>() {
+                    .subscribe(new DefaultObserver<String>(){
                         @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(String response) {
-                            LatteLogger.d(response);
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            if (e instanceof HttpException) {
-                                HttpException httpException = (HttpException) e;
-                                try {
-                                    String responseString = httpException.response().errorBody().string();
-                                    LatteLogger.d(responseString);
-                                } catch(IOException e1){
-                                    e1.printStackTrace();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onComplete() {
+                        public void onSuccess(String response) {
 
                         }
                     });
