@@ -54,7 +54,7 @@ public class RxRestClient {
                 break;
             case POST_RAW:
                 //传入原始数据
-                observable = service.postRaw(URL, BODY == null ? getFormData() : BODY);
+                observable = service.postRaw(URL, BODY);
                 break;
             case PUT:
                 observable = service.put(URL, PARAMS);
@@ -131,6 +131,7 @@ public class RxRestClient {
     }
 
     // 拼接如果有多图和参数一起上传
+    /*
     private  final RequestBody getFormData() {
         MultipartBody.Builder builder = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM);
@@ -148,12 +149,13 @@ public class RxRestClient {
         RequestBody requestBody = builder.build();
         return  requestBody;
     }
+    */
 
-    public final Observable get() {
+    public final Observable<String> get() {
         return request(HttpMethod.GET);
     }
 
-    public final Observable post() {
+    public final Observable<String> post() {
         if (BODY == null) {
             return request(HttpMethod.POST);
         } else {
@@ -165,7 +167,7 @@ public class RxRestClient {
         }
     }
 
-    public final Observable put() {
+    public final Observable<String> put() {
         if (BODY == null) {
             return request(HttpMethod.PUT);
         } else {
@@ -177,17 +179,15 @@ public class RxRestClient {
         }
     }
 
-    public final Observable delete() {
+    public final Observable<String> delete() {
         return request(HttpMethod.DELETE);
     }
 
-    public final Observable upload() {
+    public final Observable<String> upload() {
         return request(HttpMethod.UPLOAD);
     }
 
     public final Observable<ResponseBody> download() {
-//        new DownloadHandler(URL, REQUEST, DOWNLOAD_DIR, EXTENSION, NAME, SUCCESS, FAILURE, ERROR)
-//                .handleDoenload();
         final Observable<ResponseBody> responseBodyObservable = RxRestCreator.getRxRestService().download(URL, PARAMS);
         return responseBodyObservable;
     }
