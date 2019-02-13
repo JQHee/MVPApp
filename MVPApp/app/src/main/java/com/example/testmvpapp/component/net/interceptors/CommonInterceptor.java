@@ -55,6 +55,19 @@ public class CommonInterceptor {
     };
 
     /**
+     * 添加请求头
+     */
+    public static final Interceptor mBaseHeaderInterceptor = new Interceptor() {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request mRequest = chain.request().newBuilder()
+                    .header("TOKEN","login_token")
+                    .build();
+            return chain.proceed(mRequest);
+        }
+    };
+
+    /**
      * 日志拦截器
      */
     public static final HttpLoggingInterceptor mLoggingInterceptor = new HttpLoggingInterceptor()

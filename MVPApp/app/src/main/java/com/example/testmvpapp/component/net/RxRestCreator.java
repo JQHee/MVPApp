@@ -61,6 +61,7 @@ public class RxRestCreator {
 
             // BUILDER.sslSocketFactory(HttpsTrustManager.createSSLSocketFactory());
             // BUILDER.hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier());
+            BUILDER.addInterceptor(CommonInterceptor.mBaseHeaderInterceptor);
             BUILDER.addInterceptor(CommonInterceptor.mRewriteCacheControlInterceptor);
             BUILDER.addInterceptor(CommonInterceptor.mLoggingInterceptor);
             return BUILDER;
