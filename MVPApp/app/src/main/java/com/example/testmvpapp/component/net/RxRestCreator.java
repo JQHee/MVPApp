@@ -1,8 +1,6 @@
 package com.example.testmvpapp.component.net;
 
 
-import com.example.testmvpapp.app.ConstantService;
-
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
