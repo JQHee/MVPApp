@@ -71,12 +71,12 @@ public class DensityUtil {
     }
 
     public static int dp2px(float dpValue) {
-        float scale = MyApplication.getAppContext().getResources().getDisplayMetrics().density;
+        float scale = MyApplication.getInstance().getApplicationContext().getResources().getDisplayMetrics().density;
         return (int) (dpValue * scale);
     }
 
     public static int px2dp(float pxValue) {
-        float scale = MyApplication.getAppContext().getResources().getDisplayMetrics().density;
+        float scale = MyApplication.getInstance().getApplicationContext().getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale);
     }
 

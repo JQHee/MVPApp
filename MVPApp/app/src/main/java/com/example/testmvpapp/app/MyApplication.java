@@ -1,5 +1,6 @@
 package com.example.testmvpapp.app;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
@@ -10,12 +11,16 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.FragmentActivity;
 
 import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.ApplicationComponent;
 import com.example.testmvpapp.di.component.DaggerApplicationComponent;
 import com.example.testmvpapp.di.module.ApplicationModule;
+import com.example.testmvpapp.ui.scanner.ScannerActivity;
+import com.example.testmvpapp.util.base.CrashHandler;
 import com.example.testmvpapp.util.log.LatteLogger;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
@@ -31,7 +36,6 @@ public class MyApplication extends Application {
     public static String registrationId;
     private static MyApplication instance;
     private ApplicationComponent mApplicationComponent;
-    public static Context mContext;
     @SuppressLint("StaticFieldLeak")
     private static Activity activity;
 
@@ -122,10 +126,6 @@ public class MyApplication extends Application {
 
     public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
-    }
-
-    public static Context getAppContext() {
-        return mContext.getApplicationContext();
     }
 
     private void initApplicationComponent() {

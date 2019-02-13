@@ -1,5 +1,6 @@
 package com.example.testmvpapp.sections.launcher;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.DisplayCutout;
@@ -16,12 +18,19 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.sections.main.MainActivity;
+import com.example.testmvpapp.sections.sign.SignInActivity;
+import com.example.testmvpapp.util.base.CrashHandler;
 import com.example.testmvpapp.util.login.LoginInterceptor;
+import com.example.testmvpapp.util.storage.BFPreference;
+import com.example.testmvpapp.util.storage.ConstantKey;
 import com.example.testmvpapp.util.timer.BaseTimerTask;
 import com.example.testmvpapp.util.timer.ITimerListener;
 import com.jaeger.library.StatusBarUtil;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.MessageFormat;
 import java.util.Timer;
@@ -66,9 +75,23 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     private void checkIsShowScroll() {
 
         // LoginInterceptor.interceptor(LauncherActivity.this, "NewFeaturesActivity", null);
-        //跳转
-        Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
-        startActivity(intent);
+
+        if (!BFPreference.getAppFlag(ConstantKey.IS_FIRST_LOAD)) {
+            // 跳转
+            Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
+            startActivity(intent);
+
+        } else {
+            if (BFPreference.getAppFlag(ConstantKey.IS_LOGIN)) {
+                Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            } else {
+                Intent intent = new Intent(LauncherActivity.this, SignInActivity.class);
+                startActivity(intent);
+
+            }
+        }
         finish();
 
     }
@@ -122,6 +145,18 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
     @Override
     protected void initView() {
         setFullScreen();
+
+        final RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(granted -> {
+                    if (granted) {
+                        // 崩溃日志
+                        CrashHandler.getInstance().init(MyApplication.getInstance());
+                    } else {
+
+                    }
+                });
     }
 
     @Override

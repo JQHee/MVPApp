@@ -54,13 +54,14 @@ public class CommonInterceptor {
         }
     };
 
-    public static final HttpLoggingInterceptor mLoggingInterceptor = new HttpLoggingInterceptor()
-            .setLevel(HttpLoggingInterceptor.Level.BODY);
-
     /**
      * 日志拦截器
      */
-    public static final Interceptor mLoggingIntercepter = new Interceptor() {
+    public static final HttpLoggingInterceptor mLoggingInterceptor = new HttpLoggingInterceptor()
+            .setLevel(HttpLoggingInterceptor.Level.BODY);
+
+
+    private static final Interceptor mLoggingIntercepter = new Interceptor() {
         @Override
         public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();

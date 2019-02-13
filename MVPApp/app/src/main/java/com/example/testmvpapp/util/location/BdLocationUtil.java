@@ -45,7 +45,7 @@ public class BdLocationUtil {
      */
     public void requestLocation(final MyLocationListener listener) {
         //声明LocationClient类
-        final LocationClient locationClient = new LocationClient(MyApplication.getAppContext());
+        final LocationClient locationClient = new LocationClient(MyApplication.getInstance().getApplicationContext());
         // 设置定位条件
         LocationClientOption option = new LocationClientOption();
         option.setOpenGps(true);                // 是否打开GPS

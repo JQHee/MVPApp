@@ -1,6 +1,8 @@
 package com.example.testmvpapp.component.net;
 
 
+import com.example.testmvpapp.component.net.interceptors.CommonInterceptor;
+
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 import java.util.concurrent.TimeUnit;
@@ -63,11 +65,15 @@ public class RxRestCreator {
             /*
             * head 头可能是需要变化的
             */
+            /*
             if (INTERCEPTORS != null && !INTERCEPTORS.isEmpty()) {
                 for (Interceptor interceptor : INTERCEPTORS) {
                     BUILDER.addInterceptor(interceptor);
                 }
             }
+            */
+            BUILDER.addInterceptor(CommonInterceptor.mRewriteCacheControlInterceptor);
+            BUILDER.addInterceptor(CommonInterceptor.mLoggingInterceptor);
             return BUILDER;
         }
 

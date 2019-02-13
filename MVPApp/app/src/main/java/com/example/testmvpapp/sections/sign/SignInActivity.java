@@ -72,25 +72,6 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         finish();
     }
 
-    /*
-     * 测试rx的网络请求
-     */
-    private void testNetWork() {
-
-        RxRestClient.builder()
-                .url("http://120.76.240.104:8017/api/index/index")
-                .build()
-                .get()
-                .compose(this.bindToLife())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io()).subscribe(new Consumer() {
-            @Override
-            public void accept(Object o) throws Exception {
-                LatteLogger.d(o);
-            }
-        });
-    }
-
     /**
      * 表单信息检验
      */

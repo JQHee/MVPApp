@@ -20,6 +20,8 @@ import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.ui.newfeature.LauncherHolderCreator;
+import com.example.testmvpapp.util.storage.BFPreference;
+import com.example.testmvpapp.util.storage.ConstantKey;
 import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
 
     @OnClick(R.id.btn_skip)
     void skipButtonAction() {
-
+        BFPreference.setAppFlag(ConstantKey.IS_FIRST_LOAD, true);
         Intent intent = new Intent(NewFeaturesActivity.this, SignInActivity.class);
         startActivity(intent);
         finish();

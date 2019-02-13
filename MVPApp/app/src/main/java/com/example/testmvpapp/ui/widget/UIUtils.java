@@ -57,7 +57,7 @@ public class UIUtils {
      * @return
      */
     public static Context getContext() {
-        return MyApplication.getAppContext();
+        return MyApplication.getInstance().getApplicationContext();
     }
 
     /**

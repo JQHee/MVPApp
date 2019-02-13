@@ -40,5 +40,5 @@ public class ConstantService {
 
     /// 消息
     public static final String MESSAGE_LIST = BASE_URL + "/api/message/get_message";
-    
+
 }
