@@ -59,6 +59,9 @@ public class RxRestCreator {
         private static final ArrayList<Interceptor> INTERCEPTORS = InterceptorCreator.getInstance().getInterceptors();
 
         private static OkHttpClient.Builder addInterceptor() {
+
+            // BUILDER.sslSocketFactory(HttpsTrustManager.createSSLSocketFactory());
+            // BUILDER.hostnameVerifier(new HttpsTrustManager.TrustAllHostnameVerifier());
             /*
             * head 头可能是需要变化的
             */
