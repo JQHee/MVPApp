@@ -1,4 +1,4 @@
-package com.example.testmvpapp.component.net.file.download;
+package com.example.testmvpapp.component.net.listener;
 
 import java.io.File;
 

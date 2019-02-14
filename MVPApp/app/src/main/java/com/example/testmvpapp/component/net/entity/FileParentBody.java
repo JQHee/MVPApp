@@ -1,4 +1,4 @@
-package com.example.testmvpapp.component.net.file;
+package com.example.testmvpapp.component.net.entity;
 
 import java.util.ArrayList;
 

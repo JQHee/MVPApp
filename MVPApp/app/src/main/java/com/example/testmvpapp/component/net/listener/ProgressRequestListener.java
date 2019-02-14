@@ -1,4 +1,4 @@
-package com.example.testmvpapp.component.net.file.upload;
+package com.example.testmvpapp.component.net.listener;
 
 public interface ProgressRequestListener {
     void onRequestProgress(long bytesWritten, long contentLength);

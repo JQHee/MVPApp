@@ -1,6 +1,7 @@
-package com.example.testmvpapp.component.net.file.upload;
+package com.example.testmvpapp.component.net.interceptors;
 
-import com.example.testmvpapp.util.log.LatteLogger;
+import com.example.testmvpapp.component.net.listener.ProgressRequestListener;
+import com.example.testmvpapp.component.net.entity.UploadProgressRequestBody;
 
 import java.io.IOException;
 

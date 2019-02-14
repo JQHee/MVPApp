@@ -1,4 +1,6 @@
-package com.example.testmvpapp.component.net.file.upload;
+package com.example.testmvpapp.component.net.entity;
+
+import com.example.testmvpapp.component.net.listener.ProgressRequestListener;
 
 import java.io.IOException;
 

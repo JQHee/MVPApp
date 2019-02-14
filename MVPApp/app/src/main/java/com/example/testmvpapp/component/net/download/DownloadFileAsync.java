@@ -1,6 +1,8 @@
-package com.example.testmvpapp.component.net.file.download;
+package com.example.testmvpapp.component.net.download;
 
 import android.os.AsyncTask;
+
+import com.example.testmvpapp.component.net.listener.ProgressResponseListener;
 
 import java.io.BufferedInputStream;
 import java.io.File;

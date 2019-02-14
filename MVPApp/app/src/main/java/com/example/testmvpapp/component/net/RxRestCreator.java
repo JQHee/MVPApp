@@ -1,10 +1,10 @@
 package com.example.testmvpapp.component.net;
 
 
-import com.example.testmvpapp.component.net.file.download.DownloadInterceptor;
-import com.example.testmvpapp.component.net.file.download.ProgressResponseListener;
-import com.example.testmvpapp.component.net.file.upload.UpLoadProgressInterceptor;
-import com.example.testmvpapp.component.net.file.upload.ProgressRequestListener;
+import com.example.testmvpapp.component.net.interceptors.DownloadInterceptor;
+import com.example.testmvpapp.component.net.listener.ProgressResponseListener;
+import com.example.testmvpapp.component.net.interceptors.UpLoadProgressInterceptor;
+import com.example.testmvpapp.component.net.listener.ProgressRequestListener;
 import com.example.testmvpapp.component.net.interceptors.CommonInterceptor;
 
 import java.util.WeakHashMap;

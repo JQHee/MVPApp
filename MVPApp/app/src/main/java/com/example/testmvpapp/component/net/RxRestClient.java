@@ -2,8 +2,8 @@ package com.example.testmvpapp.component.net;
 
 import android.content.Context;
 
-import com.example.testmvpapp.component.net.file.FileParentBody;
-import com.example.testmvpapp.component.net.file.MultipartBodyCreator;
+import com.example.testmvpapp.component.net.entity.FileParentBody;
+import com.example.testmvpapp.component.net.entity.MultipartBodyCreator;
 
 import java.util.WeakHashMap;
 

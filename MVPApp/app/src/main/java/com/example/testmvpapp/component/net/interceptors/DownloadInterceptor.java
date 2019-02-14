@@ -1,7 +1,9 @@
-package com.example.testmvpapp.component.net.file.download;
+package com.example.testmvpapp.component.net.interceptors;
+
+import com.example.testmvpapp.component.net.entity.DownloadResponseBody;
+import com.example.testmvpapp.component.net.listener.ProgressResponseListener;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import okhttp3.Interceptor;
 import okhttp3.Response;

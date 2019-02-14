@@ -1,7 +1,8 @@
-package com.example.testmvpapp.component.net.file.download;
+package com.example.testmvpapp.component.net.entity;
+
+import com.example.testmvpapp.component.net.listener.ProgressResponseListener;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
 
 import okhttp3.MediaType;
 
