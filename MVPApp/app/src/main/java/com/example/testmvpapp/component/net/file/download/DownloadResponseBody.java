@@ -23,7 +23,7 @@ public class DownloadResponseBody extends ResponseBody {
     public DownloadResponseBody(ResponseBody responseBody, ProgressResponseListener downloadListener) {
         this.responseBody = responseBody;
         this.downloadListener = downloadListener;
-        // downloadListener.onStartDownload(responseBody.contentLength());
+        downloadListener.onStartDownload(responseBody.contentLength());
     }
     @Override
     public MediaType contentType() {
@@ -60,23 +60,5 @@ public class DownloadResponseBody extends ResponseBody {
         };
     }
 
-    /*
-    private Source source(Source source) {
-        return new ForwardingSource(source) {
-            long totalBytesRead = 0L;
-
-            @Override public long read(Buffer sink, long byteCount) throws IOException {
-                long bytesRead = super.read(sink, byteCount);
-                totalBytesRead += bytesRead != -1 ? bytesRead: 0;
-                if (null != downloadListener) {
-                    if (bytesRead != -1) {
-                        downloadListener.onProgress((int) (totalBytesRead));
-                    }
-                }
-                return bytesRead;
-            }
-        };
-    }
-    */
 
 }

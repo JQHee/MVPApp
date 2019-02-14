@@ -360,13 +360,29 @@ public class MainActivity extends SimpleActivity {
     /* 2.获取线上apk信息 */
     private void getApkInfo() {
 
-        ProgressRequestListener listener = new ProgressRequestListener() {
+        ProgressResponseListener listener = new ProgressResponseListener() {
             @Override
-            public void onRequestProgress(long bytesWritten, long contentLength) {
-                LatteLogger.d("下载进度" + String.valueOf(bytesWritten) + "总长：" + String.valueOf(contentLength));
+            public void onStartDownload(long length) {
+
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                LatteLogger.d("下载进度" + String.valueOf(progress) + "总长：");
+
+            }
+
+            @Override
+            public void onDownloadFinish(File file) {
+
+            }
+
+            @Override
+            public void onFailed(String message) {
+
             }
         };
-        RxRestCreator.createReqeustService(RxRestService.class, listener)
+        RxRestCreator.createResponseService(RxRestService.class, listener)
                 .post(ConstantService.UPDATE, new WeakHashMap<String, Object>())
                 .compose(this.bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
