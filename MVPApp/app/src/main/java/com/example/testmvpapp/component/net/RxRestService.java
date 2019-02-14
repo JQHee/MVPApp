@@ -1,6 +1,7 @@
 package com.example.testmvpapp.component.net;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -52,17 +53,30 @@ public interface RxRestService {
     @DELETE
     Observable<String> delete(@Url String url, @QueryMap Map<String, Object> params);
 
+    /**
+     * 文件下载
+     * 注意：不加Streaming会直接写到内存，造成内容溢出
+     */
     @Streaming
     @GET
-    Observable<ResponseBody> download(@Url String url, @QueryMap Map<String, Object> params);
+    // Observable<ResponseBody> download(@Url String url, @QueryMap Map<String, Object> params);
+    Observable<ResponseBody> download(@Url String url);
 
+    /**
+     * 通过 List<MultipartBody.Part> 传入多个part实现多文件上传
+     * @param parts 每个part代表一个
+     * @return 状态信息
+     */
     @Multipart
     @POST
-    Observable<String> upload(@Url String url, @Part MultipartBody.Part file);
+    Observable<String> upload(@Url String url, @Part() List<MultipartBody.Part> parts);
 
-    // 多个文件上传
-    @Multipart
+    /**
+     * 通过 MultipartBody和@body作为参数来上传
+     * @param multipartBody MultipartBody包含多个Part
+     * @return 状态信息
+     */
     @POST
-    Observable<String> uploadFiles(@Url String url, @PartMap HashMap<String, RequestBody> bodyMap);
+    Observable<String> upload(@Url String url, @Body MultipartBody multipartBody);
 
 }

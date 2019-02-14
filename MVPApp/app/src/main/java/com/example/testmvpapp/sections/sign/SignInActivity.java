@@ -94,7 +94,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         } else {
             mPassword.setError(null);
         }
-        return isPass;
+        return true;
     }
 
     @Override

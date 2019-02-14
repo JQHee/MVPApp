@@ -2,12 +2,12 @@ package com.example.testmvpapp.component.net;
 
 import android.content.Context;
 
-import java.io.File;
-import java.util.Map;
+import com.example.testmvpapp.component.net.file.FileParentBody;
+import com.example.testmvpapp.component.net.file.MultipartBodyCreator;
+
 import java.util.WeakHashMap;
 
 import io.reactivex.Observable;
-import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -24,18 +24,18 @@ public class RxRestClient {
     private final String URL;
     private final RequestBody BODY;
     private final Context CONTEXT;
-    private final File FILE;
+    private final FileParentBody FILEPARENTBODY;
 
     public RxRestClient(String url,
                         WeakHashMap<String, Object> param,
                         RequestBody body,
                         Context context,
-                        File file) {
+                        FileParentBody fileParentBody) {
         this.URL = url;
         PARAMS.putAll(param);
         this.BODY = body;
         this.CONTEXT = context;
-        this.FILE = file;
+        this.FILEPARENTBODY = fileParentBody;
     }
 
     public static RxRestClientBuilder builder() {
@@ -67,12 +67,8 @@ public class RxRestClient {
                 observable = service.delete(URL, PARAMS);
                 break;
             case UPLOAD:
-                final RequestBody requestBody =
-                        RequestBody.create(MediaType.parse(MultipartBody.FORM.toString()), FILE);
-                //以form的形式提交文件
-                final MultipartBody.Part body =
-                        MultipartBody.Part.createFormData("file", FILE.getName(), requestBody);
-                observable = RxRestCreator.getRxRestService().upload(URL, body);
+                MultipartBody tempBody = MultipartBodyCreator.paramsAndFilesToMultipartBody(PARAMS,FILEPARENTBODY);
+                observable = RxRestCreator.getRxRestService().upload(URL, tempBody);
                 break;
             default:
                 break;
@@ -106,50 +102,8 @@ public class RxRestClient {
                 });
           */
 
-        /* 示例的网络请求
-        RxRestClient.builder()
-                .url("search.php?key=")
-                .loader(getContext())
-                .build()
-                .get()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String response) throws Exception {
-                        LatteLoader.stopLoading();
-                        final String searchItemText = mSearchEdit.getText().toString();
-                        saveItem(searchItemText);
-                        mSearchEdit.setText("");
-                        //展示一些东西
-                        //弹出一段话
-                    }
-                });
-         */
-
         return observable;
     }
-
-    // 拼接如果有多图和参数一起上传
-    /*
-    private  final RequestBody getFormData() {
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM);
-
-        for (Map.Entry<String, Object> entry: PARAMS.entrySet()
-                ) {
-            if (entry.getValue() instanceof File) {
-                // 这里上传的是多图 (特别 file[])
-                builder.addFormDataPart("file[]", ((File)entry.getValue()).getName(), RequestBody.create(MediaType.parse("image/*"), (File)entry.getValue()));
-            } else {
-
-                builder.addFormDataPart(entry.getKey(), String.valueOf(entry.getValue()));
-            }
-        }
-        RequestBody requestBody = builder.build();
-        return  requestBody;
-    }
-    */
 
     public final Observable<String> get() {
         return request(HttpMethod.GET);
@@ -188,7 +142,7 @@ public class RxRestClient {
     }
 
     public final Observable<ResponseBody> download() {
-        final Observable<ResponseBody> responseBodyObservable = RxRestCreator.getRxRestService().download(URL, PARAMS);
+        final Observable<ResponseBody> responseBodyObservable = RxRestCreator.getRxRestService().download(URL);
         return responseBodyObservable;
     }
 }

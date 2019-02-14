@@ -19,6 +19,7 @@ import com.example.testmvpapp.di.component.DaggerApplicationComponent;
 import com.example.testmvpapp.di.module.ApplicationModule;
 import com.example.testmvpapp.ui.scanner.ScannerActivity;
 import com.example.testmvpapp.util.base.CrashHandler;
+import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.crashreport.CrashReport;
@@ -65,6 +66,7 @@ public class MyApplication extends Application {
         mHandler = new Handler();
 
         initApplicationComponent();
+        ToastUtils.init(this);
         // 初始化化日志打印工具
         LatteLogger.setup();
         initDB();

@@ -3,7 +3,8 @@ package com.example.testmvpapp.component.net;
 import android.content.Context;
 
 
-import java.io.File;
+import com.example.testmvpapp.component.net.file.FileParentBody;
+
 import java.util.WeakHashMap;
 
 import okhttp3.MediaType;
@@ -19,7 +20,7 @@ public class RxRestClientBuilder {
 
     private static final WeakHashMap<String, Object> PARAMS = RxRestCreator.getParams();
     private String mUrl = null;
-    private File mFile = null;
+    private FileParentBody mFileParentBody = null;
     private RequestBody mBody = null;
     private Context mContext = null;
 
@@ -42,13 +43,8 @@ public class RxRestClientBuilder {
         return this;
     }
 
-    public final RxRestClientBuilder file(File file) {
-        this.mFile = file;
-        return this;
-    }
-
-    public final RxRestClientBuilder file(String file) {
-        this.mFile = new File(file);
+    public final RxRestClientBuilder fileParentBody(FileParentBody fileParentBody) {
+        this.mFileParentBody = fileParentBody;
         return this;
     }
 
@@ -63,6 +59,6 @@ public class RxRestClientBuilder {
     }
 
     public final RxRestClient build() {
-        return new RxRestClient(mUrl, PARAMS, mBody, mContext, mFile);
+        return new RxRestClient(mUrl, PARAMS, mBody, mContext, mFileParentBody);
     }
 }

@@ -1,25 +1,47 @@
 package com.example.testmvpapp.sections.main;
 
 import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.baidu.location.BDLocation;
+import com.example.testmvpapp.Model.UpdateInfo;
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.component.jpush.NotificationsUtils;
+import com.example.testmvpapp.component.net.ConstantService;
+import com.example.testmvpapp.component.net.DefaultObserver;
+import com.example.testmvpapp.component.net.RxRestClient;
+import com.example.testmvpapp.component.net.RxRestClientBuilder;
+import com.example.testmvpapp.component.net.RxRestService;
+import com.example.testmvpapp.component.net.file.FileNetworkConfig;
+import com.example.testmvpapp.component.net.file.download.DownloadFileAsync;
+import com.example.testmvpapp.component.net.file.download.DownloadListener;
+import com.example.testmvpapp.component.net.file.download.DownloadRestService;
 import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
 import com.example.testmvpapp.sections.main.index.IndexFragment;
 import com.example.testmvpapp.sections.main.personal.PersonalFragment;
@@ -27,14 +49,32 @@ import com.example.testmvpapp.sections.main.sort.SortFragment;
 import com.example.testmvpapp.ui.bottom.BottomBarAdapter;
 import com.example.testmvpapp.ui.bottom.BottomBarLayout;
 import com.example.testmvpapp.ui.bottom.BottomBarViewPager;
+import com.example.testmvpapp.util.base.CrashHandler;
+import com.example.testmvpapp.util.base.ToastUtils;
+import com.example.testmvpapp.util.json.JsonUtils;
 import com.example.testmvpapp.util.location.BdLocationUtil;
+import com.example.testmvpapp.util.log.LatteLogger;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import cn.jpush.android.api.JPushInterface;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 
 public class MainActivity extends SimpleActivity {
@@ -51,6 +91,9 @@ public class MainActivity extends SimpleActivity {
     private BottomBarLayout mBottomBarLayout = null;
     private List<Fragment> mFragmentList = new ArrayList<>();
 
+    /* 下载进度 */
+    private ProgressDialog mProgressDialog = null;
+
     @Override
     protected Object getLayout() {
         return R.layout.activity_main;
@@ -64,6 +107,7 @@ public class MainActivity extends SimpleActivity {
         initData();
         initListener();
         checkNotificationPermissions();
+        updateApk();
     }
 
     private void initData() {
@@ -293,6 +337,269 @@ public class MainActivity extends SimpleActivity {
         tags.add("0x124");
         tags.add("0x125");
         return tags;
+    }
+
+    /* 1.apk更新 */
+    private void updateApk() {
+        // 6.0以上的申请动态权限 (文件写入权限)
+        if (Build.VERSION.SDK_INT >= 23) {
+            final RxPermissions rxPermissions = new RxPermissions(this);
+            rxPermissions
+                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .subscribe(granted -> {
+                        if (granted) {
+                            getApkInfo();
+                        } else {
+                            ToastUtils.showToast("暂无权限");
+                        }
+                    });
+            return;
+        }
+        getApkInfo();
+    }
+
+    /* 2.获取线上apk信息 */
+    private void getApkInfo() {
+
+        // 获取app更新信息
+        RxRestClient.builder()
+                .url(ConstantService.UPDATE)
+                .build()
+                .post()
+                .compose(this.bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new DefaultObserver<String>(){
+                    @Override
+                    public void onSuccess(String response) {
+                        LatteLogger.d(response);
+                        JSONObject fastJson = JSON.parseObject(response);
+                        UpdateInfo updateInfo = JsonUtils.parseObject(fastJson.getString("data"), UpdateInfo.class);
+                        showUpdate(updateInfo);
+                    }
+                });
+    }
+
+    /**
+     * 3.显示版本更新新
+     */
+    public void showUpdate(final UpdateInfo updateInfo) {
+        int now_version = 0;
+        try {
+            PackageManager packageManager = this.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(this.getPackageName(),0);
+            now_version = packageInfo.versionCode;//获取原版本号
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if(String.valueOf(now_version).equals(updateInfo.getVersion())){
+            Toast.makeText(this, "已经是最新版本", Toast.LENGTH_SHORT).show();
+            Log.d("版本号是", "onResponse: "+ now_version);
+        } else {
+            LatteLogger.d("版本号是", "onResponse: "+ now_version + " 服务器版本" + updateInfo.getVersion());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setIcon(android.R.drawable.ic_dialog_info);
+            builder.setTitle("请升级APP至版本" + updateInfo.getVersion());
+            builder.setMessage(updateInfo.getDesc());
+            builder.setCancelable(false);
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.e("MainActivity",String.valueOf(Environment.MEDIA_MOUNTED));
+                    downFile(updateInfo.getUpadeUrl());
+                }
+            });
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            builder.create().show();
+        }
+    }
+
+    /**
+     * 4.下载apk文件
+     */
+    private void downFile(String url) {
+        mProgressDialog = new ProgressDialog(this);    //进度条，在下载的时候实时更新进度，提高用户友好度
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setTitle("正在下载");
+        mProgressDialog.setMessage("请稍候...");
+        mProgressDialog.setProgress(0);
+        mProgressDialog.show();
+        File file = new File(getApkPath(),"ZhouzhiHouse.apk"); //获取文件路径
+        download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
+        // download(ConstantService.BASE_URL + url, file);
+
+    }
+
+    // 4.文件路径
+    private String getApkPath() {
+        String directoryPath="";
+        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) ) {//判断外部存储是否可用
+            directoryPath = getExternalFilesDir("apk").getAbsolutePath();
+        }else{//没外部存储就使用内部存储
+            directoryPath = getFilesDir()+File.separator+"apk";
+        }
+        File file = new File(directoryPath);
+        Log.e("测试路径",directoryPath);
+        if(!file.exists()){//判断文件目录是否存在
+            file.mkdirs();
+        }
+        return directoryPath;
+    }
+
+    /**
+     * 开始下载
+     * @param url
+     * @param file
+     */
+    public void download(@NonNull String url, final File file) {
+
+        DownloadListener downloadListener = new DownloadListener() {
+            @Override
+            public void onStartDownload(long length) {
+                setMax(length);
+            }
+
+            @Override
+            public void onProgress(int progress) {
+                downLoading(progress);
+            }
+
+            @Override
+            public void onDownloadFinish(String filePath) {
+                downSuccess();
+            }
+        };
+
+        // SaveFileTask 以后再用DownloadListener
+        FileNetworkConfig.getDownLoadRetrofit(downloadListener).create(DownloadRestService.class)
+                .download(url)
+                .subscribeOn(Schedulers.io())
+                .compose(this.bindToLifecycle())
+                .unsubscribeOn(Schedulers.io())
+                .subscribe(new Observer<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(ResponseBody responseBody) {
+
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                        DownloadFileAsync task = new DownloadFileAsync(downloadListener);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, file);
+                        // 这里一定要判断，否则文件下载不全
+                        if (task.isCancelled()) {
+                            // 下载完成
+                        }
+                        /*
+                        InputStream is = null;//输入流
+                        FileOutputStream fos = null;//输出流
+                        try {
+                            is = responseBody.byteStream();//获取输入流
+                            long total = responseBody.contentLength();//获取文件大小
+                            setMax(total); //为progressDialog设置大小
+                            if(is != null){
+                                Log.d("SettingPresenter", "onResponse: 不为空");
+                                fos = new FileOutputStream(file);
+                                byte[] buf = new byte[1024];
+                                int ch = -1;
+                                int process = 0;
+                                while ((ch = is.read(buf)) != -1) {
+                                    fos.write(buf, 0, ch);
+                                    process += ch;
+                                    downLoading(process);       //这里就是关键的实时更新进度了！
+                                }
+
+                            }
+                            fos.flush();
+                            // 下载完成
+                            if(fos != null){
+                                fos.close();
+                            }
+                            downSuccess();
+                        } catch (Exception e) {
+                            // view.downFial();
+                            Log.d("SettingPresenter",e.toString());
+                        } finally {
+                            try {
+                                if (is != null)
+                                    is.close();
+                            } catch (IOException e) {
+                            }
+                            try {
+                                if (fos != null)
+                                    fos.close();
+                            } catch (IOException e) {
+                            }
+                        }
+                        */
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
+    }
+
+    /* 进度条更新 */
+    public void setMax(final long total) {
+        mProgressDialog.setMax((int) total);
+    }
+
+    public void downLoading(final int i) {
+        mProgressDialog.setProgress(i);
+    }
+
+    /**
+     * 下载成功
+     */
+    public void downSuccess() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setIcon(android.R.drawable.ic_dialog_info);
+        builder.setTitle("下载完成");
+        builder.setMessage("是否安装");
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //android N的权限问题
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//授权读权限
+                    Uri contentUri = FileProvider.getUriForFile(MainActivity.this, "com.example.testmvpapp.fileprovider", new File(getApkPath(), "ZhouzhiHouse.apk"));//注意修改
+                    intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+                } else {
+                    intent.setDataAndType(Uri.fromFile(new File(getApkPath(), "ZhouzhiHouse.apk")), "application/vnd.android.package-archive");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                }
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.create().show();
     }
 
 }

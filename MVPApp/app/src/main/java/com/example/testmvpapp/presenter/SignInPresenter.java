@@ -46,8 +46,8 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
 
             RxRestClient.builder()
                     .url(ConstantService.LOGIN)
-                    .params("account", userName)
-                    .params("password", password)
+                    .params("account", "18775134221")
+                    .params("password", "123456")
                     .build()
                     .post()
                     .compose(mView.bindToLife())
@@ -56,11 +56,11 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
                     .subscribe(new DefaultObserver<String>(){
                         @Override
                         public void onSuccess(String response) {
-
+                            // 登录成功跳转的主页面
+                            mView.gotoMain();
                         }
                     });
-            // 登录成功跳转的主页面
-            // mView.gotoMain();
+
         }
     }
 }
