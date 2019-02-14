@@ -29,6 +29,8 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+    <!--android o 8.0 apk 未知应用安装权限 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <!-- 极光推送的权限  -->
     <!-- Required -->

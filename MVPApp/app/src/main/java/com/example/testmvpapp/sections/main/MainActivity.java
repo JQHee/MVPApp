@@ -14,6 +14,7 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -584,6 +585,14 @@ public class MainActivity extends SimpleActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //android N的权限问题
+                    // 兼容8.0
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        boolean hasInstallPermission = getPackageManager().canRequestPackageInstalls();
+                        if (!hasInstallPermission) {
+                            startInstallPermissionSettingActivity();
+                            return;
+                        }
+                    }
                     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);//授权读权限
                     Uri contentUri = FileProvider.getUriForFile(MainActivity.this, "com.example.testmvpapp.fileprovider", new File(getApkPath(), "ZhouzhiHouse.apk"));//注意修改
                     intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
@@ -600,6 +609,17 @@ public class MainActivity extends SimpleActivity {
             }
         });
         builder.create().show();
+    }
+
+    /**
+     * 跳转到设置-允许安装未知来源-页面
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startInstallPermissionSettingActivity() {
+        //注意这个是8.0新API
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
 }
