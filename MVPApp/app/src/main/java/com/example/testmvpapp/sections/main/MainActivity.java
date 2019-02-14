@@ -434,8 +434,8 @@ public class MainActivity extends SimpleActivity {
         mProgressDialog.setProgress(0);
         mProgressDialog.show();
         File file = new File(getApkPath(),"ZhouzhiHouse.apk"); //获取文件路径
-        download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
-        // download(ConstantService.BASE_URL + url, file);
+        // download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
+        download(ConstantService.BASE_URL + url, file);
 
     }
 
@@ -497,14 +497,16 @@ public class MainActivity extends SimpleActivity {
                         if (file.exists()) {
                             file.delete();
                         }
-                        /*
-                        DownloadFileAsync task = new DownloadFileAsync(downloadListener);
-                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, file);
+
+                        // 下载完成 task cancle
+                        final DownloadFileAsync task = new DownloadFileAsync(downloadListener, file);
+                        // task.execute(url);
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
                         // 这里一定要判断，否则文件下载不全
                         if (task.isCancelled()) {
                             // 下载完成
                         }
-                        */
+
                         //下载文件放在子线程
                         /*
                         mThread = new Thread() {

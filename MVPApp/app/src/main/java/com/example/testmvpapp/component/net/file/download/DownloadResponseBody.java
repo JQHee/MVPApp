@@ -24,7 +24,7 @@ public class DownloadResponseBody extends ResponseBody {
     public DownloadResponseBody(ResponseBody responseBody, DownloadListener downloadListener) {
         this.responseBody = responseBody;
         this.downloadListener = downloadListener;
-        downloadListener.onStartDownload(responseBody.contentLength());
+        // downloadListener.onStartDownload(responseBody.contentLength());
     }
     @Override
     public MediaType contentType() {
@@ -52,7 +52,7 @@ public class DownloadResponseBody extends ResponseBody {
                 LatteLogger.d("download", "read: "+ (int) (totalBytesRead * 100 / responseBody.contentLength()));
                 if (null != downloadListener) {
                     if (bytesRead != -1) {
-                        downloadListener.onProgress((int) (totalBytesRead));
+                        // downloadListener.onProgress((int) (totalBytesRead));
                     }
                 }
                 return bytesRead;
