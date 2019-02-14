@@ -20,7 +20,6 @@ public class UpLoadProgressInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        LatteLogger.d("UpLoadProgressInterceptor");
         if(null == request.body()){
             return chain.proceed(request);
         }

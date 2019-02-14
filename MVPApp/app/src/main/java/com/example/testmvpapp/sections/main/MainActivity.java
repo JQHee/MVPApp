@@ -472,8 +472,8 @@ public class MainActivity extends SimpleActivity {
         mProgressDialog.setProgress(0);
         mProgressDialog.show();
         File file = new File(getApkPath(),"ZhouzhiHouse.apk"); //获取文件路径
-        download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
-        // download(ConstantService.BASE_URL + url, file);
+        // download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
+        download(ConstantService.BASE_URL + url, file);
 
     }
 
