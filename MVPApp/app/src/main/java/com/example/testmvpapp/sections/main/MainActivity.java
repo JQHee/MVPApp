@@ -65,6 +65,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -94,6 +95,8 @@ public class MainActivity extends SimpleActivity {
 
     /* 下载进度 */
     private ProgressDialog mProgressDialog = null;
+    /* 子线程用来写文件 */
+    private Thread mThread;
 
     @Override
     protected Object getLayout() {
@@ -494,53 +497,25 @@ public class MainActivity extends SimpleActivity {
                         if (file.exists()) {
                             file.delete();
                         }
+                        /*
                         DownloadFileAsync task = new DownloadFileAsync(downloadListener);
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, file);
                         // 这里一定要判断，否则文件下载不全
                         if (task.isCancelled()) {
                             // 下载完成
                         }
+                        */
+                        //下载文件放在子线程
                         /*
-                        InputStream is = null;//输入流
-                        FileOutputStream fos = null;//输出流
-                        try {
-                            is = responseBody.byteStream();//获取输入流
-                            long total = responseBody.contentLength();//获取文件大小
-                            setMax(total); //为progressDialog设置大小
-                            if(is != null){
-                                Log.d("SettingPresenter", "onResponse: 不为空");
-                                fos = new FileOutputStream(file);
-                                byte[] buf = new byte[1024];
-                                int ch = -1;
-                                int process = 0;
-                                while ((ch = is.read(buf)) != -1) {
-                                    fos.write(buf, 0, ch);
-                                    process += ch;
-                                    downLoading(process);       //这里就是关键的实时更新进度了！
-                                }
-
+                        mThread = new Thread() {
+                            @Override
+                            public void run() {
+                                super.run();
+                                //保存到本地
+                                writeFileToDisk(responseBody, file, downloadListener);
                             }
-                            fos.flush();
-                            // 下载完成
-                            if(fos != null){
-                                fos.close();
-                            }
-                            downSuccess();
-                        } catch (Exception e) {
-                            // view.downFial();
-                            Log.d("SettingPresenter",e.toString());
-                        } finally {
-                            try {
-                                if (is != null)
-                                    is.close();
-                            } catch (IOException e) {
-                            }
-                            try {
-                                if (fos != null)
-                                    fos.close();
-                            } catch (IOException e) {
-                            }
-                        }
+                        };
+                        mThread.start();
                         */
 
                     }
@@ -557,6 +532,52 @@ public class MainActivity extends SimpleActivity {
                 });
 
     }
+
+    // 将下载的文件写入本地存储
+    private void writeFileToDisk(ResponseBody response, File file, DownloadListener downloadListener) {
+        long currentLength = 0;
+        OutputStream os = null;
+
+        InputStream is = response.byteStream(); //获取下载输入流
+        long totalLength = response.contentLength();
+
+        try {
+            os = new FileOutputStream(file); //输出流
+            int len;
+            byte[] buff = new byte[1024];
+            while ((len = is.read(buff)) != -1) {
+                os.write(buff, 0, len);
+                currentLength += len;
+                Log.e(TAG, "当前进度: " + currentLength);
+                //计算当前下载百分比，并经由回调传出
+                downloadListener.onProgress((int) (100 * currentLength / totalLength));
+                //当百分比为100时下载结束，调用结束回调，并传出下载后的本地路径
+                if ((int) (100 * currentLength / totalLength) == 100) {
+                    downloadListener.onDownloadFinish(file.getPath());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (os != null) {
+                try {
+                    os.close(); //关闭输出流
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (is != null) {
+                try {
+                    is.close(); //关闭输入流
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     /* 进度条更新 */
     public void setMax(final long total) {
