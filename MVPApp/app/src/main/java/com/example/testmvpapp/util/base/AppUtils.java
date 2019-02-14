@@ -74,12 +74,12 @@ public class AppUtils {
 	 * @param context
 	 * @return 当前应用的版本名称
 	 */
-	public static int getVersionCode(Context context) {
+	public static long getVersionCode(Context context) {
 		try {
 			PackageManager packageManager = context.getPackageManager();
 			PackageInfo packageInfo = packageManager.getPackageInfo(
 					context.getPackageName(), 0);
-			return packageInfo.versionCode;
+			return packageInfo.getLongVersionCode();
 
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();

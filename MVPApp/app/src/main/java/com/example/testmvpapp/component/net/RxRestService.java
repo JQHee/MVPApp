@@ -72,10 +72,6 @@ public interface RxRestService {
     @POST
     Observable<String> upload(@Url String url, @Part() List<MultipartBody.Part> parts);
 
-    @Streaming
-    @GET
-    Call<ResponseBody> downloadWithDynamicUrl(@Url String fileUrl);
-
     /**
      * 通过 MultipartBody和@body作为参数来上传
      * @param multipartBody MultipartBody包含多个Part

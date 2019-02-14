@@ -1,25 +1,17 @@
 package com.example.testmvpapp.component.net.file.download;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.example.testmvpapp.util.log.LatteLogger;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import okhttp3.ResponseBody;
-
 public class DownloadFileAsync extends AsyncTask<String, Integer, File> {
 
-    private final DownloadListener LISTENER;
+    private final ProgressResponseListener LISTENER;
     private final File FILE;
 
     //声明publishProgress的更新标记
@@ -28,7 +20,7 @@ public class DownloadFileAsync extends AsyncTask<String, Integer, File> {
     private static final int UPDATE = 0X2;
     int contentLen;//声明要下载的文件总长
 
-    public DownloadFileAsync(DownloadListener listener, File file) {
+    public DownloadFileAsync(ProgressResponseListener listener, File file) {
         this.LISTENER = listener;
         this.FILE = file;
     }
@@ -104,7 +96,7 @@ public class DownloadFileAsync extends AsyncTask<String, Integer, File> {
                 int i = values[1];
                 // LatteLogger.d("Current-", String.valueOf(i));
                 if (LISTENER != null) {
-                    LISTENER.onProgress(i);
+                   // LISTENER.onProgress(i);
                 }
                 break;
         }

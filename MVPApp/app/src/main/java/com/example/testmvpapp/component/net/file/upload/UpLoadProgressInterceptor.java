@@ -9,9 +9,9 @@ import okhttp3.Response;
 
 public class UpLoadProgressInterceptor implements Interceptor {
 
-    private UploadListener mUploadListener;
+    private ProgressRequestListener mUploadListener;
 
-    public UpLoadProgressInterceptor(UploadListener uploadListener) {
+    public UpLoadProgressInterceptor(ProgressRequestListener uploadListener) {
         mUploadListener = uploadListener;
     }
 

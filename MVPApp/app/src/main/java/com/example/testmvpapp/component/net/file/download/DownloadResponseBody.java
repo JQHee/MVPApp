@@ -1,9 +1,5 @@
 package com.example.testmvpapp.component.net.file.download;
 
-import android.util.Log;
-
-import com.example.testmvpapp.util.log.LatteLogger;
-
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
@@ -19,15 +15,13 @@ import okio.Source;
 public class DownloadResponseBody extends ResponseBody {
 
     private ResponseBody responseBody;
-    private DownloadListener downloadListener;
-    private Executor mExecutor;
+    private ProgressResponseListener downloadListener;
 
     // BufferedSource 是okio库中的输入流，这里就当作inputStream来使用。
     private BufferedSource bufferedSource;
 
-    public DownloadResponseBody(ResponseBody responseBody, Executor executor, DownloadListener downloadListener) {
+    public DownloadResponseBody(ResponseBody responseBody, ProgressResponseListener downloadListener) {
         this.responseBody = responseBody;
-        this.mExecutor = executor;
         this.downloadListener = downloadListener;
         // downloadListener.onStartDownload(responseBody.contentLength());
     }
@@ -59,11 +53,7 @@ public class DownloadResponseBody extends ResponseBody {
                     totalBytesRead += bytesRead != -1 ? bytesRead : 0;
                     // Logger.t("DownloadUtil").d("已经下载的：" + totalBytesRead + "共有：" + responseBody.contentLength());
                     final int progress = (int) (totalBytesRead * 100 / responseBody.contentLength());
-                    if (mExecutor != null) {
-                        mExecutor.execute(() -> downloadListener.onProgress(progress));
-                    } else {
-                        downloadListener.onProgress(progress);
-                    }
+                    downloadListener.onProgress(progress);
                 }
                 return bytesRead;
             }

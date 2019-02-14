@@ -1,10 +1,5 @@
 package com.example.testmvpapp.component.net.file.upload;
 
-import android.os.Handler;
-import android.os.Looper;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -22,10 +17,10 @@ public class UploadProgressRequestBody extends RequestBody {
 
 
     private RequestBody mRequestBody;
-    private UploadListener mUploadListener;
+    private ProgressRequestListener mUploadListener;
     private CountingSink mCountingSink;
 
-    public UploadProgressRequestBody(RequestBody requestBody, UploadListener uploadListener) {
+    public UploadProgressRequestBody(RequestBody requestBody, ProgressRequestListener uploadListener) {
         mRequestBody = requestBody;
         mUploadListener = uploadListener;
     }

@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * 下载进度接口
  */
-public interface DownloadListener {
+public interface ProgressResponseListener {
 
     void onStartDownload(long length);
     void onProgress(int progress);

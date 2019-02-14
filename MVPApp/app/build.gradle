@@ -120,6 +120,7 @@ dependencies {
 
     /* 网络请求依赖 */
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    // 转换器
     implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
     implementation "com.squareup.okhttp3:okhttp:3.12.1"
     implementation 'com.squareup.okio:okio:1.14.0'

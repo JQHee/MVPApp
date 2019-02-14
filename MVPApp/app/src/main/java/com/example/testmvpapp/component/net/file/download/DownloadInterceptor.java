@@ -8,12 +8,10 @@ import okhttp3.Response;
 
 public class DownloadInterceptor implements Interceptor {
 
-    private DownloadListener downloadListener;
-    private Executor mExecutor;
+    private ProgressResponseListener downloadListener;
 
-    public DownloadInterceptor(DownloadListener downloadListener, Executor executor) {
+    public DownloadInterceptor(ProgressResponseListener downloadListener) {
         this.downloadListener = downloadListener;
-        this.mExecutor = executor;
     }
 
     @Override
@@ -21,7 +19,7 @@ public class DownloadInterceptor implements Interceptor {
 
         Response response=chain.proceed(chain.request());
         return response.newBuilder()
-                .body(new DownloadResponseBody(response.body(), mExecutor, downloadListener)).build();
+                .body(new DownloadResponseBody(response.body(), downloadListener)).build();
     }
 
     /*

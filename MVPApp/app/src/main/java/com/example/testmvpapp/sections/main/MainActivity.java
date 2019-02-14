@@ -35,10 +35,11 @@ import com.example.testmvpapp.component.jpush.NotificationsUtils;
 import com.example.testmvpapp.component.net.ConstantService;
 import com.example.testmvpapp.component.net.DefaultObserver;
 import com.example.testmvpapp.component.net.RxRestClient;
+import com.example.testmvpapp.component.net.RxRestCreator;
 import com.example.testmvpapp.component.net.RxRestService;
-import com.example.testmvpapp.component.net.file.FileNetworkConfig;
 import com.example.testmvpapp.component.net.file.download.DownloadFileAsync;
-import com.example.testmvpapp.component.net.file.download.DownloadListener;
+import com.example.testmvpapp.component.net.file.download.ProgressResponseListener;
+import com.example.testmvpapp.component.net.file.upload.ProgressRequestListener;
 import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
 import com.example.testmvpapp.sections.main.index.IndexFragment;
 import com.example.testmvpapp.sections.main.personal.PersonalFragment;
@@ -62,6 +63,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observer;
@@ -358,7 +360,32 @@ public class MainActivity extends SimpleActivity {
     /* 2.获取线上apk信息 */
     private void getApkInfo() {
 
+        ProgressRequestListener listener = new ProgressRequestListener() {
+            @Override
+            public void onRequestProgress(long bytesWritten, long contentLength) {
+                LatteLogger.d("下载进度" + String.valueOf(bytesWritten) + "总长：" + String.valueOf(contentLength));
+            }
+        };
+        RxRestCreator.createReqeustService(RxRestService.class, listener)
+                .post(ConstantService.UPDATE, new WeakHashMap<String, Object>())
+                .compose(this.bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new DefaultObserver<String>(){
+                    @Override
+                    public void onSuccess(String response) {
+                        LatteLogger.d(response);
+                        JSONObject fastJson = JSON.parseObject(response);
+                        UpdateInfo updateInfo = JsonUtils.parseObject(fastJson.getString("data"), UpdateInfo.class);
+                        showUpdate(updateInfo);
+                    }
+                });
+
+
+
         // 获取app更新信息
+
+        /*
         RxRestClient.builder()
                 .url(ConstantService.UPDATE)
                 .build()
@@ -375,6 +402,8 @@ public class MainActivity extends SimpleActivity {
                         showUpdate(updateInfo);
                     }
                 });
+                */
+
     }
 
     /**
@@ -385,7 +414,7 @@ public class MainActivity extends SimpleActivity {
         try {
             PackageManager packageManager = this.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(this.getPackageName(),0);
-            now_version = packageInfo.getLongVersionCode();//获取原版本号
+            now_version = packageInfo.versionCode;//获取原版本号
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -427,8 +456,8 @@ public class MainActivity extends SimpleActivity {
         mProgressDialog.setProgress(0);
         mProgressDialog.show();
         File file = new File(getApkPath(),"ZhouzhiHouse.apk"); //获取文件路径
-        // download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
-        download(ConstantService.BASE_URL + url, file);
+        download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
+        // download(ConstantService.BASE_URL + url, file);
 
     }
 
@@ -455,7 +484,7 @@ public class MainActivity extends SimpleActivity {
      */
     public void download(@NonNull String url, final File file) {
 
-        DownloadListener downloadListener = new DownloadListener() {
+        ProgressResponseListener downloadListener = new ProgressResponseListener() {
             @Override
             public void onStartDownload(long length) {
                 setMax(length);
@@ -478,9 +507,7 @@ public class MainActivity extends SimpleActivity {
         };
 
         // SaveFileTask 以后再用DownloadListener
-        FileNetworkConfig.getInstance()
-                .getDownLoadRetrofit(downloadListener)
-                .create(RxRestService.class)
+        RxRestCreator.createResponseService(RxRestService.class, downloadListener)
                 .download(url)
                 .subscribeOn(Schedulers.io())
                 .compose(this.bindToLifecycle())
@@ -536,7 +563,7 @@ public class MainActivity extends SimpleActivity {
     }
 
     // 将下载的文件写入本地存储
-    private void writeFileToDisk(ResponseBody response, File file, DownloadListener downloadListener) {
+    private void writeFileToDisk(ResponseBody response, File file, ProgressResponseListener downloadListener) {
         long currentLength = 0;
         OutputStream os = null;
 
