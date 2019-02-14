@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 import com.example.testmvpapp.R;
 
 /**
- * 作者：Created by mengshirui on 2016-07-18
+ * 作者：Created by hjq on 2016-07-18
  * 邮箱：
  * 描述：自定义宽高比例的view
  */

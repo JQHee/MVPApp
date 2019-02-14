@@ -8,6 +8,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
@@ -70,6 +71,10 @@ public interface RxRestService {
     @Multipart
     @POST
     Observable<String> upload(@Url String url, @Part() List<MultipartBody.Part> parts);
+
+    @Streaming
+    @GET
+    Call<ResponseBody> downloadWithDynamicUrl(@Url String fileUrl);
 
     /**
      * 通过 MultipartBody和@body作为参数来上传

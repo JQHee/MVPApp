@@ -1,6 +1,7 @@
 package com.example.testmvpapp.sections.main;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,11 +10,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
@@ -31,18 +30,15 @@ import com.amap.api.location.AMapLocationListener;
 import com.baidu.location.BDLocation;
 import com.example.testmvpapp.Model.UpdateInfo;
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.component.jpush.NotificationsUtils;
 import com.example.testmvpapp.component.net.ConstantService;
 import com.example.testmvpapp.component.net.DefaultObserver;
 import com.example.testmvpapp.component.net.RxRestClient;
-import com.example.testmvpapp.component.net.RxRestClientBuilder;
 import com.example.testmvpapp.component.net.RxRestService;
 import com.example.testmvpapp.component.net.file.FileNetworkConfig;
 import com.example.testmvpapp.component.net.file.download.DownloadFileAsync;
 import com.example.testmvpapp.component.net.file.download.DownloadListener;
-import com.example.testmvpapp.component.net.file.download.DownloadRestService;
 import com.example.testmvpapp.sections.main.discover.DiscoverFragment;
 import com.example.testmvpapp.sections.main.index.IndexFragment;
 import com.example.testmvpapp.sections.main.personal.PersonalFragment;
@@ -50,15 +46,11 @@ import com.example.testmvpapp.sections.main.sort.SortFragment;
 import com.example.testmvpapp.ui.bottom.BottomBarAdapter;
 import com.example.testmvpapp.ui.bottom.BottomBarLayout;
 import com.example.testmvpapp.ui.bottom.BottomBarViewPager;
-import com.example.testmvpapp.util.base.CrashHandler;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.json.JsonUtils;
 import com.example.testmvpapp.util.location.BdLocationUtil;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,6 +75,7 @@ public class MainActivity extends SimpleActivity {
 
     protected final String TAG = this.getClass().getSimpleName();
     private static final int BAIDU_ACCESS_COARSE_LOCATION = 100;
+    private static final int REQUEST_CODE_APP_INSTALL = 1001;
 
     //声明AMapLocationClient类对象
     public AMapLocationClient mLocationClient = null;
@@ -388,11 +381,11 @@ public class MainActivity extends SimpleActivity {
      * 3.显示版本更新新
      */
     public void showUpdate(final UpdateInfo updateInfo) {
-        int now_version = 0;
+        long now_version = 0;
         try {
             PackageManager packageManager = this.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(this.getPackageName(),0);
-            now_version = packageInfo.versionCode;//获取原版本号
+            now_version = packageInfo.getLongVersionCode();//获取原版本号
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -434,8 +427,8 @@ public class MainActivity extends SimpleActivity {
         mProgressDialog.setProgress(0);
         mProgressDialog.show();
         File file = new File(getApkPath(),"ZhouzhiHouse.apk"); //获取文件路径
-        download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
-        // download(ConstantService.BASE_URL + url, file);
+        // download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
+        download(ConstantService.BASE_URL + url, file);
 
     }
 
@@ -474,13 +467,20 @@ public class MainActivity extends SimpleActivity {
             }
 
             @Override
-            public void onDownloadFinish(String filePath) {
+            public void onDownloadFinish(File file) {
                 downSuccess();
+            }
+
+            @Override
+            public void onFailed(String message) {
+
             }
         };
 
         // SaveFileTask 以后再用DownloadListener
-        FileNetworkConfig.getDownLoadRetrofit(downloadListener).create(DownloadRestService.class)
+        FileNetworkConfig.getInstance()
+                .getDownLoadRetrofit(downloadListener)
+                .create(RxRestService.class)
                 .download(url)
                 .subscribeOn(Schedulers.io())
                 .compose(this.bindToLifecycle())
@@ -555,7 +555,7 @@ public class MainActivity extends SimpleActivity {
                 downloadListener.onProgress((int) (100 * currentLength / totalLength));
                 //当百分比为100时下载结束，调用结束回调，并传出下载后的本地路径
                 if ((int) (100 * currentLength / totalLength) == 100) {
-                    downloadListener.onDownloadFinish(file.getPath());
+                    downloadListener.onDownloadFinish(file);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -642,7 +642,17 @@ public class MainActivity extends SimpleActivity {
         //注意这个是8.0新API
         Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_APP_INSTALL);
+        // startActivity(intent);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE_APP_INSTALL) {
+                downSuccess();
+            }
+        }
+    }
 }
