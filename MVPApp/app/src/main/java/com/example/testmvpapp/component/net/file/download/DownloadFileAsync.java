@@ -104,7 +104,7 @@ public class DownloadFileAsync extends AsyncTask<String, Integer, File> {
                 int i = values[1];
                 // LatteLogger.d("Current-", String.valueOf(i));
                 if (LISTENER != null) {
-                    LISTENER.onProgress(i);
+                    // LISTENER.onProgress(i);
                 }
                 break;
         }
