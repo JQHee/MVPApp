@@ -22,12 +22,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.blankj.utilcode.util.ToastUtils;
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.di.component.ActivityComponent;
-import com.example.testmvpapp.di.component.DaggerActivityComponent;
-import com.example.testmvpapp.di.module.ActivityModule;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.base.CleanLeakUtils;
@@ -44,9 +39,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

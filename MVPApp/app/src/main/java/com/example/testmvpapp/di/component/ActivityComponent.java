@@ -34,6 +34,4 @@ public interface ActivityComponent {
 
     void inject(SignUpActivity signUpActivity);
 
-    // void inject(ZhihuWebActivity zhihuWebActivity);
-
 }

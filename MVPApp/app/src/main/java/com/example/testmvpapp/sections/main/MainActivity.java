@@ -104,7 +104,7 @@ public class MainActivity extends SimpleActivity {
         initData();
         initListener();
         checkNotificationPermissions();
-        updateApk();
+        // updateApk();
     }
 
     private void initData() {

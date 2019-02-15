@@ -21,6 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SignInActivity extends BaseActivity<SignInPresenter> implements SignInContract.View {
 
+    /*
     @BindView(R.id.edit_sign_in_email)
     TextInputEditText mEmail;
     @BindView(R.id.edit_sign_in_password)
@@ -41,6 +42,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         // 微信登录
         mPresenter.gotoWechatLoginAction();
     }
+    */
 
     @Override
     protected Object getLayout() {
@@ -77,6 +79,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
      */
     @Override
     public boolean checkForm() {
+        /*
         final String email = mEmail.getText().toString();
         final String password = mPassword.getText().toString();
 
@@ -94,6 +97,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         } else {
             mPassword.setError(null);
         }
+        */
         return true;
     }
 
