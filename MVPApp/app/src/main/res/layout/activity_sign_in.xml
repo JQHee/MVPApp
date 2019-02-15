@@ -165,11 +165,12 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_sign_up"/>
 
             <!--登录按钮-->
-            <android.support.v7.widget.AppCompatButton
+            <com.deadline.statebutton.StateButton
                 android:id="@+id/btn_sign_up"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/holo_orange_dark"
+                app:normalBackgroundColor="@android:color/holo_orange_dark"
+                app:radius="5dp"
                 android:text="登录"
                 android:textSize="20sp"
                 android:textColor="@color/white"
