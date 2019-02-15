@@ -6,8 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/color_F2F4F3">
 
-
-    <android.support.v7.widget.Toolbar
+<!--    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -29,14 +28,14 @@
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp"/>
 
-    </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -47,24 +46,124 @@
             android:layout_height="match_parent">
 
             <!--登录的icon-->
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/scroll_view_content_icon"
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/sign_in_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintTop_toTopOf="@id/scroll_view_content"
+                app:layout_constraintLeft_toLeftOf="@id/scroll_view_content"
+                app:layout_constraintRight_toRightOf="@id/scroll_view_content"
+                android:layout_marginTop="50dp"/>
+
+            <!--手机号、密码输入框-->
+            <EditText
+                android:id="@+id/et_phone_number"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="50dp"
+                android:background="@null"
+                android:hint="请输入手机号"
+                android:textColor="@color/white"
+                android:textColorHint="#a9aaa4"
+                app:layout_constraintTop_toBottomOf="@id/sign_in_logo"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:background="#a9aaa4"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/et_phone_number"
+                app:layout_constraintLeft_toLeftOf="@id/et_phone_number"
+                app:layout_constraintRight_toRightOf="@id/et_phone_number"/>
+
+            <EditText
+                android:id="@+id/et_pass_word"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="18dp"
+                android:background="@null"
+                android:hint="请输入密码"
+                android:textColor="@color/white"
+                android:textColorHint="#a9aaa4"
+                app:layout_constraintTop_toBottomOf="@id/et_phone_number"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <View
+                android:id="@+id/et_pass_word_line"
+                android:layout_width="0dp"
+                android:layout_height="1px"
+                android:background="#a9aaa4"
+                android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/et_pass_word"
+                app:layout_constraintLeft_toLeftOf="@id/et_pass_word"
+                app:layout_constraintRight_toRightOf="@id/et_pass_word"/>
+
+            <!--记住账号、自动登录 CheckBox  android:button="@drawable/check_selector"-->
+            <RadioButton
+                android:id="@+id/rbtn_remember_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="记住账号"
+                android:textColor="#333333"
+                android:checked="true"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintLeft_toLeftOf="@id/btn_sign_up"
+                app:layout_constraintBottom_toTopOf="@id/btn_sign_up"/>
+
+            <RadioButton
+                android:id="@+id/rbtn_auto_sign_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录"
+                android:textColor="#333333"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintRight_toRightOf="@id/btn_sign_up"
+                app:layout_constraintBottom_toTopOf="@id/btn_sign_up"/>
+
+            <!--登录按钮-->
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btn_sign_up"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:background="@color/white"
-                tools:ignore="MissingConstraints">
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_orange_dark"
+                android:text="登录"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintTop_toBottomOf="@id/et_pass_word_line"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_launcher"
-                    app:layout_constraintTop_toTopOf="@id/scroll_view_content_icon"
-                    app:layout_constraintBottom_toBottomOf="@id/scroll_view_content_icon"
-                    app:layout_constraintLeft_toLeftOf="@id/scroll_view_content_icon"
-                    app:layout_constraintRight_toRightOf="@id/scroll_view_content_icon"/>
-            </android.support.constraint.ConstraintLayout>
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="新用户注册"
+                android:textColor="#333333"
+                android:layout_marginTop="15dp"
+                app:layout_constraintLeft_toLeftOf="@id/btn_sign_up"
+                app:layout_constraintTop_toBottomOf="@id/btn_sign_up"/>
 
-            
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="忘记密码"
+                android:textColor="#333333"
+                android:layout_marginTop="15dp"
+                app:layout_constraintRight_toRightOf="@id/btn_sign_up"
+                app:layout_constraintTop_toBottomOf="@id/btn_sign_up" />
+
 
         </android.support.constraint.ConstraintLayout>
 
