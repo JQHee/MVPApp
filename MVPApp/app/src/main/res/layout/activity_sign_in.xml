@@ -56,6 +56,36 @@
                 app:layout_constraintRight_toRightOf="@id/scroll_view_content"
                 android:layout_marginTop="50dp"/>
 
+
+            <!--国家码选择-->
+            <CheckBox
+                android:id="@+id/cb_country_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:text="+86"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:drawablePadding="8dp"
+                android:drawableRight="@drawable/icon_home_team_arrow_down"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintTop_toBottomOf="@id/sign_in_logo"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <View
+                android:id="@+id/cb_country_code_line"
+                android:layout_width="1px"
+                android:layout_height="0dp"
+                android:background="#a9aaa4"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                app:layout_constraintTop_toTopOf="@id/cb_country_code"
+                app:layout_constraintLeft_toRightOf="@id/cb_country_code"
+                app:layout_constraintBottom_toBottomOf="@id/cb_country_code"/>
+
             <!--手机号、密码输入框-->
             <EditText
                 android:id="@+id/et_phone_number"
@@ -69,7 +99,7 @@
                 android:textColor="@color/white"
                 android:textColorHint="#a9aaa4"
                 app:layout_constraintTop_toBottomOf="@id/sign_in_logo"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/cb_country_code_line"
                 app:layout_constraintRight_toRightOf="parent" />
 
             <View
@@ -79,7 +109,7 @@
                 android:background="#a9aaa4"
                 android:layout_marginTop="12dp"
                 app:layout_constraintTop_toBottomOf="@id/et_phone_number"
-                app:layout_constraintLeft_toLeftOf="@id/et_phone_number"
+                app:layout_constraintLeft_toLeftOf="@id/cb_country_code"
                 app:layout_constraintRight_toRightOf="@id/et_phone_number"/>
 
             <EditText
@@ -172,5 +202,5 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
-    
+
 </android.support.constraint.ConstraintLayout>
