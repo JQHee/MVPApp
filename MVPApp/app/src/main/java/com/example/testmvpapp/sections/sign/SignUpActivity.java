@@ -1,15 +1,26 @@
 package com.example.testmvpapp.sections.sign;
 
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Patterns;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.presenter.SignUpPresenter;
 import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
+import com.example.testmvpapp.util.base.MyImageSpan;
 
 import javax.inject.Inject;
 
@@ -31,6 +42,18 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
     @BindView(R.id.edit_sign_up_re_password)
     TextInputEditText mRePassword;
 
+    // 存在多个用户协议的
+    String[] protocols = {
+            "《创客中心产品认购合同》",
+            "《创客中心注册申请合同》",
+            "《创客中心系统服务合同》",
+            "《创客中心服务合同》",
+            "《代理协议》"
+    };
+    private boolean isChecked;
+    private SpannableStringBuilder spannableStringBuilder;
+
+
     @OnClick({R.id.btn_sign_up})
     public void onClickSignUp() {
 
@@ -39,6 +62,88 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
     @OnClick({R.id.tv_link_sign_in})
     public void onClickLink() {
         mPresenter.gotoSignIn();
+    }
+
+
+    private void setup() {
+        final String string = "  已阅读并同意";
+        //图标(默认位选中)
+        spannableStringBuilder = new SpannableStringBuilder(string);
+        setIconSapn(spannableStringBuilder, R.drawable.ic_shop_normal);
+        //选择按钮的点击事件
+        ClickableSpan imagClick = new ClickableSpan() {
+            @Override
+            public void onClick(View widget) {
+                //显示协议内容
+                if (isChecked) {
+                    setIconSapn(spannableStringBuilder, R.drawable.ic_shop_normal);
+                } else {
+                    setIconSapn(spannableStringBuilder, R.drawable.ic_shop_normal);
+                }
+                isChecked = !isChecked;
+
+
+                // 设置text(暂时这样)
+                TextView protoclTextView = null;
+                protoclTextView.setText(spannableStringBuilder);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.WHITE);
+            }
+        };
+        spannableStringBuilder.setSpan(imagClick, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    /**
+     * 设置徐泽状态图标
+     *
+     * @param spannableStringBuilder
+     * @param resId
+     */
+    private void setIconSapn(SpannableStringBuilder spannableStringBuilder, int resId) {
+        MyImageSpan imageSpan = new MyImageSpan(this, BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), resId), 2);
+        spannableStringBuilder.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private void setupProtocolsStyle() {
+        for (int i = 0; i < protocols.length; i++) {
+            final String protocol = protocols[i];
+            SpannableStringBuilder protocolStringBuild = new SpannableStringBuilder(protocol);
+            //协议
+            //点击span
+            final int finalI = i;
+            ClickableSpan clickableSpan = new ClickableSpan() {
+                @Override
+                public void onClick(View widget) {
+                    // 显示协议内容
+                    // mView.showProtocol(protocol, finalI, protocols.length);
+                }
+
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setUnderlineText(false);
+                    ds.setColor(Color.WHITE);
+                }
+            };
+            protocolStringBuild.setSpan(clickableSpan, 0, protocol.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //前景
+            ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(MyApplication.getInstance().getResources().getColor(R.color.colorPrimary));
+            protocolStringBuild.setSpan(foregroundColorSpan, 0, protocol.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannableStringBuilder.append(protocolStringBuild);
+            //点
+            if (i != protocols.length - 1) {
+                SpannableStringBuilder dotStringBuild = new SpannableStringBuilder("、");
+                ForegroundColorSpan dotSpan = new ForegroundColorSpan(MyApplication.getInstance().getResources().getColor(R.color.color_666666));
+                dotStringBuild.setSpan(dotSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStringBuilder.append(dotStringBuild);
+            }
+        }
+        // return spannableStringBuilder;
     }
 
     @Override
