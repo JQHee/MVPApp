@@ -1,6 +1,7 @@
 package com.example.testmvpapp.component.net.interceptors;
 
 import com.blankj.utilcode.util.NetworkUtils;
+import com.example.testmvpapp.util.log.LatteLogger;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
@@ -64,6 +65,26 @@ public class CommonInterceptor {
                     .header("token","login_token")
                     .build();
             return chain.proceed(mRequest);
+        }
+    };
+
+
+    /**
+     * 获取返回的状态码
+     */
+    public static final Interceptor mBaseResponseCodeInterceptor = new Interceptor() {
+
+        public static final int HTTP_CODE_NOT_LOGIN = 300;
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Response response = chain.proceed(chain.request());
+            LatteLogger.d("状态码" + String.valueOf(response.code()) );
+            // 常用于拦截登录状态
+            if (response.code() == HTTP_CODE_NOT_LOGIN) {
+
+            }
+            return response;
         }
     };
 

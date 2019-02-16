@@ -91,6 +91,7 @@ public class RxRestCreator {
             BUILDER.addInterceptor(CommonInterceptor.mBaseHeaderInterceptor);
             BUILDER.addInterceptor(CommonInterceptor.mRewriteCacheControlInterceptor);
             BUILDER.addInterceptor(CommonInterceptor.mLoggingInterceptor);
+            BUILDER.addInterceptor(CommonInterceptor.mBaseResponseCodeInterceptor);
             return BUILDER;
         }
 

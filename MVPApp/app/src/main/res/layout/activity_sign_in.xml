@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -161,12 +162,12 @@
                 android:drawableLeft="@drawable/check_selector"
                 android:drawablePadding="8dp"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintRight_toRightOf="@id/btn_sign_up"
-                app:layout_constraintBottom_toTopOf="@id/btn_sign_up"/>
+                app:layout_constraintRight_toRightOf="@id/btn_sign_in"
+                app:layout_constraintBottom_toTopOf="@id/btn_sign_in"/>
 
             <!--登录按钮-->
             <com.deadline.statebutton.StateButton
-                android:id="@+id/btn_sign_up"
+                android:id="@+id/btn_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:normalBackgroundColor="@android:color/holo_orange_dark"
@@ -187,8 +188,8 @@
                 android:text="新用户注册"
                 android:textColor="#333333"
                 android:layout_marginTop="15dp"
-                app:layout_constraintLeft_toLeftOf="@id/btn_sign_up"
-                app:layout_constraintTop_toBottomOf="@id/btn_sign_up"/>
+                app:layout_constraintLeft_toLeftOf="@id/btn_sign_in"
+                app:layout_constraintTop_toBottomOf="@id/btn_sign_in"/>
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -196,8 +197,8 @@
                 android:text="忘记密码"
                 android:textColor="#333333"
                 android:layout_marginTop="15dp"
-                app:layout_constraintRight_toRightOf="@id/btn_sign_up"
-                app:layout_constraintTop_toBottomOf="@id/btn_sign_up" />
+                app:layout_constraintRight_toRightOf="@id/btn_sign_in"
+                app:layout_constraintTop_toBottomOf="@id/btn_sign_in" />
 
 
         </android.support.constraint.ConstraintLayout>

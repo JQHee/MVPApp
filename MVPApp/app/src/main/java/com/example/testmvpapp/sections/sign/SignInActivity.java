@@ -21,16 +21,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SignInActivity extends BaseActivity<SignInPresenter> implements SignInContract.View {
 
+
+    @OnClick({R.id.btn_sign_in})
+    public void onClickSignIn() {
+        mPresenter.login("", "");
+    }
     /*
     @BindView(R.id.edit_sign_in_email)
     TextInputEditText mEmail;
     @BindView(R.id.edit_sign_in_password)
     TextInputEditText mPassword;
-
-    @OnClick({R.id.btn_sign_in})
-    public void onClickSignIn() {
-        mPresenter.login(mEmail.getText().toString(), mPassword.getText().toString());
-    }
 
     @OnClick({R.id.tv_link_sign_up})
     public void onClickLink() {
