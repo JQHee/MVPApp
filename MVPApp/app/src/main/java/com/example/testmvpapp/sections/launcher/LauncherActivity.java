@@ -4,6 +4,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +38,8 @@ import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static com.example.testmvpapp.ui.widget.UIUtils.getContext;
 
 
 /**
@@ -80,20 +83,40 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
             // 跳转
             Intent intent = new Intent(LauncherActivity.this, NewFeaturesActivity.class);
             startActivity(intent);
+            finish();
 
         } else {
+            startActivityAfterLogin(new Intent(LauncherActivity.this, MainActivity.class));
+            finish();
+            /*
             if (BFPreference.getAppFlag(ConstantKey.IS_LOGIN)) {
                 Intent intent = new Intent(LauncherActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
 
             } else {
                 Intent intent = new Intent(LauncherActivity.this, SignInActivity.class);
                 startActivity(intent);
+                finish();
 
             }
+            */
         }
-        finish();
 
+
+    }
+
+    public void startActivityAfterLogin(Intent intent) {
+        //未登录（这里用自己的登录逻辑去判断是否未登录）
+        final boolean isLogin = BFPreference.getAppFlag(ConstantKey.IS_LOGIN);
+        if (!isLogin) {
+            ComponentName componentName = new ComponentName(getContext(), SignInActivity.class);
+            intent.putExtra("className", intent.getComponent().getClassName());
+            intent.setComponent(componentName);
+            super.startActivity(intent);
+        } else {
+            super.startActivity(intent);
+        }
     }
 
     /**

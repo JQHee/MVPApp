@@ -1,5 +1,6 @@
 package com.example.testmvpapp.sections.sign;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
@@ -25,6 +26,23 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
         mPresenter.login("", "");
+    }
+
+
+    private void startActivity() {
+        if (getIntent().getExtras() != null && getIntent().getExtras().getString("className") != null) {
+            String className = getIntent().getExtras().getString("className");
+            getIntent().removeExtra("className");
+            if (className != null && !className.equals(mActivityComponent.getActivityContext().getClass().getName())) {
+                try {
+                    ComponentName componentName = new ComponentName(mActivityComponent.getActivityContext(), Class.forName(className));
+                    startActivity(getIntent().setComponent(componentName));
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        finish();
     }
     /*
     @BindView(R.id.edit_sign_in_email)
@@ -69,9 +87,12 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
 
     @Override
     public void gotoMain() {
+        startActivity();
+        /*
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+        */
     }
 
     /**

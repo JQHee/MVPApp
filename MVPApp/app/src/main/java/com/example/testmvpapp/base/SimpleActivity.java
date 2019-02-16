@@ -53,6 +53,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
 
     protected final String TAG = this.getClass().getSimpleName();
     protected ProgressDialog mProgressDialog;
+    protected Context mContext;
     private Unbinder mUnBinder = null;
     // 用于显示加载中、网络异常，空布局、内容布局
     protected StateView mStateView = null;
@@ -61,6 +62,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         if (getLayout() instanceof Integer) {
             setContentView((Integer) getLayout());;
         } else if (getLayout() instanceof  View) {

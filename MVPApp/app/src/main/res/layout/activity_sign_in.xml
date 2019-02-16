@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/color_F2F4F3">
 
 <!--    <android.support.v7.widget.Toolbar
@@ -149,8 +147,9 @@
                 android:drawableLeft="@drawable/check_selector"
                 android:drawablePadding="8dp"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintLeft_toLeftOf="@id/btn_sign_up"
-                app:layout_constraintBottom_toTopOf="@id/btn_sign_up"/>
+                app:layout_constraintLeft_toLeftOf="@id/btn_sign_in"
+                app:layout_constraintBottom_toTopOf="@id/btn_sign_in"
+                android:drawableStart="@drawable/check_selector" />
 
             <CheckBox
                 android:id="@+id/rbtn_auto_sign_in"
@@ -163,7 +162,8 @@
                 android:drawablePadding="8dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintRight_toRightOf="@id/btn_sign_in"
-                app:layout_constraintBottom_toTopOf="@id/btn_sign_in"/>
+                app:layout_constraintBottom_toTopOf="@id/btn_sign_in"
+                android:drawableStart="@drawable/check_selector" />
 
             <!--登录按钮-->
             <com.deadline.statebutton.StateButton
