@@ -4,33 +4,24 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
-import android.view.DisplayCutout;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.app.MyApplication;
-import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.base.CrashHandler;
-import com.example.testmvpapp.util.login.LoginInterceptor;
 import com.example.testmvpapp.util.storage.BFPreference;
 import com.example.testmvpapp.util.storage.ConstantKey;
 import com.example.testmvpapp.util.timer.BaseTimerTask;
 import com.example.testmvpapp.util.timer.ITimerListener;
-import com.jaeger.library.StatusBarUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.text.MessageFormat;
@@ -165,10 +156,12 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
         return R.layout.activity_launcher;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void initView() {
         isHiddenToolbar(true);
         setFullScreen();
+        // hideBottomUIMenu();
 
         final RxPermissions rxPermissions = new RxPermissions(this);
         rxPermissions

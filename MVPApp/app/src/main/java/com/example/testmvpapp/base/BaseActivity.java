@@ -2,6 +2,7 @@ package com.example.testmvpapp.base;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -99,10 +100,13 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     private int mToolbarHeight;
     protected int topMargin = 0;
     private TextView actionText;
-    private IntentFilter mIntentFilter;
     private MenuItem mRight1MenuView;
     private MenuItem mRight2MenuView;
     private Handler mHandler;
+
+    // 广播
+    private BaseBroadcastReceiver mReceiver;
+    private IntentFilter mIntentFilter;
 
 
     protected abstract Object getLayout();
@@ -267,6 +271,11 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
             mPresenter.detachView();
             mPresenter = null;
         }
+
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);// 销毁广播
+            mReceiver = null;
+        }
     }
 
     /**
@@ -292,6 +301,38 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     public void unregisterEventBus(Object subscribe) {
         if (isEventBusRegisted(subscribe)) {
             EventBus.getDefault().unregister(subscribe);
+        }
+    }
+
+    /**
+     * 启动广播接收
+     */
+    private void startReceiver() {
+        mIntentFilter = new IntentFilter();
+        registerReceiver(mIntentFilter);
+        // 没有广播则不注册广播
+        if (mIntentFilter.countActions() > 0) {
+            mReceiver = new BaseBroadcastReceiver();
+            registerReceiver(mReceiver, mIntentFilter);
+        }
+    }
+
+    /**
+     * 接收广播 子类重写并从intent得到广播信息
+     */
+    public void receiveBroadcast(Context context, Intent intent) {
+    }
+
+    /**
+     * 注册广播 子类重写并通过mIntentFilter.addAction()添加接收的广播
+     */
+    public void registerReceiver(IntentFilter mIntentFilter) {
+    }
+
+    private class BaseBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            receiveBroadcast(context, intent);
         }
     }
 

@@ -1,28 +1,18 @@
 package com.example.testmvpapp.sections.launcher;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
-import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.ui.newfeature.LauncherHolderCreator;
 import com.example.testmvpapp.util.storage.BFPreference;
 import com.example.testmvpapp.util.storage.ConstantKey;
-import com.jaeger.library.StatusBarUtil;
 
 import java.util.ArrayList;
 

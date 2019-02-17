@@ -105,9 +105,9 @@
         <service android:name="com.amap.api.location.APSService" />
 
 
+        <!--欢迎页-->
         <activity android:name=".sections.launcher.LauncherActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|screenSize|orientation"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,33 +115,33 @@
             </intent-filter>
         </activity>
 
+        <!--新特性页-->
         <activity android:name=".sections.launcher.NewFeaturesActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|screenSize|orientation"
             android:exported="false">
         </activity>
 
+        <!--主页面-->
         <activity android:name=".sections.main.MainActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|screenSize|orientation"
             android:exported="false">
         </activity>
 
+        <!--登录页面-->
         <activity android:name=".sections.sign.SignInActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|screenSize|orientation"
             android:exported="false">
         </activity>
 
+        <!--注册页面-->
         <activity android:name=".sections.sign.SignUpActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|screenSize|orientation"
             android:exported="false">
         </activity>
 
+        <!--扫码页面-->
         <activity android:name=".ui.scanner.ScannerActivity"
             android:screenOrientation="portrait"
-            android:configChanges="keyboardHidden|screenSize|orientation"
             android:exported="false">
         </activity>
 
