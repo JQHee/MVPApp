@@ -36,6 +36,11 @@ public abstract class BaseFragment <T extends BaseContract.BasePresenter> extend
     protected View mRootView,mErrorView, mEmptyView;
     protected ProgressDialog mProgressDialog;
 
+
+    protected abstract Object getLayout();
+    protected abstract void initInjector();
+    public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,12 +176,10 @@ public abstract class BaseFragment <T extends BaseContract.BasePresenter> extend
         return new FragmentModule(this);
     }
 
-    protected abstract Object getLayout();
-    protected abstract void initInjector();
-    public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
-    protected abstract BasePresenter createPresenter();
 
-
+    /**
+     * 事件总线
+     */
     public boolean isEventBusRegisted(Object subscribe) {
         return EventBus.getDefault().isRegistered(subscribe);
     }

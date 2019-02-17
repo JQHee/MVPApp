@@ -1,12 +1,22 @@
 package com.example.testmvpapp.base;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,13 +24,23 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.testmvpapp.R;
@@ -32,7 +52,9 @@ import com.example.testmvpapp.sections.common.listener.PermissionListener;
 import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.base.CleanLeakUtils;
 import com.example.testmvpapp.util.base.DensityUtil;
+import com.example.testmvpapp.util.base.ResUtil;
 import com.example.testmvpapp.util.base.StatusBarUtils;
+import com.example.testmvpapp.util.base.StringUtils;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
 import com.github.nukc.stateview.StateView;
@@ -57,19 +79,45 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     protected T mPresenter;
     protected ActivityComponent mActivityComponent;
     protected ProgressDialog mProgressDialog;
+    protected Context mContext;
     private Unbinder mUnBinder = null;
     // 用于显示加载中、网络异常，空布局、内容布局
     protected StateView mStateView = null;
     public PermissionListener mPermissionListener = null;
 
+    // toolbar基本参数配置
+    private Menu mMenu;
+    private LinearLayout mBaseLayout;
+    private LinearLayout mContentLayout;
+    protected Toolbar mToolbar;// 标题栏
+    private boolean right1Visiabled = false;// 是否显示右1菜单
+    private boolean right2Visiabled = false;// 是否显示右2菜单
+    private boolean right1Enabled = true;// 右1菜单是否可用
+    private boolean right2Enabled = true;// 右2菜单是否可用
+    private int resRight1;// 最右的菜单图标
+    private int resRight2;// 右数第二个图标
+    private int mToolbarHeight;
+    protected int topMargin = 0;
+    private TextView actionText;
+    private IntentFilter mIntentFilter;
+    private MenuItem mRight1MenuView;
+    private MenuItem mRight2MenuView;
+    private Handler mHandler;
+
+
+    protected abstract Object getLayout();
+    protected abstract void initInjector();
+    protected abstract void initView();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         initActivityComponent();
         if (getLayout() instanceof Integer) {
-            setContentView((Integer) getLayout());;
+            setCusContentView((Integer) getLayout());;
         } else if (getLayout() instanceof View) {
-            setContentView((View) getLayout());
+            setCusContentView((View) getLayout());
         } else {
             throw new ClassCastException("getLayout() type must be int or View");
         }
@@ -82,9 +130,49 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
 
     }
 
+    private void setCusContentView(Object layout) {
+
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+
+        int baseId = R.layout.activity_base;
+        View inflaterView = inflater.inflate(baseId, null);
+        mBaseLayout = (LinearLayout)inflaterView.findViewById(R.id.base_layout);
+        mContentLayout = (LinearLayout)inflaterView.findViewById(R.id.llContent);
+        actionText = (TextView) inflaterView.findViewById(R.id.title);
+        mToolbar = (Toolbar) inflaterView.findViewById(R.id.toolbar);
+
+        View child;
+        if (layout  instanceof Integer) {
+            child = inflater.inflate((Integer) layout, null);
+        } else {
+            child =  (View) layout;
+        }
+        Toolbar.LayoutParams params = new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
+                Toolbar.LayoutParams.MATCH_PARENT);
+        params.topMargin = topMargin;
+        mContentLayout.addView(child, params);
+        setContentView(mBaseLayout);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    protected void initActivityComponent() {
+        mActivityComponent = DaggerActivityComponent.builder()
+                .applicationComponent(((MyApplication) getApplication()).getApplicationComponent())
+                .activityModule(new ActivityModule(this))
+                .build();
+    }
+
     @Override
     public void showLoading() {
-        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog = new ProgressDialog(mContext);
         if (mProgressDialog != null) {
             mProgressDialog.setMessage("正在加载数据");
             mProgressDialog.show();
@@ -154,26 +242,6 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         }
     }
 
-    /**
-     * 沉浸式状态栏（适配虚拟按键、状态栏）
-     */
-    protected void setTranslucentStatus() {
-        // 5.0以上系统状态栏透明
-        /**
-         * 会影响布局，页面的空间会被拉伸
-         */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -206,84 +274,6 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
      */
     public static void exitApp() {
         ActivityCollector.removeAllActivity();
-    }
-
-    protected abstract Object getLayout();
-    protected abstract void initInjector();
-    protected abstract void initView();
-
-    /**
-     * 点击空白区域隐藏键盘.
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent me) {
-        if (me.getAction() == MotionEvent.ACTION_DOWN) {  //把操作放在用户点击的时候
-            View v = getCurrentFocus();      //得到当前页面的焦点,ps:有输入框的页面焦点一般会被输入框占据
-            if (isShouldHideKeyboard(v, me)) { //判断用户点击的是否是输入框以外的区域
-                hideKeyboard(v.getWindowToken());   //收起键盘
-            }
-        }
-        return super.dispatchTouchEvent(me);
-    }
-
-    /**
-     * 根据EditText所在坐标和用户点击的坐标相对比，来判断是否隐藏键盘，因为当用户点击EditText时则不能隐藏
-     *
-     * @param v
-     * @param event
-     * @return
-     */
-    private boolean isShouldHideKeyboard(View v, MotionEvent event) {
-        if (v != null && (v instanceof EditText)) {  //判断得到的焦点控件是否包含EditText
-            int[] l = {0, 0};
-            v.getLocationInWindow(l);
-            int left = l[0],    //得到输入框在屏幕中上下左右的位置
-                    top = l[1],
-                    bottom = top + v.getHeight(),
-                    right = left + v.getWidth();
-            if (event.getX() > left && event.getX() < right
-                    && event.getY() > top && event.getY() < bottom) {
-                // 点击位置如果是EditText的区域，忽略它，不收起键盘。
-                return false;
-            } else {
-                return true;
-            }
-        }
-        // 如果焦点不是EditText则忽略
-        return false;
-    }
-
-    /**
-     * 获取InputMethodManager，隐藏软键盘
-     * @param token
-     */
-    private void hideKeyboard(IBinder token) {
-        if (token != null) {
-            InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            im.hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS);
-        }
-    }
-
-    /**
-     * 是否需要登录登录
-     */
-    protected void startActivityWithLogin(Intent intent , boolean isNeedLogin , LoginResult startIntentStype){
-
-        if (isNeedLogin){
-
-            if (LoginConfig.isLogin()) {
-                Intent tempIntent = new Intent(this , SignInActivity.class);
-                if (LoginResult.START_FOR_RESULT == startIntentStype){
-                    startActivityForResult(tempIntent , LoginConfig.REQUEST_CODE);
-                }else if(LoginResult.START_NO_RESULT == startIntentStype){
-                    startActivity(tempIntent);
-                }
-            } else {
-                this.startActivity(intent);
-            }
-        }else {
-            this.startActivity(intent);
-        }
     }
 
     /**
@@ -348,80 +338,450 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         }
     }
 
-    /**
-     * 添加 Fragment
-     *
-     * @param containerViewId
-     * @param fragment
-     */
-    protected void addFragment(int containerViewId, Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(containerViewId, fragment);
-        fragmentTransaction.commit();
-    }
 
-    /**
-     * 添加 Fragment
-     *
-     * @param containerViewId
-     * @param fragment
-     */
-    protected void addFragment(int containerViewId, Fragment fragment, String tag) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        // 设置tag，不然下面 findFragmentByTag(tag)找不到
-        fragmentTransaction.add(containerViewId, fragment, tag);
-        fragmentTransaction.addToBackStack(tag);
-        fragmentTransaction.commit();
-    }
-
-    /**
-     * 替换 Fragment
-     *
-     * @param containerViewId
-     * @param fragment
-     */
-    protected void replaceFragment(int containerViewId, Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(containerViewId, fragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
-
-    /**
-     * 替换 Fragment
-     *
-     * @param containerViewId
-     * @param fragment
-     */
-    protected void replaceFragment(int containerViewId, Fragment fragment, String tag) {
-        if (getSupportFragmentManager().findFragmentByTag(tag) == null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            // 设置tag
-            fragmentTransaction.replace(containerViewId, fragment, tag);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            // 这里要设置tag，上面也要设置tag
-            fragmentTransaction.addToBackStack(tag);
-            fragmentTransaction.commit();
-        } else {
-            // 存在则弹出在它上面的所有fragment，并显示对应fragment
-            getSupportFragmentManager().popBackStack(tag, 0);
+    public Handler getHandler() {
+        if (mHandler == null) {
+            mHandler = new Handler(getMainLooper());
         }
+        return mHandler;
     }
 
+
+    /**
+     * 菜单从右往左数
+     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        mMenu=menu;
+        getMenuInflater().inflate(R.menu.main, menu);
+        mRight1MenuView = menu.findItem(R.id.ac_search);
+        mRight2MenuView = menu.findItem(R.id.ac_share);
+        mRight1MenuView.setVisible(right1Visiabled);
+        mRight2MenuView.setVisible(right2Visiabled);
+        if (resRight1 > 0) {
+            mRight2MenuView.setIcon(resRight1);
         }
-        return super.onOptionsItemSelected(item);
+        if (resRight2 > 0) {
+            mRight1MenuView.setIcon(resRight2);
+        }
+        mRight1MenuView.setEnabled(right1Enabled);
+        mRight2MenuView.setEnabled(right2Enabled);
+        return super.onCreateOptionsMenu(menu);
     }
 
-    protected void initActivityComponent() {
-        mActivityComponent = DaggerActivityComponent.builder()
-                .applicationComponent(((MyApplication) getApplication()).getApplicationComponent())
-                .activityModule(new ActivityModule(this))
-                .build();
+    /**
+     * 刷新menu
+     */
+    public void refreshOptionsMenu() {
+        if (mMenu != null) {
+            mRight1MenuView = mMenu.findItem(R.id.ac_search);
+            mRight2MenuView = mMenu.findItem(R.id.ac_share);
+            mRight1MenuView.setVisible(right1Visiabled);
+            mRight2MenuView.setVisible(right2Visiabled);
+            if (resRight1 > 0) {
+                mRight2MenuView.setIcon(resRight1);
+            }
+            if (resRight2 > 0) {
+                mRight1MenuView.setIcon(resRight2);
+            }
+            mRight1MenuView.setEnabled(right1Enabled);
+            mRight2MenuView.setEnabled(right2Enabled);
+        }
     }
+
+
+    /**
+     * 设置标题（标题是居中的）
+     * @param title
+     */
+    @Override
+    public void setTitle(CharSequence title) {
+        actionText.setText(title.toString());
+    }
+    /**
+     * 设置标题（标题是居中的）
+     * @param titleId
+     */
+    @Override
+    public void setTitle(int titleId) {
+        actionText.setText(titleId);
+    }
+
+    /**
+     * 把Toolbar当做ActionBar，menu还是可以像ActionBar一样用和处理的
+     * @param resBack 返回按钮为图片
+     */
+    public void addToolBar(int resBack) {
+        //设置返回按钮图片
+        mToolbar.setNavigationIcon(resBack);
+        setSupportActionBar();
+    }
+
+    /**
+     * 把Toolbar当做ActionBar，menu还是可以像ActionBar一样用和处理的
+     * 返回按钮显示字符串
+     * @param backText 字符串
+     */
+    public void addToolBar(final String backText) {
+        ViewTreeObserver vto2 = mToolbar.getViewTreeObserver();
+        vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+                mToolbar.getViewTreeObserver()
+                        .removeGlobalOnLayoutListener(this);
+                mToolbarHeight = mToolbar.getHeight();
+                mToolbar.setNavigationIcon(createDrawable(backText));
+            }
+        });
+        setSupportActionBar();
+    }
+
+    /**
+     * 把Toolbar当做ActionBar，menu还是可以像ActionBar一样用和处理的
+     * 返回按钮显示返回图片+字符串
+     * @param resBack 返回图片
+     * @param backText 字符串
+     */
+    public void addToolBar(final int resBack,final String backText) {
+        ViewTreeObserver vto2 = mToolbar.getViewTreeObserver();
+        vto2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+                mToolbar.getViewTreeObserver()
+                        .removeGlobalOnLayoutListener(this);
+                mToolbarHeight = mToolbar.getHeight();
+                mToolbar.setNavigationIcon(createDrawable(resBack, backText));
+            }
+        });
+        setSupportActionBar();
+    }
+
+    /**
+     * 设置SupportActionBar
+     */
+    @SuppressLint("RestrictedApi")
+    private void setSupportActionBar(){
+        //把Toolbar当做ActionBar
+        setSupportActionBar(mToolbar);
+        //返回按钮点击事件
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        //menu菜单点击事件
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int i = item.getItemId();
+                if (i == R.id.ac_share) {
+                    onRight2Click(findViewById(R.id.ac_share));
+                } else if (i == R.id.ac_search) {
+                    onRight1Click(findViewById(R.id.ac_search));
+                } else {
+
+                }
+                return true;
+            }
+
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(false);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayUseLogoEnabled(false);
+    }
+
+    /**
+     * 右边第一个按钮（子类重写即可）
+     * @param view
+     */
+    public void onRight1Click(View view) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * 右边第二个按钮（子类重写即可）
+     * @param view
+     */
+    public void onRight2Click(View view) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * 是否显示右1菜单
+     * @param visiabled
+     */
+    public void setRight1Menu(boolean visiabled) {
+        right1Visiabled = visiabled;
+        if (mRight1MenuView != null) {
+            mRight1MenuView.setVisible(visiabled);
+        }
+    }
+
+    /**
+     * 是否显示右2菜单
+     * @param visiabled
+     */
+    public void setRight2Menu(boolean visiabled) {
+        right2Visiabled = visiabled;
+        if (mRight2MenuView != null) {
+            mRight2MenuView.setVisible(visiabled);
+        }
+    }
+
+    /**
+     * 右1菜单是否可用
+     */
+    public void setRight1Enabled(boolean enabled) {
+        right1Enabled = enabled;
+        if(mRight1MenuView!=null){
+            mRight1MenuView.setEnabled(enabled);
+        }
+    }
+
+    /**
+     * 右2菜单是否可用
+     */
+    public void setRight2Enabled(boolean enabled) {
+        right2Enabled = enabled;
+        if(mRight2MenuView!=null){
+            mRight2MenuView.setEnabled(enabled);
+        }
+    }
+
+    /**
+     * 自定义右边菜单不带监听事件
+     * @param textAction
+     */
+    public void setRightTextAction(String textAction) {
+        setRightTextAction(textAction, null);
+    }
+
+    /**
+     * 自定义右边菜单带监听事件
+     * @param textAction
+     * @param listener
+     */
+    @SuppressLint("RtlHardcoded")
+    public void setRightTextAction(String textAction, View.OnClickListener listener) {
+        if (StringUtils.isBlank(textAction)) {
+            return;
+        }
+        TextView actionText = new TextView(mContext);
+        actionText.setText(textAction);
+        actionText.setGravity(Gravity.CENTER);
+        Toolbar.LayoutParams params = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT,
+                Toolbar.LayoutParams.MATCH_PARENT);
+        int right = Gravity.RIGHT;
+        params.gravity = right;
+        actionText.setTextSize(TypedValue.COMPLEX_UNIT_PX, ResUtil.getDimension(this,R.dimen.text_size_16));
+        actionText.setPadding(12, 12, ResUtil.getDimension(this,R.dimen.base_padding_right), 12);
+        actionText.setLayoutParams(params);
+        actionText.setTextColor(Color.WHITE);
+        if (listener != null) {
+            actionText.setOnClickListener(listener);
+        }
+        mToolbar.addView(actionText);
+    }
+
+    /**
+     * 自定义右边菜单带监听事件
+     * @param view
+     * @param listener
+     */
+    @SuppressLint("RtlHardcoded")
+    public void setRightTextAction(View view, View.OnClickListener listener) {
+        Toolbar.LayoutParams params = new Toolbar.LayoutParams(Toolbar.LayoutParams.WRAP_CONTENT,
+                Toolbar.LayoutParams.MATCH_PARENT);
+        int right = Gravity.RIGHT;
+        params.gravity = right;
+        if (listener != null) {
+            view.setOnClickListener(listener);
+        }
+        mToolbar.addView(view, new ActionBar.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT, Gravity.RIGHT
+                | Gravity.CENTER));
+    }
+
+    public Toolbar getToolbar() {
+        return mToolbar;
+    }
+
+    /**
+     * 设置右上角的菜单
+     * 只用一个按钮默认用右边第二个按钮
+     * @param res
+     */
+    public void setRightMenuIcon(int... res) {
+        if (res.length == 1) {
+            resRight1 = res[0];
+            setRight2Menu(true);
+        } else if (res.length == 2) {
+            resRight1 = res[0];
+            resRight2 = res[1];
+            setRight1Menu(true);
+            setRight2Menu(true);
+        }
+    }
+
+    /**
+     * 是否隐藏Toolbar
+     */
+    public void isHiddenToolbar(boolean isHidden) {
+        if (isHidden) {
+            mToolbar.setVisibility(View.GONE);
+        } else {
+            mToolbar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 创建文字Drawable
+     * @param resBack 返回图片
+     * @param text 文字
+     */
+    private Drawable createDrawable(int resBack, String text) {
+        Bitmap imgMarker;//返回图片
+        int width, height; // 新画的图片高度和宽带
+        Bitmap imgTemp; // 临时标记图
+        imgMarker = BitmapFactory.decodeResource(getResources(),resBack);
+
+        // imgTemp左间距
+        int l = (int) getResources().getDimension(R.dimen.spacing);
+
+        // 设置letter字符串字体大小和颜色和得到字符串的宽度和长度信息
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG
+                | Paint.DEV_KERN_TEXT_FLAG);
+        textPaint.setTextSize(getResources().getDimension(
+                R.dimen.dp_18));
+        textPaint.setColor(Color.WHITE);
+        Rect rect = new Rect();
+        textPaint.getTextBounds(text, 0, text.length(), rect);
+
+        //设置新图片宽高
+        width = l + imgMarker.getWidth() + rect.width() + 10;// 左间距+返回图片宽度+返回字体宽度+10
+        height = mToolbarHeight;// imgTemp高度
+        imgTemp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(imgTemp);
+        Paint paint = new Paint(); // 建立画笔
+        paint.setDither(true);
+        paint.setFilterBitmap(true);
+
+        // 图片的left值保持不变，top通过得到Toolbar高度除2，然后图片高度除2，两个再相减，这样图片就竖向居中了
+        int t = (height / 2) - (imgMarker.getHeight() / 2);
+        canvas.drawBitmap(imgMarker, l, t, paint);
+
+        // y通过得到Toolbar高度除2，然后根据字体的高度除2，两个再相减，再加上字体高度，这样字体就竖向居中了
+        int y = ((height / 2) - (rect.height() / 2)) + rect.height();
+        y = (int) (y - getResources().getDimension(R.dimen.back_text_size_h));// 向上移动调整一下
+        canvas.drawText(text, imgMarker.getWidth() + l, y, textPaint);
+
+        canvas.save();
+        // 下面这个方法废弃
+        // canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.restore();
+
+        //得到返回图片和字符串拼成的Drawable
+        return (Drawable) new BitmapDrawable(getResources(), imgTemp);
+    }
+
+    /**
+     * 创建文字Drawable
+     * @param text 文字
+     */
+    private Drawable createDrawable(String text) {
+        int width, height; // 新画的图片高度和宽带
+        Bitmap imgTemp; // 临时标记图
+
+        // imgTemp左间距
+        int l = (int) getResources().getDimension(R.dimen.spacing);
+
+        // 设置letter字符串字体大小和颜色和得到字符串的宽度和长度信息
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG
+                | Paint.DEV_KERN_TEXT_FLAG);
+        textPaint.setTextSize(getResources().getDimension(
+                R.dimen.dp_18));
+        textPaint.setColor(Color.WHITE);
+        Rect rect = new Rect();
+        textPaint.getTextBounds(text, 0, text.length(), rect);
+
+        //设置新图片宽高
+        width = l + rect.width() + 10;// 左间距+返回字体宽度+10
+        height = mToolbarHeight;// imgTemp高度
+        imgTemp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(imgTemp);
+        Paint paint = new Paint(); // 建立画笔
+        paint.setDither(true);
+        paint.setFilterBitmap(true);
+
+        // y通过得到Toolbar高度除2，然后根据字体的高度除2，两个再相减，再加上字体高度，这样字体就竖向居中了
+        int y = ((height / 2) - (rect.height() / 2)) + rect.height();
+        y = (int) (y - getResources().getDimension(R.dimen.back_text_size_h));// 向上移动调整一下
+        canvas.drawText(text, l, y, textPaint);
+
+        canvas.save();
+        // canvas.save(Canvas.ALL_SAVE_FLAG);
+        canvas.restore();
+
+        //得到返回图片和字符串拼成的Drawable
+        return (Drawable) new BitmapDrawable(getResources(), imgTemp);
+    }
+
+    /**
+     * 设置背景颜色
+     * @param resId
+     */
+    public void setBackground(int resId){
+        mBaseLayout.setBackgroundResource(resId);
+    }
+    public void setBackgroundColor(int colorId){
+        mBaseLayout.setBackgroundColor(colorId);
+    }
+
+    protected void showKeyboard(boolean isShow) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (isShow) {
+            if (getCurrentFocus() == null) {
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            } else {
+                imm.showSoftInput(getCurrentFocus(), 0);
+            }
+        } else {
+            if (getCurrentFocus() != null) {
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
+    /**
+     * 延时弹出键盘
+     *
+     * @param focus 键盘的焦点项
+     */
+    protected void showKeyboardDelayed(View focus) {
+        final View viewToFocus = focus;
+        if (focus != null) {
+            focus.requestFocus();
+        }
+
+        getHandler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (viewToFocus == null || viewToFocus.isFocused()) {
+                    showKeyboard(true);
+                }
+            }
+        }, 200);
+    }
+
+
 }

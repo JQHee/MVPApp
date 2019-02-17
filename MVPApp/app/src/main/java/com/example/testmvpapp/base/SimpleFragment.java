@@ -35,6 +35,10 @@ public abstract class SimpleFragment extends RxFragment {
     protected View mRootView,mErrorView, mEmptyView;
     protected ProgressDialog mProgressDialog;
 
+
+    protected abstract Object getLayout();
+    public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +99,9 @@ public abstract class SimpleFragment extends RxFragment {
         return new FragmentModule(this);
     }
 
-    protected abstract Object getLayout();
-    public abstract void onBindView(@Nullable Bundle savedInstanceState, View rootView);
-
-
+    /**
+     * 事件总线
+     */
     public boolean isEventBusRegisted(Object subscribe) {
         return EventBus.getDefault().isRegistered(subscribe);
     }

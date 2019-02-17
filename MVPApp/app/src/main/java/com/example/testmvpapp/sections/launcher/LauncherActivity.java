@@ -167,6 +167,7 @@ public class LauncherActivity extends SimpleActivity implements ITimerListener {
 
     @Override
     protected void initView() {
+        isHiddenToolbar(true);
         setFullScreen();
 
         final RxPermissions rxPermissions = new RxPermissions(this);
