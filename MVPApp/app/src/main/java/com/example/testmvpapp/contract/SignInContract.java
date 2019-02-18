@@ -15,6 +15,8 @@ public class SignInContract {
         void gotoMain();
         // 跳转忘记密码页面
         void gotoForgetPassword();
+        // 跳转国家码选择列表
+        void gotoCountryCode();
         // 验证表单信息
         boolean checkForm();
     }
@@ -23,5 +25,6 @@ public class SignInContract {
         void login(String userName, String password);
         void gotoSignUpAction();
         void goForgetPasswordAction();
+        void gotoCountryCodeAction();
     }
 }

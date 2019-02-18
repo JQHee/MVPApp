@@ -63,4 +63,9 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
     public void goForgetPasswordAction() {
         mView.gotoForgetPassword();
     }
+
+    @Override
+    public void gotoCountryCodeAction() {
+        mView.gotoCountryCode();
+    }
 }

@@ -184,6 +184,9 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         return this.bindToLifecycle();
     }
 
+    public Context getContext() {
+        return mContext;
+    }
 
     /**
      * 验证用户登录

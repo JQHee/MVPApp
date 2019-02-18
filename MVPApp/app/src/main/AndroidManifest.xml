@@ -133,6 +133,12 @@
             android:exported="false">
         </activity>
 
+        <!--国家码选择页面-->
+        <activity android:name=".sections.sign.CountryCodeActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+        </activity>
+
         <!--忘记密码-->
         <activity android:name=".sections.sign.ForgetPasswordActivity"
             android:screenOrientation="portrait"

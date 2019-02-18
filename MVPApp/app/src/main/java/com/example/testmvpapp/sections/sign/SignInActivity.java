@@ -1,7 +1,9 @@
 package com.example.testmvpapp.sections.sign;
 
+import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.presenter.SignInPresenter;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.util.base.ToastUtils;
+import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
@@ -44,6 +47,11 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         mPresenter.goForgetPasswordAction();
     }
 
+    @OnClick(R.id.cb_country_code)
+    public void onClickCountryCode() {
+        mPresenter.gotoCountryCodeAction();
+    }
+
 
     private void startActivity() {
         if (getIntent().getExtras() != null && getIntent().getExtras().getString("className") != null) {
@@ -61,6 +69,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         finish();
     }
 
+
     @Override
     protected Object getLayout() {
         return R.layout.activity_sign_in;
@@ -75,6 +84,14 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     protected void initView() {
 
         isHiddenToolbar(true);
+
+        // 获取国家码选择回传的值
+        LiveBus.getDefault().subscribe("COUNTRY_CODE").observe(this, new Observer<Object>() {
+            @Override
+            public void onChanged(@Nullable Object o) {
+                LatteLogger.d(o);
+            }
+        });
     }
 
     @Override
@@ -99,6 +116,13 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     public void gotoForgetPassword() {
         // 忘记密码
         Intent intent = new Intent(SignInActivity.this, ForgetPasswordActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void gotoCountryCode() {
+        // 忘记密码
+        Intent intent = new Intent(SignInActivity.this, CountryCodeActivity.class);
         startActivity(intent);
     }
 
