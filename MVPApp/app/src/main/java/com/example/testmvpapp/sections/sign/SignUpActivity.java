@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Patterns;
@@ -23,6 +25,7 @@ import com.example.testmvpapp.contract.SignUpContract;
 import com.example.testmvpapp.presenter.SignUpPresenter;
 import com.example.testmvpapp.ui.toolbar.ToolbarUtil;
 import com.example.testmvpapp.util.base.MyImageSpan;
+import com.example.testmvpapp.util.log.LatteLogger;
 
 import javax.inject.Inject;
 
@@ -31,18 +34,9 @@ import butterknife.OnClick;
 
 public class SignUpActivity extends BaseActivity<SignUpPresenter> implements SignUpContract.View {
 
-    @BindView(R.id.id_toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.edit_sign_up_name)
-    TextInputEditText mName;
-    @BindView(R.id.edit_sign_up_email)
-    TextInputEditText mEmail;
-    @BindView(R.id.edit_sign_up_phone)
-    TextInputEditText mPhone;
-    @BindView(R.id.edit_sign_up_password)
-    TextInputEditText mPassword;
-    @BindView(R.id.edit_sign_up_re_password)
-    TextInputEditText mRePassword;
+
+    @BindView(R.id.tv_protocol_content)
+    AppCompatTextView mProtocolTV;
 
     // 存在多个用户协议的
     String[] protocols = {
@@ -53,18 +47,8 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
             "《代理协议》"
     };
     private boolean isChecked;
+    // 富文本
     private SpannableStringBuilder spannableStringBuilder;
-
-
-    @OnClick({R.id.btn_sign_up})
-    public void onClickSignUp() {
-
-    }
-
-    @OnClick({R.id.tv_link_sign_in})
-    public void onClickLink() {
-        mPresenter.gotoSignIn();
-    }
 
 
     public static void start(Context context) {
@@ -73,7 +57,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
     }
 
     private void setup() {
-        final String string = "  已阅读并同意";
+        final String string = "    我已认真阅读并同意";
         //图标(默认位选中)
         spannableStringBuilder = new SpannableStringBuilder(string);
         setIconSapn(spannableStringBuilder, R.drawable.ic_shop_normal);
@@ -81,18 +65,15 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
         ClickableSpan imagClick = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                //显示协议内容
+                // 显示协议内容
                 if (isChecked) {
-                    setIconSapn(spannableStringBuilder, R.drawable.ic_shop_normal);
+                    setIconSapn(spannableStringBuilder, R.drawable.ic_shop_check);
                 } else {
                     setIconSapn(spannableStringBuilder, R.drawable.ic_shop_normal);
                 }
                 isChecked = !isChecked;
 
-
-                // 设置text(暂时这样)
-                TextView protoclTextView = null;
-                protoclTextView.setText(spannableStringBuilder);
+                mProtocolTV.setText(spannableStringBuilder);
             }
 
             @Override
@@ -116,7 +97,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
         spannableStringBuilder.setSpan(imageSpan, 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
 
-    private void setupProtocolsStyle() {
+    private SpannableStringBuilder setupProtocolsStyle() {
         for (int i = 0; i < protocols.length; i++) {
             final String protocol = protocols[i];
             SpannableStringBuilder protocolStringBuild = new SpannableStringBuilder(protocol);
@@ -128,6 +109,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
                 public void onClick(View widget) {
                     // 显示协议内容
                     // mView.showProtocol(protocol, finalI, protocols.length);
+                    LatteLogger.d(protocol);
                 }
 
                 @Override
@@ -138,11 +120,11 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
                 }
             };
             protocolStringBuild.setSpan(clickableSpan, 0, protocol.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            //前景
+            // 前景
             ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(MyApplication.getInstance().getResources().getColor(R.color.colorPrimary));
             protocolStringBuild.setSpan(foregroundColorSpan, 0, protocol.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannableStringBuilder.append(protocolStringBuild);
-            //点
+            // 点
             if (i != protocols.length - 1) {
                 SpannableStringBuilder dotStringBuild = new SpannableStringBuilder("、");
                 ForegroundColorSpan dotSpan = new ForegroundColorSpan(MyApplication.getInstance().getResources().getColor(R.color.color_666666));
@@ -150,7 +132,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
                 spannableStringBuilder.append(dotStringBuild);
             }
         }
-        // return spannableStringBuilder;
+        return spannableStringBuilder;
     }
 
     @Override
@@ -165,11 +147,15 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
 
     @Override
     protected void initView() {
+        addToolBar(R.mipmap.menu_back);
+        setTitle("注册");
         // 设置返回图标
-        // addToolBar();
-        isHiddenToolbar(true);
-        ToolbarUtil.setActivityToolbar(this, "注册", true);
+        // ToolbarUtil.setActivityToolbar(this, "注册", true);
 
+        setup();
+        mProtocolTV.setText(setupProtocolsStyle());
+        // 开始响应点击事件(不设置则不能相应事件)
+        mProtocolTV.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     @Override
@@ -181,7 +167,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        // getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         /*
         MenuInflater inflater = getMenuInflater();
         //设置menu界面为res/menu/menu.xml
@@ -205,6 +191,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
     */
 
     public boolean checkForm() {
+        /*
         final String name = mName.getText().toString();
         final String email = mEmail.getText().toString();
         final String phone = mPhone.getText().toString();
@@ -247,8 +234,9 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
         } else {
             mRePassword.setError(null);
         }
+        */
 
-        return isPass;
+        return true;
     }
 
 }
