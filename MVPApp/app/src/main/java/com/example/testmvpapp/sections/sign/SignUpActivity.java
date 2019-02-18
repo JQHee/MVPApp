@@ -1,5 +1,7 @@
 package com.example.testmvpapp.sections.sign;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
@@ -64,6 +66,11 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
         mPresenter.gotoSignIn();
     }
 
+
+    public static void start(Context context) {
+        Intent intent = new Intent(context, SignUpActivity.class);
+        context.startActivity(intent);
+    }
 
     private void setup() {
         final String string = "  已阅读并同意";
@@ -158,6 +165,9 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
 
     @Override
     protected void initView() {
+        // 设置返回图标
+        // addToolBar();
+        isHiddenToolbar(true);
         ToolbarUtil.setActivityToolbar(this, "注册", true);
 
     }

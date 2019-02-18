@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.di.component.DaggerFragmentComponent;
@@ -94,10 +95,10 @@ public abstract class BaseFragment <T extends BaseContract.BasePresenter> extend
     }
 
     @Override
-    public void showLoading() {
+    public void showLoading(String message) {
         mProgressDialog=new ProgressDialog(getActivity());
-        if (mProgressDialog != null) {
-            mProgressDialog.setMessage("正在加载数据....");
+        if (mProgressDialog != null && !StringUtils.isEmpty(message)) {
+            mProgressDialog.setMessage(message);
             mProgressDialog.show();
         }
     }

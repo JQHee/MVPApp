@@ -11,7 +11,7 @@ public interface BaseContract {
 
     public interface BaseView {
         //显示进度中
-        void showLoading();
+        void showLoading(String message);
 
         //隐藏进度
         void hideLoading();

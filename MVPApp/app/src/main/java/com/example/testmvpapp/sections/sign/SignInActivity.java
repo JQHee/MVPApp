@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
+import android.widget.EditText;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BaseActivity;
@@ -11,6 +12,7 @@ import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.presenter.SignInPresenter;
 import com.example.testmvpapp.sections.main.MainActivity;
+import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
@@ -22,10 +24,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SignInActivity extends BaseActivity<SignInPresenter> implements SignInContract.View {
 
+    @BindView(R.id.et_phone_number)
+    EditText mPhoneNumber;
+    @BindView(R.id.et_pass_word)
+    EditText mPassword;
 
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
-        mPresenter.login("", "");
+        mPresenter.login(mPhoneNumber.getText().toString(), mPassword.getText().toString());
+    }
+
+    @OnClick(R.id.tv_register)
+    public void onClickRegister() {
+        mPresenter.gotoSignUpAction();
     }
 
 
@@ -44,23 +55,6 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         }
         finish();
     }
-    /*
-    @BindView(R.id.edit_sign_in_email)
-    TextInputEditText mEmail;
-    @BindView(R.id.edit_sign_in_password)
-    TextInputEditText mPassword;
-
-    @OnClick({R.id.tv_link_sign_up})
-    public void onClickLink() {
-        mPresenter.goToSignUpAction();
-    }
-
-    @OnClick({R.id.icon_sign_in_wechat})
-    public void onClickWeiChat() {
-        // 微信登录
-        mPresenter.gotoWechatLoginAction();
-    }
-    */
 
     @Override
     protected Object getLayout() {
@@ -101,25 +95,19 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
      */
     @Override
     public boolean checkForm() {
-        /*
-        final String email = mEmail.getText().toString();
+        final String phone = mPhoneNumber.getText().toString();
         final String password = mPassword.getText().toString();
 
         boolean isPass = true;
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mEmail.setError("错误的邮箱格式");
+        if (phone.isEmpty()) {
+            ToastUtils.showToast("请输入手机号");
             isPass = false;
-        } else {
-            mEmail.setError(null);
         }
 
         if (password.isEmpty()) {
-            mPassword.setError("请填写至少6位数密码");
+            ToastUtils.showToast("请填写至少6位数密码");
             isPass = false;
-        } else {
-            mPassword.setError(null);
         }
-        */
         return true;
     }
 

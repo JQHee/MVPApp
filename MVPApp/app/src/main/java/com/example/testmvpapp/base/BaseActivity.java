@@ -3,6 +3,7 @@ package com.example.testmvpapp.base;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -58,6 +59,8 @@ import com.example.testmvpapp.util.base.StatusBarUtils;
 import com.example.testmvpapp.util.base.StringUtils;
 import com.example.testmvpapp.util.login.LoginConfig;
 import com.example.testmvpapp.util.login.LoginResult;
+import com.example.testmvpapp.util.storage.BFPreference;
+import com.example.testmvpapp.util.storage.ConstantKey;
 import com.github.nukc.stateview.StateView;
 import com.jaeger.library.StatusBarUtil;
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -72,6 +75,8 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.example.testmvpapp.ui.widget.UIUtils.getContext;
 
 public abstract class BaseActivity <T extends BaseContract.BasePresenter> extends RxAppCompatActivity implements BaseContract.BaseView  {
 
@@ -138,6 +143,7 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
+        // 公共布局
         int baseId = R.layout.activity_base;
         View inflaterView = inflater.inflate(baseId, null);
         mBaseLayout = (LinearLayout)inflaterView.findViewById(R.id.base_layout);
@@ -175,10 +181,10 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     }
 
     @Override
-    public void showLoading() {
+    public void showLoading(String message) {
         mProgressDialog = new ProgressDialog(mContext);
-        if (mProgressDialog != null) {
-            mProgressDialog.setMessage("正在加载数据");
+        if (mProgressDialog != null && !StringUtils.isEmpty(message)) {
+            mProgressDialog.setMessage(message);
             mProgressDialog.show();
         }
     }
@@ -275,6 +281,22 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         if (mReceiver != null) {
             unregisterReceiver(mReceiver);// 销毁广播
             mReceiver = null;
+        }
+    }
+
+    /**
+     * 验证用户登录
+     */
+    public void startActivityAfterLogin(Intent intent) {
+        //未登录（这里用自己的登录逻辑去判断是否未登录）
+        final boolean isLogin = BFPreference.getAppFlag(ConstantKey.IS_LOGIN);
+        if (!isLogin) {
+            ComponentName componentName = new ComponentName(getContext(), SignInActivity.class);
+            intent.putExtra("className", intent.getComponent().getClassName());
+            intent.setComponent(componentName);
+            super.startActivity(intent);
+        } else {
+            super.startActivity(intent);
         }
     }
 

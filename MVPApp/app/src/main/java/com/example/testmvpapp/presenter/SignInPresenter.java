@@ -63,4 +63,9 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
 
         }
     }
+
+    @Override
+    public void gotoSignUpAction() {
+        mView.gotoSignUp();
+    }
 }

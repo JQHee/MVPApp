@@ -19,5 +19,6 @@ public class SignInContract {
 
     public interface Presenter extends BaseContract.BasePresenter<View> {
         void login(String userName, String password);
+        void gotoSignUpAction();
     }
 }

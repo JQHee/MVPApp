@@ -3,6 +3,7 @@ package com.example.testmvpapp.base;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -43,11 +44,14 @@ import android.widget.TextView;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
+import com.example.testmvpapp.sections.sign.SignInActivity;
 import com.example.testmvpapp.util.base.CleanLeakUtils;
 import com.example.testmvpapp.util.base.DensityUtil;
 import com.example.testmvpapp.util.base.ResUtil;
 import com.example.testmvpapp.util.base.StatusBarUtils;
 import com.example.testmvpapp.util.base.StringUtils;
+import com.example.testmvpapp.util.storage.BFPreference;
+import com.example.testmvpapp.util.storage.ConstantKey;
 import com.github.nukc.stateview.StateView;
 import com.jaeger.library.StatusBarUtil;
 import com.trello.rxlifecycle2.LifecycleTransformer;
@@ -182,6 +186,23 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
 
 
     /**
+     * 验证用户登录
+     */
+    public void startActivityAfterLogin(Intent intent) {
+        //未登录（这里用自己的登录逻辑去判断是否未登录）
+        final boolean isLogin = BFPreference.getAppFlag(ConstantKey.IS_LOGIN);
+        if (!isLogin) {
+            ComponentName componentName = new ComponentName(mContext, SignInActivity.class);
+            intent.putExtra("className", intent.getComponent().getClassName());
+            intent.setComponent(componentName);
+            super.startActivity(intent);
+        } else {
+            super.startActivity(intent);
+        }
+    }
+
+
+    /**
      * 添加 Fragment
      *
      * @param containerViewId
@@ -246,10 +267,10 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     /**
      * 加载框
      */
-    public void showLoading() {
+    public void showLoading(String message) {
         mProgressDialog = new ProgressDialog(mContext);
-        if (mProgressDialog != null) {
-            mProgressDialog.setMessage("正在加载数据");
+        if (mProgressDialog != null && !StringUtils.isEmpty(message)) {
+            mProgressDialog.setMessage(message);
             mProgressDialog.show();
         }
     }
