@@ -13,6 +13,8 @@ public class SignInContract {
         void gotoSignUp();
         // 跳转主框架页面
         void gotoMain();
+        // 跳转忘记密码页面
+        void gotoForgetPassword();
         // 验证表单信息
         boolean checkForm();
     }
@@ -20,5 +22,6 @@ public class SignInContract {
     public interface Presenter extends BaseContract.BasePresenter<View> {
         void login(String userName, String password);
         void gotoSignUpAction();
+        void goForgetPasswordAction();
     }
 }

@@ -39,6 +39,11 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         mPresenter.gotoSignUpAction();
     }
 
+    @OnClick(R.id.tv_forget_password)
+    public void onClickForgetPassword() {
+        mPresenter.goForgetPasswordAction();
+    }
+
 
     private void startActivity() {
         if (getIntent().getExtras() != null && getIntent().getExtras().getString("className") != null) {
@@ -88,6 +93,13 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         startActivity(intent);
         finish();
         */
+    }
+
+    @Override
+    public void gotoForgetPassword() {
+        // 忘记密码
+        Intent intent = new Intent(SignInActivity.this, ForgetPasswordActivity.class);
+        startActivity(intent);
     }
 
     /**

@@ -5,21 +5,11 @@ import com.example.testmvpapp.component.net.ConstantService;
 import com.example.testmvpapp.component.net.DefaultObserver;
 import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
-import com.example.testmvpapp.util.log.LatteLogger;
-
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.HttpException;
 
 public class SignInPresenter extends BasePresenter<SignInContract.View> implements SignInContract.Presenter {
 
@@ -46,8 +36,8 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
 
             RxRestClient.builder()
                     .url(ConstantService.LOGIN)
-                    .params("account", "18775134221")
-                    .params("password", "123456")
+                    .params("account", userName)
+                    .params("password", password)
                     .build()
                     .post()
                     .compose(mView.bindToLife())
@@ -67,5 +57,10 @@ public class SignInPresenter extends BasePresenter<SignInContract.View> implemen
     @Override
     public void gotoSignUpAction() {
         mView.gotoSignUp();
+    }
+
+    @Override
+    public void goForgetPasswordAction() {
+        mView.gotoForgetPassword();
     }
 }
