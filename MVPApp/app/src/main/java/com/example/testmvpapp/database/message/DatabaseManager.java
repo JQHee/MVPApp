@@ -31,6 +31,8 @@ public class DatabaseManager {
         final Database db = helper.getWritableDb();
         mDaoSession = new DaoMaster(db).newSession();
         messageEntityDao = mDaoSession.getMessageEntityDao();
+        // 操作完成需要关闭，不然会出现内存泄漏
+        // helper.close();
     }
 
     public final MessageEntityDao getDao() {
