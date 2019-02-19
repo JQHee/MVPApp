@@ -34,6 +34,8 @@ public class PersonalAdapter extends BaseSectionQuickAdapter<PersonalBean, BaseV
     protected void convertHead(BaseViewHolder helper, PersonalBean item) {
         final AppCompatTextView textView =  helper.getView(R.id.tv_title);
         textView.setText(item.getTitle());
+        //设置子View的点击事件
+        helper.addOnClickListener(R.id.tv_title);
     }
 
     @Override
@@ -41,5 +43,6 @@ public class PersonalAdapter extends BaseSectionQuickAdapter<PersonalBean, BaseV
         PersonalItemBean bean = item.t;
         final AppCompatTextView textView =  helper.getView(R.id.tv_title);
         textView.setText(bean.getTitle());
+        helper.addOnClickListener(R.id.tv_title);
     }
 }

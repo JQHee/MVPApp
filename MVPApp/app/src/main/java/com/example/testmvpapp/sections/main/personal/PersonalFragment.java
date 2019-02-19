@@ -10,12 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.testmvpapp.Model.PersonalBean;
 import com.example.testmvpapp.Model.PersonalItemBean;
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleFragment;
 import com.example.testmvpapp.sections.adapter.PersonalAdapter;
+import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
 
 import java.util.ArrayList;
@@ -71,9 +73,25 @@ public class PersonalFragment extends SimpleFragment {
         mPersonalAdapter.addHeaderView(getHeaderView(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ToastUtils.showToast("header 点击");
+                LatteLogger.d("点击");
             }
         }));
+        mPersonalAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                PersonalBean item = (PersonalBean) adapter.getData().get(position);
+                LatteLogger.d("点击");
+                switch (view.getId()) {
+                    case R.id.tv_title:
+                        ToastUtils.showToast("点击");
+                        break;
+
+                        default:
+                            break;
+                }
+            }
+        });
         mPersonalRV.setAdapter(mPersonalAdapter);
     }
 
