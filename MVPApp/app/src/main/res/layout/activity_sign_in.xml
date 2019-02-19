@@ -86,7 +86,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/cb_country_code"/>
 
             <!--手机号、密码输入框-->
-            <EditText
+            <com.example.testmvpapp.ui.widget.ClearableEditText
                 android:id="@+id/et_phone_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                 app:layout_constraintLeft_toLeftOf="@id/cb_country_code"
                 app:layout_constraintRight_toRightOf="@id/et_phone_number"/>
 
-            <EditText
+            <com.example.testmvpapp.ui.widget.ClearableEditText
                 android:id="@+id/et_pass_word"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
