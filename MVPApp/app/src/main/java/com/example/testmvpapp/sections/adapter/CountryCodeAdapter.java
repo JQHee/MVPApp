@@ -18,6 +18,8 @@ public class CountryCodeAdapter extends BaseMultiItemQuickAdapter<CountryCodeLis
 
     @Override
     protected void convert(BaseViewHolder helper, CountryCodeListBean item) {
+        // 为了条目不复用
+        // helper.setIsRecyclable(false);
         switch (helper.getItemViewType()) {
             case ITEM_NORMAL:
                 helper.setText(R.id.tv_title, item.getmText());

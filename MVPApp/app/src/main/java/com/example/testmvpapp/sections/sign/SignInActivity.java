@@ -34,6 +34,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
 
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
+        ToastUtils.showToast("请输入手机号");
         mPresenter.login(mPhoneNumber.getText().toString(), mPassword.getText().toString());
     }
 
@@ -104,12 +105,11 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
 
     @Override
     public void gotoMain() {
-        startActivity();
-        /*
+        // startActivity();
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
-        */
+
     }
 
     @Override
@@ -135,16 +135,14 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
         final String password = mPassword.getText().toString();
 
         boolean isPass = true;
-        if (phone.isEmpty()) {
-            ToastUtils.showToast("请输入手机号");
+        if (phone.isEmpty() || phone.length() != 11) {
             isPass = false;
         }
 
-        if (password.isEmpty()) {
-            ToastUtils.showToast("请填写至少6位数密码");
+        if (password.isEmpty() || password.length() < 6) {
             isPass = false;
         }
-        return true;
+        return isPass;
     }
 
     @Override

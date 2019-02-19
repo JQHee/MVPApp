@@ -1,7 +1,12 @@
 package com.example.testmvpapp.util.base;
 
 import android.content.Context;
+import android.text.Html;
+import android.view.Gravity;
+import android.view.View;
 import android.widget.Toast;
+
+import com.example.testmvpapp.R;
 
 /**
  * Created by long on 2016/6/6.
@@ -25,7 +30,18 @@ public class ToastUtils {
 
     public static void showToast(String s) {
         if (toast == null) {
+            // String m_ToastStr = "<font color='#ffffff'>"+s+"</font>";
+            // toast = Toast.makeText(sContext, Html.fromHtml(m_ToastStr), Toast.LENGTH_SHORT);
             toast = Toast.makeText(sContext, s, Toast.LENGTH_SHORT);
+
+            // 设置背景颜色
+            View view = toast.getView();
+            // view.setBackgroundResource(android.R.color.holo_green_light);
+            view.setBackgroundResource(R.drawable.round_corner_toast);
+            toast.setView(view);
+
+            // 位置
+            toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             oneTime = System.currentTimeMillis();
         } else {
