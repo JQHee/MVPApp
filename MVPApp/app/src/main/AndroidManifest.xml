@@ -60,6 +60,9 @@
         android:resizeableActivity="true"
         tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode">
 
+        <!--子线程处理初始化第三方-->
+        <service android:name=".app.InitializeService"/>
+
         <!-- apk安装 安卓7.0适配-->
         <provider
             android:name="android.support.v4.content.FileProvider"

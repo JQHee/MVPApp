@@ -67,12 +67,13 @@ public class MyApplication extends Application {
 
         initApplicationComponent();
         ToastUtils.init(this);
-        // 初始化化日志打印工具
-        LatteLogger.setup();
-        initDB();
-        initBugly();
-        initJPUSH();
+        // 子线程初始化第三方（耗时优化）
+        InitializeService.start(this);
+        initActivityLifeCycler();
 
+    }
+
+    private void initActivityLifeCycler() {
         this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -134,27 +135,6 @@ public class MyApplication extends Application {
         mApplicationComponent =
                 DaggerApplicationComponent.builder()
                         .applicationModule(new ApplicationModule(this)).build();
-    }
-
-
-    /* bugly 收集崩溃日志 */
-    private void initBugly() {
-        CrashReport.initCrashReport(getApplicationContext(), "df307c3993", false);
-    }
-
-    /* 初始化极光推送 */
-    private void initJPUSH() {
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
-        // 获取极光推送的ID
-        registrationId = JPushInterface.getRegistrationID(this);
-    }
-
-    /**
-     * 初始化数据库
-     */
-    private void initDB() {
-        DatabaseManager.getInstance().init(this);
     }
 
     /**

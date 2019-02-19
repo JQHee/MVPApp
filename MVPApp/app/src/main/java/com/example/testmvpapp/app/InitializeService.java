@@ -4,6 +4,12 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
+import com.example.testmvpapp.database.message.DatabaseManager;
+import com.example.testmvpapp.util.log.LatteLogger;
+import com.tencent.bugly.crashreport.CrashReport;
+
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * 启动初始化Service
  * InitializeService.start(this);//启动服务执行耗时操作
@@ -42,15 +48,30 @@ public class InitializeService extends IntentService {
      * 启动初始化操作
      */
     private void performInit(String param) {
-        /*
-        initImageLoader();//初始化图片加载控件
-        initRealm();//初始化Realm数据库
-        initUser();//初始化用户(Realm数据库)
-        initPush();//初始化推送
-        initTuSdk();//初始化图sdk
-        initQiNiu();//初始化七牛
-        initQiyu();//网易七鱼
-        initLogger();//注释启动,打开屏蔽打印
-        */
+        // 初始化化日志打印工具
+        LatteLogger.setup();
+        initDB();
+        initBugly();
+        initJPUSH();
+    }
+
+    /* bugly 收集崩溃日志 */
+    private void initBugly() {
+        CrashReport.initCrashReport(getApplicationContext(), "df307c3993", false);
+    }
+
+    /* 初始化极光推送 */
+    private void initJPUSH() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+        // 获取极光推送的ID
+        MyApplication.registrationId = JPushInterface.getRegistrationID(this);
+    }
+
+    /**
+     * 初始化数据库
+     */
+    private void initDB() {
+        DatabaseManager.getInstance().init(this);
     }
 }

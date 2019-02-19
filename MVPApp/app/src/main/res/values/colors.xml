@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="app_main">@android:color/holo_orange_dark</color>
+    <color name="app_background">#F0F0F0</color>
 
     <color name="tab_gb">#F3F5F4</color>
     <color name="tab_normal_color">#515051</color>

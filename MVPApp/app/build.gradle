@@ -214,4 +214,8 @@ dependencies {
     /* 不需要多余的selector设置按钮的圆角、边框*/
     implementation 'com.github.niniloveyou:StateButton:v1.0.0'
 
+    // Google AutoValue（RGB实现导航栏的颜色渐变）
+    compileOnly 'com.google.auto.value:auto-value:1.5.2'
+    annotationProcessor "com.google.auto.value:auto-value:1.5.2"
+
 }
