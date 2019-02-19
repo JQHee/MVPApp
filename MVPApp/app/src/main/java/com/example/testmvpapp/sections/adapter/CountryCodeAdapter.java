@@ -7,6 +7,9 @@ import com.example.testmvpapp.R;
 
 import java.util.List;
 
+/**
+ * 简单的Adapter
+ */
 public class CountryCodeAdapter extends BaseMultiItemQuickAdapter<CountryCodeListBean, BaseViewHolder> {
 
     private static final int ITEM_NORMAL = 0;

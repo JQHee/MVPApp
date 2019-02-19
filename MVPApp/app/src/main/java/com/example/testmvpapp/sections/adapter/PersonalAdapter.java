@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * 实现添加header头和section
+ * 实现添加header头和section Adapter
  */
 
 public class PersonalAdapter extends BaseSectionQuickAdapter<PersonalBean, BaseViewHolder> {
@@ -34,7 +34,7 @@ public class PersonalAdapter extends BaseSectionQuickAdapter<PersonalBean, BaseV
     protected void convertHead(BaseViewHolder helper, PersonalBean item) {
         final AppCompatTextView textView =  helper.getView(R.id.tv_title);
         textView.setText(item.getTitle());
-        //设置子View的点击事件
+        // 设置子View的点击事件
         helper.addOnClickListener(R.id.tv_title);
     }
 
@@ -43,6 +43,7 @@ public class PersonalAdapter extends BaseSectionQuickAdapter<PersonalBean, BaseV
         PersonalItemBean bean = item.t;
         final AppCompatTextView textView =  helper.getView(R.id.tv_title);
         textView.setText(bean.getTitle());
+        // 设置子View的点击事件
         helper.addOnClickListener(R.id.tv_title);
     }
 }
