@@ -1,6 +1,8 @@
 package com.example.testmvpapp.base;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +34,7 @@ public abstract class SimpleFragment extends RxFragment {
     private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
     public final String TAG = this.getClass().getSimpleName();
     private Unbinder mUnbinder = null;
+    protected Activity mActivity;
     protected View mRootView,mErrorView, mEmptyView;
     protected ProgressDialog mProgressDialog;
 
@@ -76,11 +79,18 @@ public abstract class SimpleFragment extends RxFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (mUnbinder != null) {
             mUnbinder.unbind();
         }
+        mRootView = null;
     }
 
     public <T> LifecycleTransformer<T> bindToLife() {

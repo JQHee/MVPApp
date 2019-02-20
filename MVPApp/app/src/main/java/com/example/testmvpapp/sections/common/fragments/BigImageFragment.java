@@ -50,17 +50,16 @@ public class BigImageFragment extends SimpleFragment {
         mIvPic.setOnPhotoTapListener(new OnPhotoTapListener() {
             @Override
             public void onPhotoTap(ImageView view, float x, float y) {
-                getFragmentComponent().getAcitivty().finish();
+                mActivity.finish();
             }
         });
     }
 
     private void loadData() {
 
-        String imgUrl =  "http://test";
-                // getArguments().getString(IMG_URL);
+        String imgUrl = getArguments().getString(IMG_URL);
 
-        GlideImageLoader imageLoader = new GlideImageLoader(mIvPic);
+        GlideImageLoader imageLoader = GlideImageLoader.create(mIvPic);
 
         imageLoader.setOnGlideImageViewListener(imgUrl, new OnGlideImageViewListener() {
             @Override
@@ -73,21 +72,25 @@ public class BigImageFragment extends SimpleFragment {
             }
         });
 
+
+
         RequestOptions options = imageLoader.requestOptions(R.color.placeholder_color)
                 .centerCrop()
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);;
-
-        RequestBuilder<Drawable> requestBuilder = imageLoader.requestBuilder(imgUrl, options);
+        // 崩溃
+        final RequestBuilder<Drawable> requestBuilder = imageLoader.requestBuilder(imgUrl, options);
         requestBuilder.transition(DrawableTransitionOptions.withCrossFade())
                 .into(new SimpleTarget<Drawable>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                     @Override
                     public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
-                        if (resource.getIntrinsicHeight() > DisplayUtil.getScreenHeight(getFragmentComponent().getAcitivty())) {
+                        if (resource.getIntrinsicHeight() > DisplayUtil.getScreenHeight(mActivity)) {
                             mIvPic.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         }
                         requestBuilder.into(mIvPic);
                     }
                 });
+
+
     }
 
     @Override
@@ -97,7 +100,8 @@ public class BigImageFragment extends SimpleFragment {
 
     @Override
     public void onBindView(@Nullable Bundle savedInstanceState, View rootView) {
-
+        loadData();
+        initListener();
     }
 
 }

@@ -145,6 +145,15 @@ public class ModifyAvatarActivity extends SimpleActivity {
                         mCustomPopupWindow.dismiss();
                     }
                 });
+
+        /* 添加监听方法也可以用下面这种
+        mCustomPopupWindow.setOnClickListener(R.id.pop_cancel, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        */
     }
 
     /**

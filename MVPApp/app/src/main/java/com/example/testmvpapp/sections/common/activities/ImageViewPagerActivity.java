@@ -22,7 +22,9 @@ import com.example.testmvpapp.base.BasePresenter;
 import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.sections.common.fragments.BigImageFragment;
 import com.example.testmvpapp.sections.common.listener.PermissionListener;
+import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.file.FileUtils;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,19 +67,20 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
         int position = intent.getIntExtra(POSITION, 0);
         mCurrentPosition = position;
 
-        for (int i=0;i<mImageUrls.size();i++) {
+        for (int i=0; i<mImageUrls.size(); i++) {
             String url = mImageUrls.get(i);
             BigImageFragment imageFragment = new BigImageFragment();
 
             Bundle bundle = new Bundle();
             bundle.putString(BigImageFragment.IMG_URL, url);
-            // imageFragment.setArguments(bundle);
+            imageFragment.setArguments(bundle);
 
             mFragments.add(imageFragment);//添加到fragment集合中
             mDownloadingFlagMap.put(i,false);//初始化map，一开始全部的值都为false
         }
 
-        mVpPics.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        // mVpPics.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        mVpPics.setAdapter(new ImageViewPagerAdapter(mFragments,getSupportFragmentManager()));
         mVpPics.addOnPageChangeListener(this);
 
 
@@ -109,6 +112,20 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
 
     @OnClick(R.id.tv_save)
     public void onViewClicked() {
+
+        // 动态申请权限 （内部已经有判断判断）
+        final RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .request(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .compose(this.bindToLifecycle())
+                .subscribe(granted -> {
+                    if (granted) {
+                        //保存图片
+                        downloadImg();
+                    } else {
+                        ToastUtils.showToast("请开启相机和读取权限");
+                    }
+                });
         /*
         requestRuntimePermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, new PermissionListener() {
             @Override
@@ -142,6 +159,7 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
 
     @Override
     protected void initView() {
+        isHiddenToolbar(true);
         initData();
     }
 
@@ -192,10 +210,14 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
      }
  }
 
-class MyPagerAdapter extends FragmentPagerAdapter {
+class ImageViewPagerAdapter extends FragmentPagerAdapter {
 
-    public MyPagerAdapter(FragmentManager fm) {
+    private List<BigImageFragment> mFragments = new ArrayList<>();
+    public ImageViewPagerAdapter(List<BigImageFragment> fragmentList, FragmentManager fm) {
         super(fm);
+        if (fragmentList != null){
+            mFragments = fragmentList;
+        }
     }
 
     @Override

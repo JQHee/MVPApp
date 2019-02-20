@@ -1,6 +1,8 @@
 package com.example.testmvpapp.base;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
@@ -34,6 +36,7 @@ public abstract class BaseFragment <T extends BaseContract.BasePresenter> extend
     protected T mPresenter;
     protected FragmentComponent mFragmentComponent;
     private Unbinder mUnbinder = null;
+    protected Activity mActivity;
     protected View mRootView,mErrorView, mEmptyView;
     protected ProgressDialog mProgressDialog;
 
@@ -79,7 +82,14 @@ public abstract class BaseFragment <T extends BaseContract.BasePresenter> extend
         }
         mUnbinder = ButterKnife.bind(this, mRootView);
         onBindView(savedInstanceState, mRootView);
+
         return mRootView;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mActivity = (Activity) context;
     }
 
     @Override
@@ -92,6 +102,8 @@ public abstract class BaseFragment <T extends BaseContract.BasePresenter> extend
             mPresenter.detachView();
             mPresenter = null;
         }
+
+        mRootView = null;
     }
 
     @Override

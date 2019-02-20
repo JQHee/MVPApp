@@ -57,21 +57,21 @@ public class InitializeService extends IntentService {
 
     /* bugly 收集崩溃日志 */
     private void initBugly() {
-        CrashReport.initCrashReport(getApplicationContext(), "df307c3993", false);
+        CrashReport.initCrashReport(MyApplication.getInstance(), "df307c3993", false);
     }
 
     /* 初始化极光推送 */
     private void initJPUSH() {
         JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
+        JPushInterface.init(MyApplication.getInstance());
         // 获取极光推送的ID
-        MyApplication.registrationId = JPushInterface.getRegistrationID(this);
+        MyApplication.registrationId = JPushInterface.getRegistrationID(MyApplication.getInstance());
     }
 
     /**
      * 初始化数据库
      */
     private void initDB() {
-        DatabaseManager.getInstance().init(this);
+        DatabaseManager.getInstance().init(MyApplication.getInstance());
     }
 }

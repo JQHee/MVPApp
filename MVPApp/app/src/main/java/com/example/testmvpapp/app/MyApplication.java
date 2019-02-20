@@ -68,9 +68,33 @@ public class MyApplication extends Application {
         initApplicationComponent();
         ToastUtils.init(this);
         // 子线程初始化第三方（耗时优化）
-        InitializeService.start(this);
+        // InitializeService.start(this);
+        LatteLogger.setup();
+        initDB();
+        initBugly();
+        initJPUSH();
         initActivityLifeCycler();
 
+    }
+
+    /* bugly 收集崩溃日志 */
+    private void initBugly() {
+        CrashReport.initCrashReport(this, "df307c3993", false);
+    }
+
+    /* 初始化极光推送 */
+    private void initJPUSH() {
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
+        // 获取极光推送的ID
+        MyApplication.registrationId = JPushInterface.getRegistrationID(this);
+    }
+
+    /**
+     * 初始化数据库
+     */
+    private void initDB() {
+        DatabaseManager.getInstance().init(this);
     }
 
     private void initActivityLifeCycler() {

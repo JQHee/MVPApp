@@ -171,6 +171,11 @@
             android:exported="false">
         </activity>
 
+        <!--图片浏览器-->
+        <activity android:name=".sections.common.activities.ImageViewPagerActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+        </activity>
 
         <!-- Required SDK 核心功能-->
         <!-- 可配置 android:process 参数将 PushService 放在其他进程中 -->

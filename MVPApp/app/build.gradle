@@ -77,7 +77,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     /* 监听glide图片下载进度 */
-    api 'com.sunfusheng:glideimageview:1.0.0'
+    api 'com.sunfusheng:glideimageview:1.2.0'
 
     /* Log打印 */
     implementation 'com.orhanobut:logger:2.2.0'

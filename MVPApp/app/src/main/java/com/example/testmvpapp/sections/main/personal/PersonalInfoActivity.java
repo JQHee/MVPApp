@@ -6,8 +6,12 @@ import android.view.View;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.sections.common.activities.ImageViewPagerActivity;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.OnClick;
 
@@ -18,14 +22,23 @@ public class PersonalInfoActivity extends SimpleActivity {
 
     @OnClick({R.id.cl_header, R.id.cl_name, R.id.cl_nick_name, R.id.cl_modify_pass_word})
     void onClickItem(View view) {
+        Intent intent;
         switch (view.getId()){
             case R.id.cl_header:
-                Intent intent = new Intent(getContext(), ModifyAvatarActivity.class);
+                intent = new Intent(getContext(), ModifyAvatarActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.cl_name:
-
+                intent = new Intent(getContext(), ImageViewPagerActivity.class);
+                final List<String> images = new ArrayList<>();
+                images.add("http://pic24.photophoto.cn/20120831/0038038066142800_b.jpg");
+                images.add("http://pic24.photophoto.cn/20120831/0038038066142800_b.jpg");
+                images.add("http://pic24.photophoto.cn/20120831/0038038066142800_b.jpg");
+                images.add("http://pic24.photophoto.cn/20120831/0038038066142800_b.jpg");
+                images.add("http://pic24.photophoto.cn/20120831/0038038066142800_b.jpg");
+                intent.putStringArrayListExtra(ImageViewPagerActivity.IMG_URLS, (ArrayList<String>) images);
+                startActivity(intent);
                 break;
 
             case R.id.cl_nick_name:
