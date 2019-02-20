@@ -153,8 +153,9 @@ public  class CustomPopupWindow implements PopupWindow.OnDismissListener {
      * @param viewid
      * @param listener
      */
-    public void setOnClickListener(int viewid, View.OnClickListener listener){
+    public CustomPopupWindow setOnClickListener(int viewid, View.OnClickListener listener){
         getItemView(viewid).setOnClickListener(listener);
+        return this;
     }
 
     /**
