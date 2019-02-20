@@ -77,6 +77,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     protected ProgressDialog mProgressDialog;
     protected Context mContext;
     private Unbinder mUnBinder = null;
+    protected Bundle mSavedInstanceState;
     // 用于显示加载中、网络异常，空布局、内容布局
     protected StateView mStateView = null;
     public PermissionListener mPermissionListener = null;
@@ -109,6 +110,7 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSavedInstanceState = savedInstanceState;
         mContext = this;
         if (getLayout() instanceof Integer) {
             setCusContentView((Integer) getLayout());;

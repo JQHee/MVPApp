@@ -1,5 +1,6 @@
 package com.example.testmvpapp.sections.main.personal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -73,7 +74,10 @@ public class PersonalFragment extends SimpleFragment {
         mPersonalAdapter.addHeaderView(getHeaderView(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.showToast("header 点击");
+                // ToastUtils.showToast("header 点击");
+                Intent intent = new Intent(getContext(), PersonalInfoActivity.class);
+                intent.putExtra("name", "123");
+                startActivity(intent);
                 LatteLogger.d("点击");
             }
         }));

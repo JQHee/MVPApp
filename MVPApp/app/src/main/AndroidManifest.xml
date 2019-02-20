@@ -63,13 +63,12 @@
         <!--子线程处理初始化第三方-->
         <service android:name=".app.InitializeService"/>
 
-        <!-- apk安装 安卓7.0适配-->
+        <!-- apk安装 安卓7.0适配 文件选择-->
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.example.testmvpapp.fileprovider"
             android:grantUriPermissions="true"
-            android:exported="false"
-            >
+            android:exported="false">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
@@ -126,6 +125,18 @@
 
         <!--主页面-->
         <activity android:name=".sections.main.MainActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+        </activity>
+
+        <!--个人资料页面-->
+        <activity android:name=".sections.main.personal.PersonalInfoActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+        </activity>
+
+        <!--修改用户头像-->
+        <activity android:name=".sections.main.personal.ModifyAvatarActivity"
             android:screenOrientation="portrait"
             android:exported="false">
         </activity>

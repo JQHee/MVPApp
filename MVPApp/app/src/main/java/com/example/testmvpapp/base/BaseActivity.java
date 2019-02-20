@@ -87,6 +87,7 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     protected ProgressDialog mProgressDialog;
     protected Context mContext;
     private Unbinder mUnBinder = null;
+    protected Bundle mSavedInstanceState;
     // 用于显示加载中、网络异常，空布局、内容布局
     protected StateView mStateView = null;
     public PermissionListener mPermissionListener = null;
@@ -121,6 +122,7 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSavedInstanceState = savedInstanceState;
         mContext = this;
         initActivityComponent();
         if (getLayout() instanceof Integer) {

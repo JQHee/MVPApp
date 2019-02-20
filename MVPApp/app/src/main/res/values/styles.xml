@@ -88,4 +88,10 @@
         <item name="android:windowExitAnimation">@anim/dropdown_out</item>
     </style>
 
+    <!--底部弹出动画 拍照、相册选择弹窗-->
+    <style name="pop_anim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
+    </style>
+
 </resources>
