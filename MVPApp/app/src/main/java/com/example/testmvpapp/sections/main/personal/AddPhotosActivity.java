@@ -133,8 +133,9 @@ public class AddPhotosActivity extends AppCompatActivity {
         if (bmp == null) {
             bmp = new ArrayList<>();
         }
+        // Drawable Bitmap 互转
         // Drawable drawable = getResources().getDrawable(R.drawable.ic);
-        bmp.add(BitmapFactory.decodeResource(getResources(),R.drawable.icon_add_photo));
+        // bmp.add(BitmapFactory.decodeResource(getResources(),R.drawable.icon_add_photo));
         //初始化控件
         mGvPhoto = (GridView) findViewById(R.id.gv_photo);
         //设置gridview分割线为透明
