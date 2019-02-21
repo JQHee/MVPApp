@@ -37,7 +37,7 @@ import butterknife.OnClick;
 
 /**
  * @author ChayChan
- * @description: 详情页查看图片的activity
+ * @description: 图片浏览器 的activity
  * @date 2017/8/23  11:02
  */
 
