@@ -133,6 +133,8 @@ public class AddPhotosActivity extends AppCompatActivity {
         if (bmp == null) {
             bmp = new ArrayList<>();
         }
+        // Drawable drawable = getResources().getDrawable(R.drawable.ic);
+        bmp.add(BitmapFactory.decodeResource(getResources(),R.drawable.icon_add_photo));
         //初始化控件
         mGvPhoto = (GridView) findViewById(R.id.gv_photo);
         //设置gridview分割线为透明
@@ -143,6 +145,10 @@ public class AddPhotosActivity extends AppCompatActivity {
         mGvPhoto.setAdapter(mAdapter);
         int screenWidth = DensityUtil.getScreenWidth(this);
         width = screenWidth / 3;
+
+        // 设置列数
+        int colnum =  (int) (((getResources().getDisplayMetrics().widthPixels  )) / 200 );
+        mGvPhoto.setNumColumns(colnum);
 
     }
 

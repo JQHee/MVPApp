@@ -36,17 +36,13 @@ public class UploadPicGridAdapter extends BaseAdapter {
     @Override
     public Object getItem(int arg0) {
 
-        return bmp.get(arg0);
+        return null;
     }
 
     @Override
     public long getItemId(int arg0) {
 
         return arg0;
-    }
-
-    public void update(){
-
     }
 
     /**
