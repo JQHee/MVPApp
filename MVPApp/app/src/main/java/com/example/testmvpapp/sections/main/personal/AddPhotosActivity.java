@@ -37,7 +37,7 @@ public class AddPhotosActivity extends AppCompatActivity {
     private File newFile;
     private Bitmap zoomImageBitmap;
     private GridView mGvPhoto;
-    private UploadPicGridAdapter adapter;
+    private UploadPicGridAdapter mAdapter;
     private int width;
     private ArrayList<Bitmap> bmp = new ArrayList<>();
     private ArrayList<Bitmap> origalBmp = new ArrayList<>();
@@ -59,6 +59,7 @@ public class AddPhotosActivity extends AppCompatActivity {
                 case TakePhotoUtils.CHOOSE_PICTURE:
                     origalUri = pData.getData();
                     file = BitmapUtils.getFileFromMediaUri(AddPhotosActivity.this, origalUri);
+                    // 压缩图片
                     newFile = file;
                             // CompressHelper.getDefault(getApplicationContext()).compressToFile(file);
                     Bitmap photoBmp = null;
@@ -100,7 +101,7 @@ public class AddPhotosActivity extends AppCompatActivity {
                             File file = new File(outPath);
                             bmp.add(image);
 
-                            adapter.notifyDataSetChanged();
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
 
@@ -121,7 +122,7 @@ public class AddPhotosActivity extends AppCompatActivity {
     private void zoomImage(Bitmap bitmap,int width,int height){
         zoomImageBitmap = BitmapUtils.zoomBitmap(bitmap, width, height);
         bmp.add(zoomImageBitmap);
-        adapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
 
@@ -129,19 +130,19 @@ public class AddPhotosActivity extends AppCompatActivity {
      *  让图片按照屏幕3等分
      */
     public void init() {
+        if (bmp == null) {
+            bmp = new ArrayList<>();
+        }
         //初始化控件
         mGvPhoto = (GridView) findViewById(R.id.gv_photo);
         //设置gridview分割线为透明
         mGvPhoto.setSelector(new ColorDrawable(Color.TRANSPARENT));
         //初始化适配器
-        adapter = new UploadPicGridAdapter(AddPhotosActivity.this,bmp);
-
+        mAdapter = new UploadPicGridAdapter(this,bmp);
         //绑定图片数据
-        mGvPhoto.setAdapter(adapter);
-
+        mGvPhoto.setAdapter(mAdapter);
         int screenWidth = DensityUtil.getScreenWidth(this);
-
-        width = screenWidth/3;
+        width = screenWidth / 3;
 
     }
 
@@ -153,6 +154,9 @@ public class AddPhotosActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 绑定点击事件
+     */
     private void viewBindEvents() {
 
         //绑定点击事件
@@ -172,12 +176,13 @@ public class AddPhotosActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setOnDelItemPhotoClickListener(new UploadPicGridAdapter.OnDelItemPhotoClickListener() {
+        // 删除图片
+        mAdapter.setOnDelItemPhotoClickListener(new UploadPicGridAdapter.OnDelItemPhotoClickListener() {
             @Override
             public void onDelItemPhotoClick(int position) {
                 if (bmp != null && bmp.size() > 0){
                     bmp.remove(position);
-                    adapter.notifyDataSetChanged();
+                    mAdapter.notifyDataSetChanged();
                 }
 
                 if (origalBmp != null && origalBmp.size() > 0){

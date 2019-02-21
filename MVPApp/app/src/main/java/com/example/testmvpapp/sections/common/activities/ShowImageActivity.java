@@ -18,12 +18,13 @@ import com.example.testmvpapp.sections.adapter.ShowImageAdapter;
 import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.log.LatteLogger;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
+
+
+/**
+ * 本地图片查看器
+ */
 
 public class ShowImageActivity extends AppCompatActivity {
 
@@ -40,12 +41,12 @@ public class ShowImageActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
         setContentView(R.layout.show_image_layout);    //绑定布局
 
-        inigView();
+        initView();
         initData();
         initLiveData();
     }
 
-    private void inigView() {
+    private void initView() {
         viewPager = (ViewPager) findViewById(R.id.show_view_pager);  //绑定viewpager的id
     }
 

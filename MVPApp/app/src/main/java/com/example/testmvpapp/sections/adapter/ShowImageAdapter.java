@@ -6,6 +6,9 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+/**
+ * 本地图片的大图展示
+ */
 public class ShowImageAdapter extends PagerAdapter {
 
     private List<View> list;
@@ -13,8 +16,6 @@ public class ShowImageAdapter extends PagerAdapter {
     public ShowImageAdapter(List<View> list) {
         this.list = list;
     }
-
-
 
     @Override
     public int getCount() {
