@@ -47,6 +47,7 @@
     <uses-permission android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
 
+    <!-- tools:replace="android:icon,android:theme"  解决 arouter mege错误 -->
     <application
         android:name=".app.MyApplication"
         android:debuggable="true"
@@ -58,7 +59,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:resizeableActivity="true"
-        tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode">
+        tools:ignore="GoogleAppIndexingWarning,HardcodedDebugMode"
+        tools:replace="android:icon,android:theme">
 
         <!--子线程处理初始化第三方-->
         <service android:name=".app.InitializeService"/>
@@ -173,6 +175,18 @@
 
         <!--图片浏览器-->
         <activity android:name=".sections.common.activities.ImageViewPagerActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+        </activity>
+
+
+        <!-- 图片文件上传 -->
+        <activity android:name=".sections.main.personal.AddPhotosActivity"
+            android:screenOrientation="portrait"
+            android:exported="false">
+        </activity>
+
+        <activity android:name=".sections.common.activities.ShowImageActivity"
             android:screenOrientation="portrait"
             android:exported="false">
         </activity>

@@ -44,6 +44,8 @@ public class ModifyAvatarActivity extends SimpleActivity {
     @BindView(R.id.iv_header)
     AppCompatImageView mHeaderImageView;
 
+
+
     private  CustomPopupWindow mCustomPopupWindow;
     private Uri mCutUri;
 

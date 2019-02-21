@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.ApplicationComponent;
 import com.example.testmvpapp.di.component.DaggerApplicationComponent;
@@ -74,7 +75,21 @@ public class MyApplication extends Application {
         initBugly();
         initJPUSH();
         initActivityLifeCycler();
+        initARouter();
 
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        ARouter.getInstance().destroy();
+    }
+
+    /* 路由初始化 */
+    private void initARouter() {
+        ARouter.openLog();     // 打印日志
+        ARouter.openDebug();   // 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        ARouter.init(this);    // 尽可能早，推荐在Application中初始化
     }
 
     /* bugly 收集崩溃日志 */

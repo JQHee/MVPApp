@@ -15,6 +15,7 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 includeCompileClasspath true
+                arguments = [moduleName: project.getName()]
             }
         }
         ndk {
@@ -50,6 +51,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
+    //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
@@ -217,5 +219,11 @@ dependencies {
     // Google AutoValue（RGB实现导航栏的颜色渐变）
     compileOnly 'com.google.auto.value:auto-value:1.5.2'
     annotationProcessor "com.google.auto.value:auto-value:1.5.2"
+
+    /* 大图查看 */
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.10.0'
+
+    implementation 'com.alibaba:arouter-api:1.1.1'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.1.1'
 
 }

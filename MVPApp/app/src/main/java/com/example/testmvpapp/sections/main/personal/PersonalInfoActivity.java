@@ -42,7 +42,8 @@ public class PersonalInfoActivity extends SimpleActivity {
                 break;
 
             case R.id.cl_nick_name:
-
+                intent = new Intent(getContext(), AddPhotosActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.cl_modify_pass_word:
