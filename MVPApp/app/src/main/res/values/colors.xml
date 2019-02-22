@@ -53,4 +53,6 @@
     <color name="color_E6E8E7">#E6E8E7</color>
     <color name="color_333333">#333333</color>
     <color name="color_666666">#666666</color>
+
+    <color name="search_edit_gray">#ffcccccc</color>
 </resources>
