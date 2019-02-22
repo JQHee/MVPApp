@@ -145,7 +145,7 @@ public class IOSSearchEditText extends AppCompatEditText implements View.OnFocus
         }
         return super.onTouchEvent(event);
     }
-    
+
     @Override
     public void afterTextChanged(Editable arg0) {
         if (this.length() < 1) {

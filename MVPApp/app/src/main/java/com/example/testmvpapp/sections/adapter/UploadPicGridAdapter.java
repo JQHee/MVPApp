@@ -20,12 +20,16 @@ public class UploadPicGridAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater inflater; // 视图容器
+    // 如果要同时查看本地和远程图片（本地图片：Bitmap 远程图片：链接地址String）
     public static List<Bitmap> bmp = new ArrayList<Bitmap>();
+    // 允许添加的图片总数
+    public int mMaxImageCount = 0;
 
-    public UploadPicGridAdapter(Context context,List<Bitmap> bmp) {
+    public UploadPicGridAdapter(Context context, List<Bitmap> bmp, int maxImgCount) {
         inflater = LayoutInflater.from(context);
         mContext = context;
         this.bmp = bmp;
+        this.mMaxImageCount = maxImgCount;
     }
 
     @Override
@@ -67,7 +71,7 @@ public class UploadPicGridAdapter extends BaseAdapter {
             holder.image.setImageBitmap(BitmapFactory.decodeResource(mContext.getResources(),
                     R.drawable.icon_add_photo));
             holder.iv_del.setVisibility(View.GONE);
-            if (position == 3) {
+            if (position == mMaxImageCount) {
                 holder.image.setVisibility(View.GONE);
             }
         } else {

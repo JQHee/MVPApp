@@ -141,7 +141,7 @@ public class AddPhotosActivity extends AppCompatActivity {
         //设置gridview分割线为透明
         mGvPhoto.setSelector(new ColorDrawable(Color.TRANSPARENT));
         //初始化适配器
-        mAdapter = new UploadPicGridAdapter(this,bmp);
+        mAdapter = new UploadPicGridAdapter(this,bmp, 5);
         //绑定图片数据
         mGvPhoto.setAdapter(mAdapter);
         int screenWidth = DensityUtil.getScreenWidth(this);
