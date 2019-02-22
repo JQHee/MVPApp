@@ -1,14 +1,19 @@
 package com.example.testmvpapp.sections.main.personal;
 
+import android.Manifest;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.app.MyApplication;
 import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.component.contactsearch.AddressBookActivity;
 import com.example.testmvpapp.sections.common.activities.ImageViewPagerActivity;
+import com.example.testmvpapp.util.base.CrashHandler;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +52,17 @@ public class PersonalInfoActivity extends SimpleActivity {
                 break;
 
             case R.id.cl_modify_pass_word:
+                final RxPermissions rxPermissions = new RxPermissions(this);
+                rxPermissions
+                        .request(Manifest.permission.READ_CONTACTS)
+                        .subscribe(granted -> {
+                            if (granted) {
+                                Intent tempIntent = new Intent(getContext(), AddressBookActivity.class);
+                                startActivity(tempIntent);
+                            } else {
 
+                            }
+                        });
                 break;
 
             default:break;
