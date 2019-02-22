@@ -1,6 +1,7 @@
 package com.example.testmvpapp.sections.common.activities;
 
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,9 +15,15 @@ import android.widget.Toast;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.base.SimpleActivity;
+import com.example.testmvpapp.component.events.MessageEvent;
 import com.example.testmvpapp.sections.adapter.ShowImageAdapter;
 import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.log.LatteLogger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +33,7 @@ import java.util.List;
  * 本地图片查看器
  */
 
-public class ShowImageActivity extends AppCompatActivity {
+public class ShowImageActivity extends SimpleActivity {
 
     private ViewPager viewPager;  //声明viewpage
     private List<View> listViews = null;  //用于获取图片资源
@@ -36,18 +43,27 @@ public class ShowImageActivity extends AppCompatActivity {
     private int position;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
-        setContentView(R.layout.show_image_layout);    //绑定布局
-
-        initView();
-        initData();
-        initLiveData();
+    protected void onResume() {
+        super.onResume();
+        registerEventBus(this);
     }
 
-    private void initView() {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterEventBus(this);
+    }
+
+
+    @Override
+    protected Object getLayout() {
+        return R.layout.show_image_layout;
+    }
+    @Override
+    protected void initView() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
         viewPager = (ViewPager) findViewById(R.id.show_view_pager);  //绑定viewpager的id
+        initData();
     }
 
     private void initData() {
@@ -55,20 +71,13 @@ public class ShowImageActivity extends AppCompatActivity {
         position = getIntent().getIntExtra("id",0);
     }
 
-    /**
-     * 图片回传
-     */
-    private void initLiveData() {
-        // 获取国家码选择回传的值
-        LiveBus.getDefault().subscribe("SHOW_IMGS").observe(this, new Observer<Object>() {
-            @Override
-            public void onChanged(@Nullable Object o) {
-                LatteLogger.d(o);
-                bmp = (ArrayList<Bitmap>)o;
-                int byteCount = bmp.get(0).getByteCount();
-                inint();   //初始化
-            }
-        });
+    // 方法名字随便写
+    @Subscribe(threadMode = ThreadMode.MAIN,sticky = true)
+    public void onEventMainThread(MessageEvent em) {
+        LatteLogger.d(em.obj);
+        bmp = em.obj;
+        // int byteCount = bmp.get(0).getByteCount();
+        inint();   //初始化
     }
 
     private void inint() {

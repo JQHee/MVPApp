@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.component.events.MessageEvent;
 import com.example.testmvpapp.sections.adapter.UploadPicGridAdapter;
 import com.example.testmvpapp.sections.common.activities.ShowImageActivity;
 import com.example.testmvpapp.util.base.DensityUtil;
@@ -22,6 +23,8 @@ import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.takephoto.BitmapUtils;
 import com.example.testmvpapp.util.takephoto.ImageFactory;
 import com.example.testmvpapp.util.takephoto.TakePhotoUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.IOException;
@@ -179,11 +182,13 @@ public class AddPhotosActivity extends AppCompatActivity {
                     //显示选择提示窗
                     TakePhotoUtils.getInstance().pickPhoto(AddPhotosActivity.this);
                 } else {
-                    //进入图片预览页面
+                    // 进入图片预览页面
+                    EventBus.getDefault().postSticky(new MessageEvent(origalBmp));
                     LiveBus.getDefault().postEvent("SHOW_IMGS", origalBmp);
                     Intent intent = new Intent(AddPhotosActivity.this, ShowImageActivity.class);
                     intent.putExtra("id", arg2);   //将当前点击的位置传递过去
                     startActivity(intent);     //启动Activity
+
                 }
             }
         });
