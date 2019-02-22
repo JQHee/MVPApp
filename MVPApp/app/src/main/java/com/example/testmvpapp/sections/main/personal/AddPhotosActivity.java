@@ -183,8 +183,8 @@ public class AddPhotosActivity extends AppCompatActivity {
                     TakePhotoUtils.getInstance().pickPhoto(AddPhotosActivity.this);
                 } else {
                     // 进入图片预览页面
+                    // WARNING: - bitmap不要用Intent传
                     EventBus.getDefault().postSticky(new MessageEvent(origalBmp));
-                    LiveBus.getDefault().postEvent("SHOW_IMGS", origalBmp);
                     Intent intent = new Intent(AddPhotosActivity.this, ShowImageActivity.class);
                     intent.putExtra("id", arg2);   //将当前点击的位置传递过去
                     startActivity(intent);     //启动Activity

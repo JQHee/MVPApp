@@ -61,7 +61,9 @@ public class ShowImageActivity extends SimpleActivity {
     }
     @Override
     protected void initView() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
+        // WARNING: - 必须设置在setcontentView之前
+        // requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
+        isHiddenToolbar(true);
         viewPager = (ViewPager) findViewById(R.id.show_view_pager);  //绑定viewpager的id
         initData();
     }

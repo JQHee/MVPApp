@@ -118,6 +118,8 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     protected abstract Object getLayout();
     protected abstract void initInjector();
     protected abstract void initView();
+    // 有些设置必须在SetContent之前完成
+    public void beforeSetContentView() {};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -125,6 +127,7 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         mSavedInstanceState = savedInstanceState;
         mContext = this;
         initActivityComponent();
+        beforeSetContentView();
         if (getLayout() instanceof Integer) {
             setCusContentView((Integer) getLayout());;
         } else if (getLayout() instanceof View) {
