@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
     /* 解决65535报错的问题
-    Error: Cannot fit requested classes in a single dex file (# methods: 76798 > 65536)
+        Error: Cannot fit requested classes in a single dex file (# methods: 76798 > 65536)
     */
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
