@@ -26,6 +26,8 @@ import com.example.testmvpapp.util.takephoto.TakePhotoUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 添加图片页面
@@ -41,6 +43,9 @@ public class AddPhotosActivity extends AppCompatActivity {
     private int width;
     private ArrayList<Bitmap> bmp = new ArrayList<>();
     private ArrayList<Bitmap> origalBmp = new ArrayList<>();
+
+    /* 初始化只可以这样使用 */
+    private List<String> tests = Arrays.asList("初始化");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
