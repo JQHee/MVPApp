@@ -1,7 +1,5 @@
 package com.example.testmvpapp.sections.common.activities;
 
-import android.arch.lifecycle.Observer;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,10 +13,8 @@ import android.widget.Toast;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.example.testmvpapp.R;
-import com.example.testmvpapp.base.SimpleActivity;
 import com.example.testmvpapp.component.events.MessageEvent;
 import com.example.testmvpapp.sections.adapter.ShowImageAdapter;
-import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.log.LatteLogger;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,12 +24,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * 本地图片查看器
  */
 
-public class ShowImageActivity extends SimpleActivity {
+public class ShowImageActivity extends AppCompatActivity {
 
     private ViewPager viewPager;  //声明viewpage
     private List<View> listViews = null;  //用于获取图片资源
@@ -45,27 +40,34 @@ public class ShowImageActivity extends SimpleActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerEventBus(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterEventBus(this);
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
-
     @Override
-    protected Object getLayout() {
-        return R.layout.show_image_layout;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
+        setContentView(R.layout.show_image_layout);
+        initView();
+        initData();
     }
-    @Override
-    protected void initView() {
+
+    private void initView() {
         // WARNING: - 必须设置在setcontentView之前
         // requestWindowFeature(Window.FEATURE_NO_TITLE);  //去除标题栏
-        isHiddenToolbar(true);
+        // isHiddenToolbar(true);
         viewPager = (ViewPager) findViewById(R.id.show_view_pager);  //绑定viewpager的id
-        initData();
+
     }
 
     private void initData() {
