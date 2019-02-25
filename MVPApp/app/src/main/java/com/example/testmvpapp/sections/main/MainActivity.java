@@ -105,7 +105,7 @@ public class MainActivity extends SimpleActivity {
         initData();
         initListener();
         checkNotificationPermissions();
-        // updateApk();
+        updateApk();
     }
 
     private void initData() {
@@ -472,7 +472,9 @@ public class MainActivity extends SimpleActivity {
         mProgressDialog.show();
         File file = new File(getApkPath(),"ZhouzhiHouse.apk"); //获取文件路径
         // download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
-        download(ConstantService.BASE_URL + url, file);
+        // download(ConstantService.BASE_URL + url, file);
+        // 120.76.240.104:8017/api/upgrade/get_latest_apk
+        download(ConstantService.BASE_URL + ConstantService.DOWNLOAD_APK, file);
 
     }
 

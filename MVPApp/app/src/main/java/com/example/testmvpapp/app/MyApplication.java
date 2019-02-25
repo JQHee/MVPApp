@@ -75,7 +75,7 @@ public class MyApplication extends Application {
         initBugly();
         initJPUSH();
         initActivityLifeCycler();
-        initARouter();
+        // initARouter();
 
     }
 

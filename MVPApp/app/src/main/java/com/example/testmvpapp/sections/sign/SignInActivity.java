@@ -36,9 +36,9 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     // @SingleClick
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
-        LatteLogger.d("防止重复点击判断");
+        // LatteLogger.d("防止重复点击判断");
         // ToastUtils.showToast("请输入手机号");
-        // mPresenter.login(mPhoneNumber.getText().toString(), mPassword.getText().toString());
+        mPresenter.login(mPhoneNumber.getText().toString(), mPassword.getText().toString());
     }
 
     @OnClick(R.id.tv_register)

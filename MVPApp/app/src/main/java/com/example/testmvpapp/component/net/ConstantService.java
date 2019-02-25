@@ -8,6 +8,8 @@ public class ConstantService {
     /// 公用链接
     // 版本更新
     public static final String UPDATE = BASE_URL + "/api/upgrade/get_version";
+    // apk下载
+    public static final String DOWNLOAD_APK = "/api/upgrade/get_latest_apk";
     // 短信
     public static final String SMS = BASE_URL + "/api/sms/send";
     // 文案
