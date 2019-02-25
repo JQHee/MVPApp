@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.widget.EditText;
 
 import com.example.testmvpapp.R;
+import com.example.testmvpapp.aop.annotation.SingleClick;
 import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
@@ -32,10 +33,12 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     @BindView(R.id.et_pass_word)
     EditText mPassword;
 
+    // @SingleClick
     @OnClick({R.id.btn_sign_in})
     public void onClickSignIn() {
-        ToastUtils.showToast("请输入手机号");
-        mPresenter.login(mPhoneNumber.getText().toString(), mPassword.getText().toString());
+        LatteLogger.d("防止重复点击判断");
+        // ToastUtils.showToast("请输入手机号");
+        // mPresenter.login(mPhoneNumber.getText().toString(), mPassword.getText().toString());
     }
 
     @OnClick(R.id.tv_register)
