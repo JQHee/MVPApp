@@ -78,10 +78,19 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.16'
 
     /* 图片下载 glide */
-    implementation 'com.github.bumptech.glide:glide:4.8.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    // implementation 'com.github.bumptech.glide:glide:4.8.0'
+    // annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation("com.github.bumptech.glide:glide:4.8.0") {
+        exclude group: "com.android.support"
+    }
+
     /* 监听glide图片下载进度 */
     api 'com.sunfusheng:glideimageview:1.2.0'
+
+    implementation("com.squareup.picasso:picasso:+") {
+        // 这样写的作用是从 picasso 的依赖中去除 "com.android.support" 防止兼容包冲突
+        exclude group: "com.android.support"
+    }
 
     /* Log打印 */
     implementation 'com.orhanobut:logger:2.2.0'
