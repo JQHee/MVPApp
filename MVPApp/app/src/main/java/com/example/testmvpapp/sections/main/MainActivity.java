@@ -474,7 +474,10 @@ public class MainActivity extends SimpleActivity {
         // download("http://gdown.baidu.com/data/wisegame/43b4382f3c757ebe/weixin_1400.apk", file);
         // download(ConstantService.BASE_URL + url, file);
         // 120.76.240.104:8017/api/upgrade/get_latest_apk
+        // http://120.76.240.104:8017/api/course/get_ppt_content?courseId=78&token=c87bced2-cc24-4977-8407-19434b8791f5
         download(ConstantService.BASE_URL + ConstantService.DOWNLOAD_APK, file);
+        final String downloadUrl = "http://120.76.240.104:8017/api/course/get_ppt_content?courseId=78&token=c87bced2-cc24-4977-8407-19434b8791f5";
+        //download(downloadUrl, file);
 
     }
 

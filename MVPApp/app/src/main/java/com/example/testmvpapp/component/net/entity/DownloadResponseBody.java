@@ -1,6 +1,7 @@
 package com.example.testmvpapp.component.net.entity;
 
 import com.example.testmvpapp.component.net.listener.ProgressResponseListener;
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 
@@ -52,7 +53,7 @@ public class DownloadResponseBody extends ResponseBody {
                 // read() returns the number of bytes read, or -1 if this source is exhausted.
                 if (null != downloadListener) {
                     totalBytesRead += bytesRead != -1 ? bytesRead : 0;
-                    // Logger.t("DownloadUtil").d("已经下载的：" + totalBytesRead + "共有：" + responseBody.contentLength());
+                    Logger.t("DownloadUtil").d("已经下载的：" + totalBytesRead + "共有：" + responseBody.contentLength());
                     final int progress = (int) (totalBytesRead * 100 / responseBody.contentLength());
                     downloadListener.onProgress(progress);
                 }
