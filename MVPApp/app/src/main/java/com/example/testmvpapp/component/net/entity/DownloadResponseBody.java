@@ -25,7 +25,7 @@ public class DownloadResponseBody extends ResponseBody {
     public DownloadResponseBody(ResponseBody responseBody, ProgressResponseListener downloadListener) {
         this.responseBody = responseBody;
         this.downloadListener = downloadListener;
-        downloadListener.onStartDownload(responseBody.contentLength());
+        // downloadListener.onStartDownload(responseBody.contentLength());
     }
     @Override
     public MediaType contentType() {
