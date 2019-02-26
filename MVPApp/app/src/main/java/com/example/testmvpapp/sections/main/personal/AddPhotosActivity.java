@@ -16,10 +16,9 @@ import android.widget.GridView;
 
 import com.example.testmvpapp.R;
 import com.example.testmvpapp.component.events.MessageEvent;
-import com.example.testmvpapp.sections.adapter.UploadPicGridAdapter;
+import com.example.testmvpapp.sections.adapter.UploadPhotosGridAdapter;
 import com.example.testmvpapp.sections.common.activities.ShowImageActivity;
 import com.example.testmvpapp.util.base.DensityUtil;
-import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.takephoto.BitmapUtils;
 import com.example.testmvpapp.util.takephoto.ImageFactory;
 import com.example.testmvpapp.util.takephoto.TakePhotoUtils;
@@ -42,7 +41,7 @@ public class AddPhotosActivity extends AppCompatActivity {
     private File newFile;
     private Bitmap zoomImageBitmap;
     private GridView mGvPhoto;
-    private UploadPicGridAdapter mAdapter;
+    private UploadPhotosGridAdapter mAdapter;
     private int width;
     private ArrayList<Bitmap> bmp = new ArrayList<>();
     private ArrayList<Bitmap> origalBmp = new ArrayList<>();
@@ -149,7 +148,7 @@ public class AddPhotosActivity extends AppCompatActivity {
         //设置gridview分割线为透明
         mGvPhoto.setSelector(new ColorDrawable(Color.TRANSPARENT));
         //初始化适配器
-        mAdapter = new UploadPicGridAdapter(this,bmp, 5);
+        mAdapter = new UploadPhotosGridAdapter(this,bmp, 5);
         //绑定图片数据
         mGvPhoto.setAdapter(mAdapter);
         int screenWidth = DensityUtil.getScreenWidth(this);
@@ -194,7 +193,7 @@ public class AddPhotosActivity extends AppCompatActivity {
         });
 
         // 删除图片
-        mAdapter.setOnDelItemPhotoClickListener(new UploadPicGridAdapter.OnDelItemPhotoClickListener() {
+        mAdapter.setOnDelItemPhotoClickListener(new UploadPhotosGridAdapter.OnDelItemPhotoClickListener() {
             @Override
             public void onDelItemPhotoClick(int position) {
                 if (bmp != null && bmp.size() > 0){

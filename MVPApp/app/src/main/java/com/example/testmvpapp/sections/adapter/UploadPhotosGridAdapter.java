@@ -1,6 +1,5 @@
 package com.example.testmvpapp.sections.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,14 +8,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 import com.example.testmvpapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UploadPicGridAdapter extends BaseAdapter {
+/**
+ * 多图上传的显示适配器
+ */
+public class UploadPhotosGridAdapter extends BaseAdapter {
 
     private Context mContext;
     private LayoutInflater inflater; // 视图容器
@@ -25,7 +26,7 @@ public class UploadPicGridAdapter extends BaseAdapter {
     // 允许添加的图片总数
     public int mMaxImageCount = 0;
 
-    public UploadPicGridAdapter(Context context, List<Bitmap> bmp, int maxImgCount) {
+    public UploadPhotosGridAdapter(Context context, List<Bitmap> bmp, int maxImgCount) {
         inflater = LayoutInflater.from(context);
         mContext = context;
         this.bmp = bmp;
@@ -55,15 +56,15 @@ public class UploadPicGridAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final int coord = position;
-        UploadPicGridAdapter.ViewHolder holder = null;
+        UploadPhotosGridAdapter.ViewHolder holder = null;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.item_published_grida, parent, false);
-            holder = new UploadPicGridAdapter.ViewHolder();
+            holder = new UploadPhotosGridAdapter.ViewHolder();
             holder.image = (AppCompatImageView) convertView.findViewById(R.id.iv_item);
             holder.iv_del = (AppCompatImageView) convertView.findViewById(R.id.iiv_del);
             convertView.setTag(holder);
         } else {
-            holder = (UploadPicGridAdapter.ViewHolder) convertView.getTag();
+            holder = (UploadPhotosGridAdapter.ViewHolder) convertView.getTag();
         }
 
         if (position == bmp.size()) {

@@ -14,6 +14,7 @@ import com.example.testmvpapp.base.BaseActivity;
 import com.example.testmvpapp.component.net.RxRestClient;
 import com.example.testmvpapp.contract.SignInContract;
 import com.example.testmvpapp.presenter.SignInPresenter;
+import com.example.testmvpapp.presenter.SignUpPresenter;
 import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.bus.LiveBus;
@@ -32,6 +33,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     EditText mPhoneNumber;
     @BindView(R.id.et_pass_word)
     EditText mPassword;
+
 
     // @SingleClick
     @OnClick({R.id.btn_sign_in})
