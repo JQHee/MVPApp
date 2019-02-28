@@ -32,7 +32,7 @@ public class ExpandActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         initData();
         setupRecyclerView();
     }

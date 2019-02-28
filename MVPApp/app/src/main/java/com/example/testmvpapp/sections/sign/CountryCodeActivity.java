@@ -41,7 +41,7 @@ public class CountryCodeActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         setTitle("国家码");
         addToolBar(R.mipmap.menu_back);
         setRecycler();

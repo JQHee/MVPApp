@@ -14,7 +14,7 @@ public class MessageActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
 
     }
 

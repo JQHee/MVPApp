@@ -158,7 +158,7 @@ public class ImageViewPagerActivity extends SimpleActivity implements ViewPager.
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         isHiddenToolbar(true);
         initData();
     }

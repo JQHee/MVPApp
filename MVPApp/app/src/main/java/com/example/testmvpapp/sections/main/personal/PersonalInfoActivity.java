@@ -76,7 +76,7 @@ public class PersonalInfoActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         addToolBar(R.mipmap.menu_back);
         setTitle("个人资料");
         Intent intent = getIntent();

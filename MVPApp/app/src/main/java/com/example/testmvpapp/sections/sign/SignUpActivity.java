@@ -146,7 +146,7 @@ public class SignUpActivity extends BaseActivity<SignUpPresenter> implements Sig
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         addToolBar(R.mipmap.menu_back);
         setTitle("注册");
         // 设置返回图标

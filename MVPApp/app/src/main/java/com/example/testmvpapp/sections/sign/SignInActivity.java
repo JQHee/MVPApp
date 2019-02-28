@@ -87,7 +87,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
 
         isHiddenToolbar(true);
 

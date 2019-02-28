@@ -25,16 +25,6 @@ public class ScannerActivity extends SimpleActivity implements ZBarScannerView.R
     private ScanView mScanView = null;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (mScanView == null) {
-            mScanView = new ScanView(this);
-        }
-        mScanView.setAutoFocus(true);
-        mScanView.setResultHandler(this);
-    }
-
-    @Override
     protected Object getLayout() {
         if (mScanView == null) {
             mScanView = new ScanView(this);
@@ -43,8 +33,9 @@ public class ScannerActivity extends SimpleActivity implements ZBarScannerView.R
     }
 
     @Override
-    protected void initView() {
-
+    protected void init() {
+        mScanView.setAutoFocus(true);
+        mScanView.setResultHandler(this);
     }
 
     @Override

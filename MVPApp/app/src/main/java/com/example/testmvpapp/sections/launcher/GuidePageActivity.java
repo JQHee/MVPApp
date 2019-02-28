@@ -30,7 +30,7 @@ public class GuidePageActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
 
         //设置图片集合,圆点颜色大小
         guidePage.setLocalImageResList(Arrays.asList(images)).setOvalIndicator(Color.parseColor

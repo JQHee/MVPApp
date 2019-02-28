@@ -97,7 +97,7 @@ public class MainActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         isHiddenToolbar(true);
         // getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         mVpContent = (BottomBarViewPager) findViewById(R.id.vp_content);

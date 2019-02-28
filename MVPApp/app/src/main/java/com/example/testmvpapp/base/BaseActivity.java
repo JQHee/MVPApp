@@ -118,9 +118,9 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     protected abstract Object getLayout();
     // protected abstract T createPresenter();
     protected abstract void initInjector();
-    protected abstract void initView();
+    protected abstract void init();
     // 有些设置必须在SetContent之前完成
-    public void beforeSetContentView() {};
+    public void initBeforeSetContentView() {};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,7 +128,7 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         mSavedInstanceState = savedInstanceState;
         mContext = this;
         initActivityComponent();
-        beforeSetContentView();
+        initBeforeSetContentView();
         // presenter = createPresenter();
         if (getLayout() instanceof Integer) {
             setCusContentView((Integer) getLayout());;
@@ -141,7 +141,7 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         mUnBinder = ButterKnife.bind(this);
         ActivityCollector.addActivity(this);
         attachView();
-        initView();
+        init();
         StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main), 38);
 
     }

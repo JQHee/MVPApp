@@ -73,7 +73,7 @@ public class ModifyAvatarActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         addToolBar(R.mipmap.menu_back);
         setTitle("修改头像");
     }

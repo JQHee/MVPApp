@@ -86,7 +86,7 @@ public class WebViewActivity extends SimpleActivity {
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         initData();
         initListener();
 

@@ -48,7 +48,7 @@ public class NewFeaturesActivity extends SimpleActivity implements OnItemClickLi
     }
 
     @Override
-    protected void initView() {
+    protected void init() {
         initBanner();
 
     }
