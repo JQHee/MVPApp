@@ -31,7 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-/* 检查登录状态 (登录成功后HeartBeat.start())
+/* 检查登录状态  token是否过期 (登录成功后HeartBeat.start())
 public class HeartBeat implements Runnable {
 
     private static final String TAG = "HeartBeat";
