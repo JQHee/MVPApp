@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.FragmentActivity;
+import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.testmvpapp.database.message.DatabaseManager;
@@ -22,6 +23,8 @@ import com.example.testmvpapp.ui.scanner.ScannerActivity;
 import com.example.testmvpapp.util.base.CrashHandler;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
+import com.example.testmvpapp.util.screenadapter.CutoutAdapt;
+import com.example.testmvpapp.util.screenadapter.CutoutUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -123,6 +126,20 @@ public class MyApplication extends Application {
             public void onActivityStarted(Activity activity) {
                 // ZLog.d(TAG, activity.getClass().getSimpleName() + " Started");
                 MyApplication.activity = activity;
+                // 如果是允许全屏显示到刘海屏区域的刘海屏机型
+                if (CutoutUtil.allowDisplayToCutout()) {
+                    if (isFullScreen(activity)) {
+                        // 如果允许通过显示状态栏方式适配刘海屏
+                        if (activity instanceof CutoutAdapt) {
+                            // 显示状态栏
+                            // StatusBarUtil.showStatusbar(activity.getWindow());
+                        } else {
+                            // 需自行将该界面视图元素下移，否则可能会被刘海遮挡
+                        }
+                    } else {
+                        // 非全屏界面无需适配刘海屏
+                    }
+                }
 
             }
 
@@ -151,6 +168,12 @@ public class MyApplication extends Application {
 
             }
         });
+    }
+
+    /* 是否是全屏显示 */
+    public boolean isFullScreen(Activity activity) {
+        return (activity.getWindow().getAttributes().flags &
+                WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN;
     }
 
     /**

@@ -175,8 +175,10 @@ dependencies {
 
     /* RecyclerView 依赖 */
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-    //RecyclerView 分割线
+    // RecyclerView 分割线
     implementation 'com.choices.divider:RecyclerView_Divider:1.0.0'
+    // item选中效果
+    // implementation 'com.android.support:recyclerview-selection:28.0.0'
 
     /* SmartRefreshLayout刷新 */
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'

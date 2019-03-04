@@ -15,5 +15,15 @@
   ~    limitations under the License.
   -->
 <network-security-config>
+
+    <!-- 配置7.0抓包 发布时去掉 start -->
+    <debug-overrides>
+        <trust-anchors>
+            <!-- Trust user added CAs while debuggable only -->
+            <certificates src="user"/>
+        </trust-anchors>
+    </debug-overrides>
+    <!-- 配置7.0抓包 end -->
+
     <base-config cleartextTrafficPermitted="true" />
 </network-security-config>

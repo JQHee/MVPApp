@@ -43,6 +43,7 @@
 
     <!--android o 8.0 apk 未知应用安装权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"></uses-permission>
 
     <!-- 极光推送的权限  -->
     <!-- Required -->
@@ -60,9 +61,12 @@
         tools:ignore="ProtectedPermissions" />
 
     <!-- tools:replace="android:icon,android:theme"  解决 arouter mege错误 -->
+    <!--是否支持分屏-->
+    <!--android:resizeableActivity="true"-->
+    <!--是否为调试-->
+    <!--android:debuggable="true"-->
     <application
         android:name=".app.MyApplication"
-        android:debuggable="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -88,10 +92,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- 允许绘制到华为刘海屏机型的刘海区域 -->
         <meta-data android:name="android.notch_support" android:value="true"/>
-        <meta-data
-            android:name="android.max_aspect"
-            android:value="2.4" />
+        <!-- 允许绘制到华为刘海屏机型的刘海区域 -->
+        <meta-data android:name="android.max_aspect" android:value="2.2" />
+        <!-- 允许绘制到小米刘海屏机型的刘海区域 -->
+        <meta-data android:name="notch.config" android:value="portrait" />
 
         <!--androidAutoSize 配置设计稿的尺寸-->
         <meta-data
