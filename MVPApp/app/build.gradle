@@ -2,14 +2,19 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 apply plugin: 'android-aspectjx'
 
+// 其他模块引入（头部声明）
+def ext = rootProject.ext
+def ext_android = ext.android
+def ext_dependVersion = ext.dependVersion
+
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion ext_android.compileSdkVersion
     defaultConfig {
         applicationId "com.example.testmvpapp"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion ext_android.minSdkVersion
+        targetSdkVersion ext_android.targetSdkVersion
+        versionCode ext_android.versionCode
+        versionName ext_android.versionName
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //支持矢量图
@@ -55,7 +60,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    //noinspection GradleCompatible
+    // noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 

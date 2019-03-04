@@ -1,6 +1,5 @@
 package com.example.testmvpapp.app;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
@@ -11,7 +10,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
-import android.support.v4.app.FragmentActivity;
 import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -19,13 +17,10 @@ import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.ApplicationComponent;
 import com.example.testmvpapp.di.component.DaggerApplicationComponent;
 import com.example.testmvpapp.di.module.ApplicationModule;
-import com.example.testmvpapp.ui.scanner.ScannerActivity;
-import com.example.testmvpapp.util.base.CrashHandler;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.example.testmvpapp.util.screenadapter.CutoutAdapt;
 import com.example.testmvpapp.util.screenadapter.CutoutUtil;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
@@ -45,10 +40,10 @@ public class MyApplication extends Application {
     private static Activity activity;
 
     //以下属性应用于整个应用程序，合理利用资源，减少资源浪费
-    private static Thread mMainThread;//主线程
-    private static long mMainThreadId;//主线程id
-    private static Looper mMainLooper;//循环队列
-    private static Handler mHandler;//主线程Handler
+    private static Thread mMainThread; // 主线程
+    private static long mMainThreadId; // 主线程id
+    private static Looper mMainLooper; // 循环队列
+    private static Handler mHandler;   // 主线程Handler
 
     //根目录
     public static final String APP_ROOT_DIRECTORY = "zhenghexing";
@@ -63,7 +58,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //对全局属性赋值
+        // 对全局属性赋值
         instance = this;
         mMainThread = Thread.currentThread();
         mMainThreadId = android.os.Process.myTid();
@@ -78,7 +73,7 @@ public class MyApplication extends Application {
         initBugly();
         initJPUSH();
         initActivityLifeCycler();
-        // initARouter();
+        initARouter();
 
     }
 
@@ -126,6 +121,7 @@ public class MyApplication extends Application {
             public void onActivityStarted(Activity activity) {
                 // ZLog.d(TAG, activity.getClass().getSimpleName() + " Started");
                 MyApplication.activity = activity;
+                /*
                 // 如果是允许全屏显示到刘海屏区域的刘海屏机型
                 if (CutoutUtil.allowDisplayToCutout()) {
                     if (isFullScreen(activity)) {
@@ -140,6 +136,7 @@ public class MyApplication extends Application {
                         // 非全屏界面无需适配刘海屏
                     }
                 }
+                */
 
             }
 

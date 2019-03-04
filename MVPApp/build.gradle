@@ -1,16 +1,8 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-/*
-* 为了方便配置
-*/
-ext {
-    compileSdkVersion = 28
-    minSdkVersion = 15
-    targetSdkVersion = 27
-}
-
+apply from: "config.gradle"
 
 buildscript {
+
     repositories {
         google()
         jcenter()
