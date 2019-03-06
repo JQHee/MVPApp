@@ -32,7 +32,7 @@ public class DBManager {
 
     private final int BUFFER_SIZE = 400000;
     public static final String DB_NAME = "countries.db"; //保存的数据库文件名
-    public static final String PACKAGE_NAME = "com.android.ImportDatabase";
+    public static final String PACKAGE_NAME = "com.example.testmvpapp";
     public static final String DB_PATH = "/data"
             + Environment.getDataDirectory().getAbsolutePath() + "/"
             + PACKAGE_NAME;  //在手机里存放数据库的位置
