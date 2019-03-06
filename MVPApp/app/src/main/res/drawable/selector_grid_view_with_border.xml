@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <stroke android:width="1px" android:color="#F5F5F5" />
+            <gradient android:angle="270.0" android:endColor="#ffe8ecef" android:startColor="#ffe8ecef" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <gradient android:angle="270.0" android:endColor="#ffe8ecef" android:startColor="#ffe8ecef" />
+            <stroke android:width="1px" android:color="#F5F5F5" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:angle="270.0" android:endColor="#ffffffff" android:startColor="#ffffffff" />
+            <stroke android:width="1px" android:color="#F5F5F5" />
+        </shape>
+    </item>
+</selector>
+
+<!--   GridView item_layout 设置分割线
+ <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:background="@drawable/selector_grid_view_with_border">
+
+<... />
+</LinearLayout>
+-->
