@@ -125,7 +125,6 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         init();
         startReceiver();
         StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main), 38);
-
     }
 
     private void setCusContentView(Object layout) {
@@ -134,8 +133,8 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
 
         int baseId = R.layout.activity_base;
         View inflaterView = inflater.inflate(baseId, null);
-        mBaseLayout = (LinearLayout)inflaterView.findViewById(R.id.base_layout);
-        mContentLayout = (LinearLayout)inflaterView.findViewById(R.id.llContent);
+        mBaseLayout = (LinearLayout) inflaterView.findViewById(R.id.base_layout);
+        mContentLayout = (LinearLayout) inflaterView.findViewById(R.id.llContent);
         actionText = (TextView) inflaterView.findViewById(R.id.title);
         mToolbar = (Toolbar) inflaterView.findViewById(R.id.toolbar);
 
@@ -145,8 +144,12 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
         } else {
             child =  (View) layout;
         }
+        /*
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT);
+        */
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
         params.topMargin = topMargin;
         mContentLayout.addView(child, params);
         setContentView(mBaseLayout);
@@ -291,14 +294,14 @@ public abstract class SimpleActivity extends RxAppCompatActivity {
     /**
      * 设置全屏显示
      */
-    public void setFullScreen() {
+    public void setFullScreen(boolean isShowToolbar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (!DensityUtil.isNavigationBarExist(this)) {
                 if (getWindow() != null) {
                     WindowManager.LayoutParams lp = getWindow().getAttributes();
                     lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
                     getWindow().setAttributes(lp);
-                    StatusBarUtils.setStatusBarVisible(this, false);
+                    StatusBarUtils.setStatusBarVisible(this, isShowToolbar);
                 }
             }
         }

@@ -143,7 +143,6 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         attachView();
         init();
         StatusBarUtil.setColor(this, getResources().getColor(R.color.app_main), 38);
-
     }
 
     private void setCusContentView(Object layout) {
@@ -164,8 +163,12 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
         } else {
             child =  (View) layout;
         }
+        /*
         Toolbar.LayoutParams params = new Toolbar.LayoutParams(Toolbar.LayoutParams.MATCH_PARENT,
                 Toolbar.LayoutParams.MATCH_PARENT);
+        */
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
         params.topMargin = topMargin;
         mContentLayout.addView(child, params);
         setContentView(mBaseLayout);
@@ -246,14 +249,14 @@ public abstract class BaseActivity <T extends BaseContract.BasePresenter> extend
     /**
      * 设置全屏显示
      */
-    public void setFullScreen() {
+    public void setFullScreen(boolean isShowToolbar) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (!DensityUtil.isNavigationBarExist(this)) {
                 if (getWindow() != null) {
                     WindowManager.LayoutParams lp = getWindow().getAttributes();
                     lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
                     getWindow().setAttributes(lp);
-                    StatusBarUtils.setStatusBarVisible(this, false);
+                    StatusBarUtils.setStatusBarVisible(this, isShowToolbar);
                 }
             }
         }

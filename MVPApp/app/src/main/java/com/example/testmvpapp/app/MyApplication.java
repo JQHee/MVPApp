@@ -5,22 +5,30 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.multidex.MultiDex;
+import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.testmvpapp.R;
 import com.example.testmvpapp.database.message.DatabaseManager;
 import com.example.testmvpapp.di.component.ApplicationComponent;
 import com.example.testmvpapp.di.component.DaggerApplicationComponent;
 import com.example.testmvpapp.di.module.ApplicationModule;
+import com.example.testmvpapp.util.base.DensityUtil;
+import com.example.testmvpapp.util.base.StatusBarUtils;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.log.LatteLogger;
 import com.example.testmvpapp.util.screenadapter.CutoutAdapt;
-import com.example.testmvpapp.util.screenadapter.CutoutUtil;
+import com.example.testmvpapp.util.screenadapter.CutoutUtils;
+import com.jaeger.library.StatusBarUtil;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
@@ -121,10 +129,9 @@ public class MyApplication extends Application {
             public void onActivityStarted(Activity activity) {
                 // ZLog.d(TAG, activity.getClass().getSimpleName() + " Started");
                 MyApplication.activity = activity;
-                /*
                 // 如果是允许全屏显示到刘海屏区域的刘海屏机型
-                if (CutoutUtil.allowDisplayToCutout()) {
-                    if (isFullScreen(activity)) {
+                if (CutoutUtils.allowDisplayToCutout()) {
+                    if (isFullScreen(activity)) { // 是否是全面屏
                         // 如果允许通过显示状态栏方式适配刘海屏
                         if (activity instanceof CutoutAdapt) {
                             // 显示状态栏
@@ -134,9 +141,9 @@ public class MyApplication extends Application {
                         }
                     } else {
                         // 非全屏界面无需适配刘海屏
+
                     }
                 }
-                */
 
             }
 

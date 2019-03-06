@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 /**
  * 判断是否是允许全屏界面内容显示到刘海区域的刘海屏机型
  */
-public class CutoutUtil {
+public class CutoutUtils {
 
     private static Boolean sAllowDisplayToCutout;
     public static final int NOTCH_IN_SCREEN_VOIO = 0x00000020;// 是否有凹槽
@@ -25,12 +25,14 @@ public class CutoutUtil {
      * 是否为允许全屏界面显示内容到刘海区域的刘海屏机型（与AndroidManifest中配置对应）
      */
     public static boolean allowDisplayToCutout() {
+        return true;
+        /*
         if (sAllowDisplayToCutout == null) {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1) {
                 // 9.0系统全屏界面默认会保留黑边，不允许显示内容到刘海区域
                 return sAllowDisplayToCutout = false;
             }
-            Context context = MyApplication.getInstance();
+            Context context = MyApplication.getInstance().getApplicationContext();
             if (hasCutout_Huawei(context)) {
                 return sAllowDisplayToCutout = true;
             }
@@ -47,6 +49,7 @@ public class CutoutUtil {
         } else {
             return sAllowDisplayToCutout;
         }
+        */
     }
 
 

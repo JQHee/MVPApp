@@ -1,11 +1,17 @@
 package com.example.testmvpapp.sections.sign;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.example.testmvpapp.R;
@@ -19,6 +25,7 @@ import com.example.testmvpapp.sections.main.MainActivity;
 import com.example.testmvpapp.util.base.ToastUtils;
 import com.example.testmvpapp.util.bus.LiveBus;
 import com.example.testmvpapp.util.log.LatteLogger;
+import com.example.testmvpapp.util.screenadapter.CutoutAdapt;
 import com.trello.rxlifecycle2.LifecycleTransformer;
 
 import butterknife.BindView;
@@ -27,7 +34,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SignInActivity extends BaseActivity<SignInPresenter> implements SignInContract.View {
+public class SignInActivity extends BaseActivity<SignInPresenter> implements SignInContract.View, CutoutAdapt {
 
     @BindView(R.id.et_phone_number)
     EditText mPhoneNumber;
@@ -90,6 +97,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
     protected void init() {
 
         isHiddenToolbar(true);
+        setFullScreen(true);
 
         // 获取国家码选择回传的值
         LiveBus.getDefault().subscribe("COUNTRY_CODE").observe(this, new Observer<Object>() {
@@ -99,6 +107,7 @@ public class SignInActivity extends BaseActivity<SignInPresenter> implements Sig
             }
         });
     }
+
 
     @Override
     public void gotoSignUp() {
